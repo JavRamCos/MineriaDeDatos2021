@@ -28,7 +28,8 @@ datos <- datos %>%
          PoolQC = coalesce(PoolQC,"NO"),
          Fence = coalesce(Fence,"NO"),
          MiscFeature = coalesce(MiscFeature,"NO"),
-         MiscFeature = coalesce(LandSlope,"NO"))
+         LandSlope = coalesce(LandSlope,"NO"),
+         BsmtQual = coalesce(BsmtQual,"NO"))
 ```
 
 ### Analisis Exploratorio Variable MSZoning
@@ -131,4 +132,97 @@ barplot(means,
         ylab="Media",
         xlab="Condicion del Exterior",
         col="red")
+```
+
+### Analisis Exploratorio Variable Exterior1st
+Media del precio de la casa en base a sus materiales de construccion del exterior
+``` {r }
+exterFirst <- table(datos$Exterior1st)
+asbShngMean <- sum(datos$SalePrice[datos$Exterior1st == "AsbShng"]) / sum(datos$Exterior1st == "AsbShng")
+asphShnMean <- sum(datos$SalePrice[datos$Exterior1st == "AsphShn"]) / sum(datos$Exterior1st == "AsphShn")
+brkCommMean <- sum(datos$SalePrice[datos$Exterior1st == "BrkComm"]) / sum(datos$Exterior1st == "BrkComm")
+brkFaceMean <- sum(datos$SalePrice[datos$Exterior1st == "BrkFace"]) / sum(datos$Exterior1st == "BrkFace")
+cBlockMean <- sum(datos$SalePrice[datos$Exterior1st == "CBlock"]) / sum(datos$Exterior1st == "CBlock")
+cemntBdMean <- sum(datos$SalePrice[datos$Exterior1st == "CemntBd"]) / sum(datos$Exterior1st == "CemntBd")
+hdBoardMean <- sum(datos$SalePrice[datos$Exterior1st == "HdBoard"]) / sum(datos$Exterior1st == "HdBoard")
+imStuccMean <- sum(datos$SalePrice[datos$Exterior1st == "ImStucc"]) / sum(datos$Exterior1st == "ImStucc")
+metalSdMean <- sum(datos$SalePrice[datos$Exterior1st == "MetalSd"]) / sum(datos$Exterior1st == "MetalSd")
+plywoodMean <- sum(datos$SalePrice[datos$Exterior1st == "Plywood"]) / sum(datos$Exterior1st == "Plywood")
+stoneMean <- sum(datos$SalePrice[datos$Exterior1st == "Stone"]) / sum(datos$Exterior1st == "Stone")
+stuccoMean <- sum(datos$SalePrice[datos$Exterior1st == "Stucco"]) / sum(datos$Exterior1st == "Stucco")
+vinylSdMean <- sum(datos$SalePrice[datos$Exterior1st == "VinylSd"]) / sum(datos$Exterior1st == "VinylSd")
+wdSdngMean <- sum(datos$SalePrice[datos$Exterior1st == "Wd Sdng"]) / sum(datos$Exterior1st == "Wd Sdng")
+wdShingMean <- sum(datos$SalePrice[datos$Exterior1st == "WdShing"]) / sum(datos$Exterior1st == "WdShing")
+means <- c("AsbShng" = asbShngMean,"AsphShn" = asphShnMean,"BrkComm" = brkCommMean,
+           "BrkFace" = brkFaceMean,"CBlock" = cBlockMean, "CemntBd" = cemntBdMean,
+           "HdBoard" = hdBoardMean,"ImStucc" = imStuccMean,"MetalSd" = metalSdMean,
+           "Plywood" = plywoodMean,"Stone" = stoneMean,"Stucco" = stuccoMean,
+           "VinylSd" = vinylSdMean,"Wd Sdng"  =wdSdngMean,"WdShing" = wdShingMean)
+barplot(means,
+        main="Media de precio variable Exter1st",
+        ylim=c(0,300000),
+        ylab="Media",
+        xlab="Material del Exterior",
+        col="purple")
+```
+
+### Analisis Exploratorio Variable RoofStyle
+Media del precio de la casa en base al estilo de su techo
+``` {r }
+roofStyles <- table(datos$RoofStyle)
+flatMean <- sum(datos$SalePrice[datos$RoofStyle == "Flat"]) / sum(datos$RoofStyle == "Flat")
+gableMean <- sum(datos$SalePrice[datos$RoofStyle == "Gable"]) / sum(datos$RoofStyle == "Gable")
+gambrelMean <- sum(datos$SalePrice[datos$RoofStyle == "Gambrel"]) / sum(datos$RoofStyle == "Gambrel")
+hipMean <- sum(datos$SalePrice[datos$RoofStyle == "Hip"]) / sum(datos$RoofStyle == "Hip")
+mansardMean <- sum(datos$SalePrice[datos$RoofStyle == "Mansard"]) / sum(datos$RoofStyle == "Mansard")
+shedMean <- sum(datos$SalePrice[datos$RoofStyle == "Shed"]) / sum(datos$RoofStyle == "Shed")
+means <- c("Flat" = flatMean,"Gable" = gableMean,"Gambrel" = gambrelMean,
+           "Hip" = hipMean,"Mansard" = mansardMean, "Shed" = shedMean)
+barplot(means,
+        main="Media de precio variable RoofStyle",
+        ylim=c(0,250000),
+        ylab="Media",
+        xlab="Estilo del techo",
+        col="blue")
+```
+
+### Analisis Exploratorio Variable RoofMatl
+Media del precio de la casa en base al material de su techo
+``` {r }
+roofMaterials <- table(datos$RoofMatl)
+clytileMean <- sum(datos$SalePrice[datos$RoofMatl == "ClyTile"]) / sum(datos$RoofMatl == "ClyTile")
+compshgMean <- sum(datos$SalePrice[datos$RoofMatl == "CompShg"]) / sum(datos$RoofMatl == "CompShg")
+membranMean <- sum(datos$SalePrice[datos$RoofMatl == "Membran"]) / sum(datos$RoofMatl == "Membran")
+metalMean <- sum(datos$SalePrice[datos$RoofMatl == "Metal"]) / sum(datos$RoofMatl == "Metal")
+rollMean <- sum(datos$SalePrice[datos$RoofMatl == "Roll"]) / sum(datos$RoofMatl == "Tar&Grv")
+targrvMean <- sum(datos$SalePrice[datos$RoofMatl == "Tar&Grv"]) / sum(datos$RoofMatl == "WdShake")
+wdshakeMean <- sum(datos$SalePrice[datos$RoofMatl == "WdShake"]) / sum(datos$RoofMatl == "Mansard")
+wdshnglMean <- sum(datos$SalePrice[datos$RoofMatl == "WdShngl"]) / sum(datos$RoofMatl == "WdShngl")
+means <- c("ClyTile" = clytileMean,"CompShg" = compshgMean,"Membran" = membranMean,
+           "Metal" = metalMean,"Roll" = rollMean,"Tar&Grv" = targrvMean,
+           "WdShake" = wdshakeMean,"WdShngl" = wdshnglMean)
+means
+barplot(means,
+        main="Media de precio variable RoofMtl",
+        ylim=c(0,410000),
+        ylab="Media",
+        xlab="Material del techo",
+        col="lightyellow")
+```
+### Analisis Exploratorio Variable BsmtQual
+Media del precio de la casa en base a la altura del sotano
+``` {r }
+bsmtHeight <- table(datos$BsmtQual)
+exMean <- sum(datos$SalePrice[datos$BsmtQual == "Ex"]) / sum(datos$BsmtQual == "Ex")
+faMean <- sum(datos$SalePrice[datos$BsmtQual == "Fa"]) / sum(datos$BsmtQual == "Fa")
+gdMean <- sum(datos$SalePrice[datos$BsmtQual == "Gd"]) / sum(datos$BsmtQual == "Gd")
+noMean <- sum(datos$SalePrice[datos$BsmtQual == "NO"]) / sum(datos$BsmtQual == "NO")
+taMean <- sum(datos$SalePrice[datos$BsmtQual == "TA"]) / sum(datos$BsmtQual == "TA")
+means <- c("Ex" = exMean,"Fa" = faMean,"Gd" = gdMean,"TA" = taMean,"NO" = noMean)
+barplot(means,
+        main="Media de precio variable BsmtQual",
+        ylim=c(0,350000),
+        ylab="Media",
+        xlab="Altura del Basement",
+        col="brown")
 ```
