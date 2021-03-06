@@ -29,7 +29,9 @@ datos <- datos %>%
          Fence = coalesce(Fence,"NO"),
          MiscFeature = coalesce(MiscFeature,"NO"),
          LandSlope = coalesce(LandSlope,"NO"),
-         BsmtQual = coalesce(BsmtQual,"NO"))
+         BsmtQual = coalesce(BsmtQual,"NO"),
+         BsmtCond = coalesce(BsmtCond,"NO"),
+         BsmtFinType1 = coalesce(BsmtFinType1,"NO"))
 ```
 
 ### Analisis Exploratorio Variable MSZoning
@@ -73,6 +75,7 @@ gtlMean <- sum(datos$SalePrice[datos$LandSlope == "Gtl"]) / sum(datos$LandSlope 
 modMean <- sum(datos$SalePrice[datos$LandSlope == "Mod"]) / sum(datos$LandSlope == "Mod")
 sevMean <- sum(datos$SalePrice[datos$LandSlope == "Sev"]) / sum(datos$LandSlope == "Sev")
 means = c("GTL" = gtlMean,"Mod" = modMean,"Sev" = sevMean)
+means
 barplot(means,
         main="Media de precio variable LandSlope",
         ylim=c(0,210000),
@@ -90,6 +93,7 @@ hlsMean <- sum(datos$SalePrice[datos$LandContour == "HLS"]) / sum(datos$LandCont
 lowMean <- sum(datos$SalePrice[datos$LandContour == "Low"]) / sum(datos$LandContour == "Low")
 lvlMean <- sum(datos$SalePrice[datos$LandContour == "Lvl"]) / sum(datos$LandContour == "Lvl")
 means = c("BNK" = bnkMean,"HLS" = hlsMean,"Low" = lowMean,"Lvl" = lvlMean)
+means
 barplot(means,
         main="Media de precio variable Contour",
         ylim=c(0,250000),
@@ -106,8 +110,7 @@ exMean <- sum(datos$SalePrice[datos$ExterQual == "Ex"]) / sum(datos$ExterQual ==
 faMean <- sum(datos$SalePrice[datos$ExterQual == "Fa"]) / sum(datos$ExterQual == "Fa")
 gdMean <- sum(datos$SalePrice[datos$ExterQual == "Gd"]) / sum(datos$ExterQual == "Gd")
 taMean <- sum(datos$SalePrice[datos$ExterQual == "TA"]) / sum(datos$ExterQual == "TA")
-means <- c("Ex" = exMean,"FA" = faMean,"GD" = gdMean,"TA" = taMean)
-means
+means <- c("Ex" = exMean,"GD" = gdMean,"TA" = taMean,"FA" = faMean)
 barplot(means,
         main="Media de precio variable ExterQual",
         ylim=c(0,400000),
@@ -125,7 +128,7 @@ faMean <- sum(datos$SalePrice[datos$ExterCond == "Fa"]) / sum(datos$ExterCond ==
 gdMean <- sum(datos$SalePrice[datos$ExterCond == "Gd"]) / sum(datos$ExterCond == "Gd")
 taMean <- sum(datos$SalePrice[datos$ExterCond == "TA"]) / sum(datos$ExterCond == "TA")
 poMean <- sum(datos$SalePrice[datos$ExterCond == "Po"]) / sum(datos$ExterCond == "Po")
-means <- c("Ex" = exMean,"FA" = faMean,"GD" = gdMean,"TA" = taMean,"Po" = poMean)
+means <- c("Ex" = exMean,"GD" = gdMean,"TA" = taMean,"FA" = faMean,"Po" = poMean)
 barplot(means,
         main="Media de precio variable ExterCond",
         ylim=c(0,205000),
@@ -158,11 +161,11 @@ means <- c("AsbShng" = asbShngMean,"AsphShn" = asphShnMean,"BrkComm" = brkCommMe
            "HdBoard" = hdBoardMean,"ImStucc" = imStuccMean,"MetalSd" = metalSdMean,
            "Plywood" = plywoodMean,"Stone" = stoneMean,"Stucco" = stuccoMean,
            "VinylSd" = vinylSdMean,"Wd Sdng"  =wdSdngMean,"WdShing" = wdShingMean)
+means <- sort(means)
 barplot(means,
         main="Media de precio variable Exter1st",
         ylim=c(0,300000),
-        ylab="Media",
-        xlab="Material del Exterior",
+        las=2,
         col="purple")
 ```
 
@@ -178,11 +181,11 @@ mansardMean <- sum(datos$SalePrice[datos$RoofStyle == "Mansard"]) / sum(datos$Ro
 shedMean <- sum(datos$SalePrice[datos$RoofStyle == "Shed"]) / sum(datos$RoofStyle == "Shed")
 means <- c("Flat" = flatMean,"Gable" = gableMean,"Gambrel" = gambrelMean,
            "Hip" = hipMean,"Mansard" = mansardMean, "Shed" = shedMean)
+means <- sort(means)
 barplot(means,
         main="Media de precio variable RoofStyle",
         ylim=c(0,250000),
-        ylab="Media",
-        xlab="Estilo del techo",
+        las=2,
         col="blue")
 ```
 
@@ -201,13 +204,14 @@ wdshnglMean <- sum(datos$SalePrice[datos$RoofMatl == "WdShngl"]) / sum(datos$Roo
 means <- c("ClyTile" = clytileMean,"CompShg" = compshgMean,"Membran" = membranMean,
            "Metal" = metalMean,"Roll" = rollMean,"Tar&Grv" = targrvMean,
            "WdShake" = wdshakeMean,"WdShngl" = wdshnglMean)
-means
+means <- sort(means)
 barplot(means,
         main="Media de precio variable RoofMtl",
         ylim=c(0,410000),
         ylab="Media",
         xlab="Material del techo",
         col="lightyellow")
+means
 ```
 ### Analisis Exploratorio Variable BsmtQual
 Media del precio de la casa en base a la altura del sotano
@@ -218,11 +222,79 @@ faMean <- sum(datos$SalePrice[datos$BsmtQual == "Fa"]) / sum(datos$BsmtQual == "
 gdMean <- sum(datos$SalePrice[datos$BsmtQual == "Gd"]) / sum(datos$BsmtQual == "Gd")
 noMean <- sum(datos$SalePrice[datos$BsmtQual == "NO"]) / sum(datos$BsmtQual == "NO")
 taMean <- sum(datos$SalePrice[datos$BsmtQual == "TA"]) / sum(datos$BsmtQual == "TA")
-means <- c("Ex" = exMean,"Fa" = faMean,"Gd" = gdMean,"TA" = taMean,"NO" = noMean)
+means <- c("Ex" = exMean,"Gd" = gdMean,"TA" = taMean,"Fa" = faMean,"NO" = noMean)
 barplot(means,
         main="Media de precio variable BsmtQual",
         ylim=c(0,350000),
         ylab="Media",
         xlab="Altura del Basement",
         col="brown")
+```
+### Analisis Exploratorio Variable BsmtCond
+Media del precio de la casa en base a la condicion/estado del sotano
+``` {r }
+bsmtCond <- table(datos$BsmtCond)
+poMean <- sum(datos$SalePrice[datos$BsmtCond == "Po"]) / sum(datos$BsmtCond == "Po")
+faMean <- sum(datos$SalePrice[datos$BsmtCond == "Fa"]) / sum(datos$BsmtCond == "Fa")
+gdMean <- sum(datos$SalePrice[datos$BsmtCond == "Gd"]) / sum(datos$BsmtCond == "Gd")
+noMean <- sum(datos$SalePrice[datos$BsmtCond == "NO"]) / sum(datos$BsmtCond == "NO")
+taMean <- sum(datos$SalePrice[datos$BsmtCond == "TA"]) / sum(datos$BsmtCond == "TA")
+means <- c("NO" = noMean,"Po" = poMean,"Fa" = faMean,"TA" = taMean,"Gd" = gdMean)
+barplot(means,
+        main="Media de precio variable BsmtCond",
+        ylim=c(0,250000),
+        ylab="Media",
+        xlab="Condicion del Basement",
+        col="grey")
+```
+### Analisis Exploratorio Variable BsmtFinType1
+Media del precio de la casa en base a los acabados del sotano
+``` {r }
+bsmtFins <- table(datos$BsmtFinType1)
+alqMean <- sum(datos$SalePrice[datos$BsmtFinType1 == "ALQ"]) / sum(datos$BsmtFinType1 == "ALQ")
+blqMean <- sum(datos$SalePrice[datos$BsmtFinType1 == "BLQ"]) / sum(datos$BsmtFinType1 == "BLQ")
+glqMean <- sum(datos$SalePrice[datos$BsmtFinType1 == "GLQ"]) / sum(datos$BsmtFinType1 == "GLQ")
+lwqMean <- sum(datos$SalePrice[datos$BsmtFinType1 == "LwQ"]) / sum(datos$BsmtFinType1 == "LwQ")
+noMean <- sum(datos$SalePrice[datos$BsmtFinType1 == "NO"]) / sum(datos$BsmtFinType1 == "NO")
+recMean <- sum(datos$SalePrice[datos$BsmtFinType1 == "Rec"]) / sum(datos$BsmtFinType1 == "Rec")
+unfMean <- sum(datos$SalePrice[datos$BsmtFinType1 == "Unf"]) / sum(datos$BsmtFinType1 == "Unf")
+means <- c("ALQ" = alqMean,"BLQ" = blqMean,"GLQ" = glqMean,"LwQ" = lwqMean,
+           "Rec" = recMean,"Unf" = unfMean,"NO" = noMean)
+means <- sort(means)
+barplot(means,
+        main="Media de precio variable BsmtFinType1",
+        ylim=c(0,250000),
+        ylab="Media",
+        xlab="Acabados del Basement",
+        col="black")
+```
+### Analisis Exploratorio Variable TotalBsmtSF
+Precio de las top 25 propiedades con los basements mas grandes (pies cuadrados)
+``` {r }
+bsmtSF <- select(datos,TotalBsmtSF,SalePrice)
+bsmtSF <- bsmtSF[with(bsmtSF,order(-TotalBsmtSF)),]
+bsmtSF <- bsmtSF[1:25,]
+barplot(t(as.matrix(bsmtSF)),
+        main="Precio de Top 25 Propiedades con basements mas grandes",
+        xlab="Tamaño Basement",
+        ylab="Precio",
+        ylim=c(0,750000),
+        col="darkseagreen1")
+bsmtSF <- bsmtSF[with(bsmtSF,order(-SalePrice)),]
+```
+### Analisis Exploratorio Variable BsmtHalfBath
+Media del precio de la casa en base al numero de banos en el sotano
+``` {r }
+bsmtBaths <- table(datos$BsmtHalfBath)
+zeroMean <- sum(datos$SalePrice[datos$BsmtHalfBath == 0]) / sum(datos$BsmtHalfBath == 0)
+oneMean <- sum(datos$SalePrice[datos$BsmtHalfBath == 1]) / sum(datos$BsmtHalfBath == 1)
+twoMean <- sum(datos$SalePrice[datos$BsmtHalfBath == 2]) / sum(datos$BsmtHalfBath == 2)
+means <- c("0" = zeroMean,"1" = oneMean,"2" = twoMean)
+means
+barplot(means,
+        main="Media de precio variable BsmtHalfBath",
+        ylim=c(0,200000),
+        ylab="Media",
+        xlab="No. Baños",
+        col="goldenrod")
 ```
