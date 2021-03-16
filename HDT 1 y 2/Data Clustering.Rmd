@@ -1,0 +1,155 @@
+---
+title: "Data Clustering"
+author: "Javier Ramirez Cospin"
+date: "18/2/2021"
+output: html_document
+---
+
+### Instalacion de paquetes
+```{r }
+install.packages('cluster') # Calculo de Siluetas
+install.packages('e1071') # Cmeans
+install.packages('mclust') # mixtures of gaussians
+install.packages('ppclust')
+install.packages('fpc') # plotcluster
+install.packages('NbClust') # Determinar el numero de clusters optimo
+install.packages('factoextra') # Hacer graficos de clustering
+install.packages('tidyverse') # Manipulacion data set
+```
+ ### Carga de librerias
+```{r }
+library('cluster')
+library('e1071')
+library('mclust')
+library('fpc')
+library('NbClust')
+library('factoextra')
+library('tidyverse')
+library('readr')
+library('ppclust')
+```
+
+### Carga de Archivo y Preprocessamiento
+```{r }
+rawData <- read.csv("tmdb-movies.csv",TRUE,",")
+datos <- read.csv("tmdb-movies.csv",TRUE,",")
+datos <- as.data.frame(unclass(datos))
+dataClean <- na.omit(datos)
+datos <- select(dataClean,popularity,budget,revenue,runtime,vote_count,vote_average,release_year,budget_adj,revenue_adj)
+scaledData <- as.matrix(scale(datos))
+```
+### Metodo de Codo (Elbow Method) para determinar numero optimo de clusters
+``` {r }
+k.max  <- 15
+wss <- sapply(1:k.max, 
+              function(k){kmeans(scaledData,k,iter.max = 100 )$tot.withinss})
+plot(1:k.max,wss,
+        type="b",
+        xlab="No. clusters",
+        ylab="No. Suma de cuadrados")
+```
+### Metodo de agrupamiento Kmeans
+``` {r }
+km <- kmeans(scaledData,4,iter.max=100)
+dis = dist(scaledData)^2
+sil = silhouette (km$cluster, dis)
+dev.new(width=5,height=8,noRStudioGD = TRUE, unit="in")
+plot(sil, col=1:5, border = NA)
+```
+
+### Metodo de agrupamiento Fuzzy C Means
+``` {r }
+res.fcm = fcm(scaledData,centers=4)
+summary(res.fcm)
+```
+
+### Metodo de agrupamiento Mixture of Gaussians
+``` {r }
+mg = Mclust(scaledData,G=4)
+summary(mg,parameters=TRUE)
+```
+
+### Adicion de clusters a data original y Separacion de grupos
+``` {r }
+rawData$group <- km$cluster
+groupOneData <- rawData[rawData$group == 1,]
+groupTwoData <- rawData[rawData$group == 2,]
+groupThreeData <- rawData[rawData$group == 3,]
+groupFourData <- rawData[rawData$group == 4,]
+```
+
+### Analisis Exploratorio Grupo Uno
+``` {r }
+voteAverageND <- rnorm(groupOneData$vote_average)
+hist(voteAverageND,
+     main="Distribucion Normal Promedio de Votos",
+     axes=TRUE,
+     xlab="Promedio de Votos",
+     ylab="Frequencia",
+     col="red")
+summary(groupOneData$release_year)
+yearMovies <- table(groupThreeData$release_year)
+barplot(yearMovies,
+        main="Peliculas por Año",
+        xlab="Año",
+        ylab="No. Peliculas",
+        col="red")
+```
+
+### Analisis Exploratorio Grupo Dos
+``` {r }
+popularityND <- rnorm(groupTwoData$popularity)
+hist(popularityND,
+     main="Distribucion Normal Popularidad",
+     axes=TRUE,
+     xlab="Popularidad",
+     ylab="Frequencia")
+summary(groupTwoData$release_year)
+popularMovies <- groupTwoData[with(groupTwoData,order(-popularity)),]
+popularMovies <- popularMovies[1:20,]
+genres = c()
+movieGenres = strsplit(popularMovies$genres,"|",fixed=TRUE)
+for(genre in movieGenres) {
+  for(x in 1:length(genre)) {
+    genres <- c(genres,genre[x])
+  }
+}
+mainGenre <- sort(table(genres),decreasing = TRUE)
+barplot(mainGenre,
+        main="Generos mas Populares",
+        ylab="Numero de peliculas",
+        las=2,
+        col="yellow")
+```
+
+### Analisis Exploratorio Grupo Tres
+``` {r }
+voteAverageND <- rnorm(groupThreeData$vote_average)
+hist(voteAverageND,
+     main="Distribucion Normal Promedio de Votos",
+     axes=TRUE,
+     xlab="Promedio de votos",
+     ylab="Frequencia",
+     col="red")
+summary(groupThreeData$release_year)
+```
+
+### Analisis Exploratorio Grupo Cuatro
+``` {r }
+popularityND <- rnorm(groupFourData$popularity)
+hist(popularityND,
+     main="Distribucion Normal Popularidad",
+     axes=TRUE,
+     xlab="Popularidad",
+     ylab="Frequencia")
+summary(groupFourData$release_year)
+directorsFrequency <- table(groupFourData$director)
+directorsFrequency <- sort(directorsFrequency[1:20],decreasing = TRUE)
+barplot(directorsFrequency,
+        main="Top 20 Directores",
+        ylab="Numero Peliculas",
+        col="blue",
+        las=2,
+        space=1)
+directorsFrequency
+```

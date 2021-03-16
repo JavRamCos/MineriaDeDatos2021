@@ -1,0 +1,162 @@
+---
+title: "Analisis Exploratorio"
+author: "Javier Ramirez Cospin"
+date: "1/2/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Hoja de Trabajo #1  
+## Analisis exploratorio #1  
+
+Este informe contiene las respuestas a la hoja de trabajo 1, realizado por Renato Estrada Martinez, Martin Ortega Yungy Javier Ramirez Cospin.
+
+### Carga del archivo:
+```{r}
+datos <- read.csv("tmdb-movies.csv",TRUE,",")
+```
+
+### Pregunta 1  
+
+```{r }
+summary(datos)
+```
+
+### Pregunta 2  
+
+``` {r }
+str(datos)
+```
+
+### Pregunta 3
+``` {r}
+head(datos)
+directorsFrequency <- table(datos$director)
+directorsFrequency <- sort(directorsFrequency[1:20],decreasing = TRUE)
+barplot(directorsFrequency,
+        main="Top 20 Directores",
+        xlab="Nombre Director",
+        ylab="Numero Peliculas",
+        col="blue",
+        density=15)
+```
+### Pregunta 4.1
+
+``` {r }
+topBudgets <- datos[with(datos,order(-budget)),]
+print(topBudgets[1:10,])
+```
+
+Metodo Alternativo
+
+``` {r }
+topBudgetsAlternative <- sort(datos$budget,decreasing = TRUE)
+topBudgetsAlternative <- topBudgetsAlternative[1:10]
+```
+
+### Pregunta 4.2
+
+``` {r }
+topRevenue <- datos[with(datos,order(-revenue)),]
+print(topRevenue[1:10,])
+```
+
+### Pregunta 4.3
+
+``` {r }
+topVotes <- datos[with(datos,order(-vote_count)),]
+print(topVotes[0:1,])
+```
+
+### Pregunta 4.4
+``` {r }
+worstMovie <- datos[with(datos,order(-vote_average,decreasing=TRUE)),]
+print(worstMovie[0:1,])
+```
+
+### Pregunta 4.5
+``` {r }
+yearMovies <- table(datos$release_year)
+barplot(yearMovies,
+        main="Peliculas por Año",
+        xlab="Año",
+        ylab="No. Peliculas",
+        col="red")
+```
+
+### Pregunta 4.6
+``` {r }
+popularMovies <- datos[with(datos,order(-popularity)),]
+popularMovies <- popularMovies[1:20,]
+genres = c()
+movieGenres = strsplit(popularMovies$genres,"|",fixed=TRUE)
+for(genre in movieGenres) {
+  for(x in 1:length(genre)) {
+    genres <- c(genres,genre[x])
+  }
+}
+mainGenre <- sort(table(genres),decreasing = TRUE)
+barplot(mainGenre,
+        main="Generos mas Populares",
+        xlab="Generos",
+        ylab="Numero de peliculas",
+        col="yellow")
+```
+
+### Pregunta 4.7
+``` {r }
+genres = c()
+movieGenres = strsplit(datos$genres,"|",fixed=TRUE)
+for(genre in movieGenres) {
+  for(x in 1:length(genre)) {
+    genres <- c(genres,genre[x])
+  }
+}
+mainGenre <- sort(table(genres),decreasing=TRUE)
+barplot(mainGenre,
+        main="Popularidad de Géneros",
+        xlab="Género",
+        ylab="No. Peliculas",
+        col="blue")
+```
+### Pregunta 4.8
+``` {r }
+movies <- datos[grep("Action",datos$genres),]
+movies <- movies[with(movies,order(-revenue)),]
+movies[1:20]
+```
+
+
+### Pregunta 4.9
+``` {r }
+movies <- datos[grep("Action",datos$genres),]
+movies <- movies[with(movies,order(-budget)),]
+movies[1:20]
+```
+### Pregunta 4.10
+``` {r }
+movies <- datos[with(datos,order(-vote_average)),]
+movies <- movies[1:20,]
+movies$director
+```
+### Pregunta 4.15
+``` {r }
+movies <- datos[with(datos,order(-runtime)),]
+movies <- movies[1:20,]
+genres <- c()
+movieGenres = strsplit(movies$genres,"|",fixed=TRUE)
+for(genre in movieGenres) {
+  for(x in 1:length(genre)) {
+    genres <- c(genres,genre[x])
+  }
+}
+movieGenres <- sort(table(genres),decreasing = TRUE)
+barplot(movieGenres,
+        main="Genero de peliculas mas largas",
+        xlab="Genero",
+        ylab="Numero de peliculas",
+        col="lightyellow")
+```
