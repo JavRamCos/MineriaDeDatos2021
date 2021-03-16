@@ -12,26 +12,93 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ``` {r }
 install.packages("plyr")
+install.packages("randomForest")
 ```
 
 ``` {r }
 library(plyr)
 library(dplyr)
+library('cluster')
+library('e1071')
+library('mclust')
+library('fpc')
+library('NbClust')
+library('factoextra')
+library('tidyverse')
+library('readr')
+library('ppclust')
+library(randomForest)
 ```
 
 ### Carga y Limpieza de Datos
 ``` {r }
+rawData <- read.csv("train.csv",TRUE,",")
 datos <- read.csv("train.csv",TRUE,",")
 datos <- datos %>% 
-  mutate(Alley = coalesce(Alley,"NO"),
-         FireplaceQu = coalesce(FireplaceQu,"NO"),
-         PoolQC = coalesce(PoolQC,"NO"),
-         Fence = coalesce(Fence,"NO"),
-         MiscFeature = coalesce(MiscFeature,"NO"),
-         LandSlope = coalesce(LandSlope,"NO"),
-         BsmtQual = coalesce(BsmtQual,"NO"),
-         BsmtCond = coalesce(BsmtCond,"NO"),
-         BsmtFinType1 = coalesce(BsmtFinType1,"NO"))
+  mutate(MSZoning = coalesce(MSZoning,"NO"),
+        Street = coalesce(Street,"NO"),
+        Alley = coalesce(Alley,"NO"),
+        LotShape = coalesce(LotShape,"NO"),
+        LandContour = coalesce(LandContour,"NO"),
+        Utilities = coalesce(Utilities,"NO"),
+        LotConfig = coalesce(LotConfig,"NO"),
+        LandSlope = coalesce(LandSlope,"NO"),
+        Neighborhood = coalesce(Neighborhood,"NO"),
+        Condition1 = coalesce(Condition1,"NO"),
+        BldgType = coalesce(BldgType,"NO"),
+        HouseStyle = coalesce(HouseStyle,"NO"),
+        RoofStyle = coalesce(RoofStyle,"NO"),
+        RoofMatl = coalesce(RoofMatl,"NO"),
+        Exterior1st = coalesce(Exterior1st,"NO"),
+        MasVnrType = coalesce(MasVnrType,"NO"),
+        ExterQual = coalesce(ExterQual,"NO"),
+        ExterCond = coalesce(ExterCond,"NO"),
+        Foundation = coalesce(Foundation,"NO"),
+        BsmtFinType1 = coalesce(BsmtFinType1,"NO"),
+        Electrical = coalesce(Electrical,"NO"),
+        KitchenQual = coalesce(KitchenQual,"NO"),
+        GarageType = coalesce(GarageType,"NO"),
+        GarageQual = coalesce(GarageQual,"NO"),
+        GarageCond = coalesce(GarageCond,"NO"),
+        PavedDrive = coalesce(PavedDrive,"NO"),
+        PoolQC = coalesce(PoolQC,"NO"),
+        MiscFeature = coalesce(MiscFeature,"NO"),
+        SaleType = coalesce(SaleType,"NO"),
+        SaleCondition = coalesce(SaleCondition,"NO"))
+datos <- select(datos,LotArea,TotalBsmtSF,X1stFlrSF,X2ndFlrSF,WoodDeckSF,OpenPorchSF,
+                EnclosedPorch,X3SsnPorch,ScreenPorch,PoolArea,MiscVal,SalePrice)
+scaledData <- as.matrix(scale(datos))
+rawData <- rawData %>% 
+  mutate(MSZoning = coalesce(MSZoning,"NO"),
+        Street = coalesce(Street,"NO"),
+        Alley = coalesce(Alley,"NO"),
+        LotShape = coalesce(LotShape,"NO"),
+        LandContour = coalesce(LandContour,"NO"),
+        Utilities = coalesce(Utilities,"NO"),
+        LotConfig = coalesce(LotConfig,"NO"),
+        LandSlope = coalesce(LandSlope,"NO"),
+        Neighborhood = coalesce(Neighborhood,"NO"),
+        Condition1 = coalesce(Condition1,"NO"),
+        BldgType = coalesce(BldgType,"NO"),
+        HouseStyle = coalesce(HouseStyle,"NO"),
+        RoofStyle = coalesce(RoofStyle,"NO"),
+        RoofMatl = coalesce(RoofMatl,"NO"),
+        Exterior1st = coalesce(Exterior1st,"NO"),
+        MasVnrType = coalesce(MasVnrType,"NO"),
+        ExterQual = coalesce(ExterQual,"NO"),
+        ExterCond = coalesce(ExterCond,"NO"),
+        Foundation = coalesce(Foundation,"NO"),
+        BsmtFinType1 = coalesce(BsmtFinType1,"NO"),
+        Electrical = coalesce(Electrical,"NO"),
+        KitchenQual = coalesce(KitchenQual,"NO"),
+        GarageType = coalesce(GarageType,"NO"),
+        GarageQual = coalesce(GarageQual,"NO"),
+        GarageCond = coalesce(GarageCond,"NO"),
+        PavedDrive = coalesce(PavedDrive,"NO"),
+        PoolQC = coalesce(PoolQC,"NO"),
+        MiscFeature = coalesce(MiscFeature,"NO"),
+        SaleType = coalesce(SaleType,"NO"),
+        SaleCondition = coalesce(SaleCondition,"NO"))
 ```
 
 ### Analisis Exploratorio Variable MSZoning
@@ -297,4 +364,33 @@ barplot(means,
         ylab="Media",
         xlab="No. Baños",
         col="goldenrod")
+```
+### Numero de Clusters (Grafica de codo)
+``` {r }
+k.max  <- 15
+wss <- sapply(1:k.max, 
+              function(k){kmeans(datos,k,iter.max = 100 )$tot.withinss})
+plot(1:k.max,wss,
+        type="b",
+        xlab="No. clusters",
+        ylab="No. Suma de cuadrados")
+```
+### Numero de Clusters (Grafica de Silueta)
+``` {r }
+km<-kmeans(scaledData, 3, iter.max = 100)
+fviz_cluster(km, data = scaledData, frame.type = "convex")
+```
+### Aplicacion de clusters a Data Inicial y Separacion de grupos
+``` {r }
+rawData$Group <- km$cluster
+groupOne <- rawData[rawData$Group == 1,]
+groupTwo <- rawData[rawData$Group == 2,]
+groupThree <- rawData[rawData$Group == 3,]
+```
+### Random Forest
+``` {r }
+output.forest <- randomForest(Group ~ LotArea+TotalBsmtSF+X1stFlrSF+X2ndFlrSF+WoodDeckSF+OpenPorchSF+
+                EnclosedPorch+X3SsnPorch+ScreenPorch+PoolArea+MiscVal,data=rawData,importance = TRUE,proximity = TRUE)
+print(output.forest)
+print(importance(output.forest,type = 2))
 ```
