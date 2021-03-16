@@ -1,0 +1,57 @@
+---
+title: "Proyecto Analisis Exploratorio"
+author: "Javier Ramirez Cospin"
+date: "15/3/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+### Instalacion de Librerias
+``` {r }
+
+```
+### Carga de librerias
+``` {r }
+library('readxl')
+```
+
+### Carga de Datos
+Ingresar el path donde se encuentran los archivos de Divorcios y Matrimonios
+``` {r }
+# Carga de datos de matrimonios 2001 - 2017
+divorcios2010 <- read_excel(paste(path,"/DivorciosBD/Divorcios2001-2010.xls",sep=""),
+                              sheet=2,skip=1,col_names=TRUE)
+divorcios2011 <- read_excel(paste(path,"/DivorciosBD/Divorcios2011.xls",sep=""),
+                              sheet=4,skip=1,col_names=TRUE)
+divorcios2012 <- read_excel(paste(path,"/DivorciosBD/Divorcios2012.xls",sep=""),
+                              sheet=4,skip=1,col_names=TRUE)
+divorcios2013 <- read_excel(paste(path,"/DivorciosBD/Divorcios2013.xls",sep=""),
+                              sheet=4,skip=1,col_names=TRUE)
+divorcios2014 <- read_excel(paste(path,"/DivorciosBD/Divorcios2014.xls",sep=""),
+                              sheet=4,skip=1,col_names=TRUE)
+divorcios2015 <- read_excel(paste(path,"/DivorciosBD/Divorcios2015.xls",sep=""),
+                              sheet=4,skip=1,col_names=TRUE)
+divorcios2016 <- read_excel(paste(path,"/DivorciosBD/Divorcios2016.xls",sep=""),
+                              sheet=4,skip=1,col_names=TRUE)
+divorcios2017 <- read_excel(paste(path,"/DivorciosBD/Divorcios2017.xlsx",sep=""),
+                              sheet=4,skip=1,col_names=TRUE)
+# Carga de datos de divorcios 2001 - 2017
+matrimonios2010 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2001-2010.xls",sep=""),
+                              sheet=2,skip=1,col_names=TRUE)
+matrimonios2011 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2011.xls",sep=""),
+                              sheet=6,skip=1,col_names=TRUE)
+matrimonios2012 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2012.xls",sep=""),
+                              sheet=6,skip=1,col_names=TRUE)
+matrimonios2013 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2013.xls",sep=""),
+                              sheet=6,skip=1,col_names=TRUE)
+matrimonios2014 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2014.xls",sep=""),
+                              sheet=6,skip=1,col_names=TRUE)
+matrimonios2015 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2015.xls",sep=""),
+                              sheet=6,skip=1,col_names=TRUE)
+matrimonios2016 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2016.xlsx",sep=""),
+                              sheet=6,skip=1,col_names=TRUE)
+matrimonios2017 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2017.xlsx",sep=""),
+                              sheet=6,skip=1,col_names=TRUE)
+```
