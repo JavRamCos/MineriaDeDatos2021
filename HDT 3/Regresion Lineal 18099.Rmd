@@ -4,7 +4,7 @@ author: "Javier Ramirez Cospin"
 date: "18/3/2021"
 output: html_document
 ---
-
+### Inicializacion de archivo
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -13,25 +13,29 @@ knitr::opts_chunk$set(echo = TRUE)
 install.packages("ggplot2")
 install.packages("broom")
 install.packages("ggpubr")
+install.packages("mctest")
+install.packages("caret")
 ```
 ### Carga de librerias
 ``` {r }
 library(plyr)
 library(dplyr)
-library('cluster')
-library('e1071')
-library('mclust')
-library('fpc')
-library('NbClust')
-library('factoextra')
-library('tidyverse')
-library('readr')
-library('ppclust')
+library(cluster)
+library(e1071)
+library(mclust)
+library(fpc)
+library(NbClust)
+library(factoextra)
+library(tidyverse)
+library(readr)
+library(ppclust)
 library(randomForest)
 library(ggplot2)
 library(broom)
 library(ggpubr)
 library(corrplot)
+library(mctest)
+library(caret)
 ```
 ### Cargar y Limpiar Datos
 ``` {r }
@@ -60,11 +64,25 @@ trainGroup <- rawData[sample(1:nrow(rawData),nrow(rawData)*0.7,),]
 testGroup <- rawData[sample(1:nrow(rawData),nrow(rawData)*0.3,),]
 set.seed(123)
 ```
-### Correlacion entre variables
+### Modelo de regresion lineal con variables elegidas
+``` {r }
+linearRegression.lm <- lm(log(SalePrice) ~ LotArea+TotalBsmtSF+X1stFlrSF+X2ndFlrSF+WoodDeckSF+OpenPorchSF+
+                EnclosedPorch+X3SsnPorch+ScreenPorch+PoolArea+MiscVal,data=trainGroup)
+summary(linearRegression.lm)
+plot(linearRegression.lm)
+```
+### Correlacion entre variables independientes
 ``` {r }
 correlation <- cor(select(trainGroup,LotArea,TotalBsmtSF,X1stFlrSF,X2ndFlrSF,WoodDeckSF,OpenPorchSF,
                 EnclosedPorch,X3SsnPorch,ScreenPorch,PoolArea,MiscVal,SalePrice))
-linearRegression.lm <- lm(SalePrice ~ LotArea+TotalBsmtSF+X1stFlrSF+X2ndFlrSF+WoodDeckSF+OpenPorchSF+
-                EnclosedPorch+X3SsnPorch+ScreenPorch+PoolArea+MiscVal,data=trainGroup)
-summary(linearRegression.lm)
+corrplot(correlation,method="square")
+corrplot(correlation,method="number")
+```
+### Multicolinealidad entre variables
+``` {r }
+car::vif(linearRegression.lm)
+```
+### Analisis de los residuos
+``` {r }
+salePrice.res <- resid(linearRegression.lm)
 ```
