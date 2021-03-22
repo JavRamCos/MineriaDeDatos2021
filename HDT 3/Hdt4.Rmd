@@ -1,0 +1,121 @@
+---
+title: "Regresion Lineal"
+author: "Javier Ramirez Cospin"
+date: "18/3/2021"
+output: html_document
+---
+### Inicializacion de archivo
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+### Instalacion de librerias
+``` {r }
+install.packages("ggplot2")
+install.packages("broom")
+install.packages("ggpubr")
+install.packages("mctest")
+install.packages("DAAG")
+install.packages("caret")
+```
+```{r }
+install.packages("e1071")
+install.packages("mclust")
+install.packages("fpc")
+install.packages("NbClust")
+install.packages("factoextra")
+install.packages("tidyverse")
+install.packages("readr")
+install.packages("ppclust")
+install.packages("randomForest")
+install.packages("ggplot2")
+install.packages("DAAG")
+```
+### Carga de librerias
+``` {r }
+library(plyr)
+library(dplyr)
+library(cluster)
+library(e1071)
+library(mclust)
+library(fpc)
+library(NbClust)
+library(factoextra)
+library(tidyverse)
+library(readr)
+library(ppclust)
+library(randomForest)
+library(ggplot2)
+library(broom)
+library(ggpubr)
+library(corrplot)
+library(mctest)
+library(caret)
+library(DAAG)
+```
+### Cargar y Limpiar Datos
+``` {r }
+rawData <- read.csv("train.csv",TRUE,",")
+datos <- read.csv("train.csv",TRUE,",")
+rawData[is.na(rawData)] = "NO"
+datos[is.na(datos)] = "NO"
+datos <- select(datos,LotArea,TotalBsmtSF,X1stFlrSF,X2ndFlrSF,WoodDeckSF,OpenPorchSF,
+                EnclosedPorch,X3SsnPorch,ScreenPorch,PoolArea,MiscVal,SalePrice)
+scaledData <- as.matrix(scale(datos))
+```
+### Aplicacion de Clusters a los datos
+``` {r }
+km<-kmeans(scaledData, 3, iter.max = 100)
+fviz_cluster(km, data = scaledData, frame.type = "convex")
+```
+### Aplicacion de clusters a datos
+``` {r }
+set.seed(12345)
+rawData$Group <- km$cluster
+head(rawData)
+```
+### Separacion de Grupos de entrenamiento y prueba
+``` {r }
+trainGroup <- rawData[sample(1:nrow(rawData),nrow(rawData)*0.7,),]
+testGroup <- rawData[sample(1:nrow(rawData),nrow(rawData)*0.3,),]
+set.seed(123)
+```
+### Modelo de regresion lineal con variables elegidas
+``` {r }
+linearRegression.lm <- lm(SalePrice ~ LotArea+TotalBsmtSF+X1stFlrSF+X2ndFlrSF+WoodDeckSF+OpenPorchSF+
+                EnclosedPorch+X3SsnPorch+ScreenPorch+PoolArea+MiscVal,data=trainGroup)
+summary(linearRegression.lm)
+plot(linearRegression.lm)
+```
+### Correlacion entre variables independientes
+``` {r }
+correlation <- cor(select(trainGroup,LotArea,TotalBsmtSF,X1stFlrSF,X2ndFlrSF,WoodDeckSF,OpenPorchSF,
+                EnclosedPorch,X3SsnPorch,ScreenPorch,PoolArea,MiscVal,SalePrice))
+corrplot(correlation,method="square")
+corrplot(correlation,method="number")
+```
+### Multicolinealidad entre variables
+``` {r }
+car::vif(linearRegression.lm, data.frame())
+```
+### Analisis de los residuos
+``` {r }
+salePrice.res <- resid(linearRegression.lm)
+```
+
+```{r}
+system.time({replicate(10000, predict(linearRegression.lm, newdata = testGroup))})
+```
+
+``` {r }
+prediction <- predict(linearRegression.lm, newdata = testGroup)
+final <- data.frame(cbind(actuals=testGroup$SalePrice, predicteds=prediction))
+cor(final)
+head(final)
+```
+```{r}
+mean(apply(final, 1, min) / apply(final, 1, max))
+mean(abs((final$predicteds - final$actuals))/final$actuals)
+```
+```{r}
+plot(final)
+```
