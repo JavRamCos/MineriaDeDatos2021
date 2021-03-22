@@ -4,7 +4,7 @@ author: "Javier Ramirez Cospin"
 date: "15/3/2021"
 output: html_document
 ---
-
+### Inicializacion de archivo
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -15,6 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ### Carga de librerias
 ``` {r }
 library('readxl')
+library('ggplot2')
 ```
 
 ### Carga de Datos
@@ -54,4 +55,61 @@ matrimonios2016 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2016.xlsx",s
                               sheet=6,skip=1,col_names=TRUE)
 matrimonios2017 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2017.xlsx",sep=""),
                               sheet=6,skip=1,col_names=TRUE)
+```
+### Analisis General Matrimonios y Divorcios
+``` {r }
+# Años 2001 - 2017
+years <- c('2001','2002','2003','2004','2005','2006','2007','2008','2009','2010',
+           '2011','2012','2013','2014','2015','2016','2017')
+# Datos generales divorcios 2001 - 2017
+dYear2001 <- divorcios2010$'2001'[1]
+dYear2002 <- divorcios2010$'2002'[1]
+dYear2003 <- divorcios2010$'2003'[1]
+dYear2004 <- divorcios2010$'2004'[1]
+dYear2005 <- divorcios2010$'2005'[1]
+dYear2006 <- divorcios2010$'2006'[1]
+dYear2007 <- divorcios2010$'2007'[1]
+dYear2008 <- divorcios2010$'2008'[1]
+dYear2009 <- divorcios2010$'2009'[1]
+dYear2010 <- divorcios2010$'2010'[1]
+dYear2011 <- divorcios2011$Total[1]
+dYear2012 <- divorcios2012$Total[1]
+dYear2013 <- divorcios2013$Total[1]
+dYear2014 <- divorcios2014$Total[1]
+dYear2015 <- divorcios2015$Total[1]
+dYear2016 <- divorcios2016$Total[1]
+dYear2017 <- divorcios2017$Total[1]
+divorciosGenerales <- c(dYear2001,dYear2002,dYear2003,dYear2004,dYear2005,dYear2006,dYear2007,
+                        dYear2008,dYear2009,dYear2010,dYear2011,dYear2012,dYear2013,dYear2014,
+                        dYear2015,dYear2016,dYear2017)
+# Datos generales matrimonios 2001 - 2017
+mYear2001 <- matrimonios2010$'2001'[1]
+mYear2002 <- matrimonios2010$'2002'[1]
+mYear2003 <- matrimonios2010$'2003'[1]
+mYear2004 <- matrimonios2010$'2004'[1]
+mYear2005 <- matrimonios2010$'2005'[1]
+mYear2006 <- matrimonios2010$'2006'[1]
+mYear2007 <- matrimonios2010$'2007'[1]
+mYear2008 <- matrimonios2010$'2008'[1]
+mYear2009 <- matrimonios2010$'2009'[1]
+mYear2010 <- matrimonios2010$'2010'[1]
+mYear2011 <- matrimonios2011$Total[1]
+mYear2012 <- matrimonios2012$Total[1]
+mYear2013 <- matrimonios2013$Total[1]
+mYear2014 <- matrimonios2014$Total[1]
+mYear2015 <- matrimonios2015$Total[1]
+mYear2016 <- matrimonios2016$Total[1]
+mYear2017 <- matrimonios2017$Total[1]
+matrimoniosGenerales <- c(mYear2001,mYear2002,mYear2003,mYear2004,mYear2005,mYear2006,mYear2007,
+                          mYear2008,mYear2009,mYear2010,mYear2011,mYear2012,mYear2013,mYear2014,
+                          mYear2015,mYear2016,mYear2017)
+# Creacion de data frame con divorcios 2001 - 2017 y  matrimonios 2001 - 2017
+df <- data.frame(Year = years,
+                 Divorcios = divorciosGenerales,
+                 Matrimonios = matrimoniosGenerales)
+# Graficas
+p1 <- ggplot() + geom_line(aes(y = Divorcios,x = Year,group = 1),
+                           data = df)
+p2 <- ggplot() + geom_line(aes(y = Matrimonios,x = Year,group = 1),
+                           data = df)
 ```
