@@ -101,7 +101,7 @@ violenciaSalario2017 <- read_excel(paste(path,"/ViolenciaBD/ViolenciaIntrafamili
 violenciaNoSalario2017 <- read_excel(paste(path,"/ViolenciaBD/ViolenciaIntrafamiliar2017.xlsx",sep=""),
                               sheet=14,skip=6,col_names=TRUE)
 ```
-### Analisis General Matrimonios y Divorcios
+### Analisis Exploratorio General Matrimonios y Divorcios
 ``` {r }
 # Años 2001 - 2017
 years <- c('2001','2002','2003','2004','2005','2006','2007','2008','2009','2010',
@@ -149,16 +149,96 @@ matrimoniosGenerales <- c(mYear2001,mYear2002,mYear2003,mYear2004,mYear2005,mYea
                           mYear2008,mYear2009,mYear2010,mYear2011,mYear2012,mYear2013,mYear2014,
                           mYear2015,mYear2016,mYear2017)
 # Creacion de data frame con divorcios 2001 - 2017 y  matrimonios 2001 - 2017
-df <- data.frame(Year = years,
-                 Divorcios = divorciosGenerales,
-                 Matrimonios = matrimoniosGenerales)
+divorciosMatrimoniosGenerales <- data.frame(Year = years,
+                                  Divorcios = divorciosGenerales,
+                                  Matrimonios = matrimoniosGenerales)
 # Graficas
 p1 <- ggplot() + geom_line(aes(y = Divorcios,x = Year,group = 1),
-                           data = df)
+                           data = divorciosMatrimoniosGenerales)
 p2 <- ggplot() + geom_line(aes(y = Matrimonios,x = Year,group = 1),
-                           data = df)
+                           data = divorciosMatrimoniosGenerales)
 ```
-### Analisis General Violencia Intrafamiliar
+### Analisis Exploratorio General Violencia Intrafamiliar
+``` {r }
+# Años
+years <- c('2008','2009','2010','2011','2012','2013','2014','2015','2016','2017')
+# Hombres sin Salario
+hSinSalario2008 <- violenciaNoSalario2008$Total[8]
+hSinSalario2009 <- violenciaNoSalario2009$Total[8]
+hSinSalario2010 <- violenciaNoSalario2010$Total[8]
+hSinSalario2011 <- violenciaNoSalario2011$Total[8]
+hSinSalario2012 <- violenciaNoSalario2012$Total[8]
+hSinSalario2013 <- violenciaNoSalario2013$Total[8]
+hSinSalario2014 <- violenciaNoSalario2014$Total[9]
+hSinSalario2015 <- violenciaNoSalario2015$Total[9]
+hSinSalario2016 <- violenciaNoSalario2016$Total[8]
+hSinSalario2017 <- violenciaNoSalario2017$Total[9]
+hombresSinSalario <- c(hSinSalario2008,hSinSalario2009,hSinSalario2010,hSinSalario2011,hSinSalario2012,
+                       hSinSalario2013,hSinSalario2014,hSinSalario2015,hSinSalario2016,hSinSalario2017)
+# Mujeres sin salario
+mSinSalario2008 <- violenciaNoSalario2008$Total[15]
+mSinSalario2009 <- violenciaNoSalario2009$Total[15]
+mSinSalario2010 <- violenciaNoSalario2010$Total[15]
+mSinSalario2011 <- violenciaNoSalario2011$Total[15]
+mSinSalario2012 <- violenciaNoSalario2012$Total[15]
+mSinSalario2013 <- violenciaNoSalario2013$Total[15]
+mSinSalario2014 <- violenciaNoSalario2014$Total[17]
+mSinSalario2015 <- violenciaNoSalario2015$Total[17]
+mSinSalario2016 <- violenciaNoSalario2016$Total[15]
+mSinSalario2017 <- violenciaNoSalario2017$Total[17]
+mujeresSinSalario <- c(mSinSalario2008,mSinSalario2009,mSinSalario2010,mSinSalario2011,mSinSalario2012,
+                       mSinSalario2013,mSinSalario2014,mSinSalario2015,mSinSalario2016,mSinSalario2017)
+# Hombres con Salario
+hSalario2008 <- violenciaSalario2008$Hombres[1]
+hSalario2009 <- violenciaSalario2009$Hombres[1]
+hSalario2010 <- violenciaSalario2010$Hombres[1]
+hSalario2011 <- violenciaSalario2011$Hombres[1]
+hSalario2012 <- violenciaSalario2012$Hombres[1]
+hSalario2013 <- violenciaSalario2013$Hombres[1]
+hSalario2014 <- violenciaSalario2014$Hombres[1]
+hSalario2015 <- violenciaSalario2015$Hombres[1]
+hSalario2016 <- violenciaSalario2016$Hombres[1]
+hSalario2017 <- violenciaSalario2017$Hombres[1]
+hombresConSalario <- c(hSalario2008,hSalario2009,hSalario2010,hSalario2011,hSalario2012,
+                       hSalario2013,hSalario2014,hSalario2015,hSalario2016,hSalario2017)
+# Mujeres con Salario
+mSalario2008 <- violenciaSalario2008$Mujeres[1]
+mSalario2009 <- violenciaSalario2009$Mujeres[1]
+mSalario2010 <- violenciaSalario2010$Mujeres[1]
+mSalario2011 <- violenciaSalario2011$Mujeres[1]
+mSalario2012 <- violenciaSalario2012$Mujeres[1]
+mSalario2013 <- violenciaSalario2013$Mujeres[1]
+mSalario2014 <- violenciaSalario2014$Mujeres[1]
+mSalario2015 <- violenciaSalario2015$Mujeres[1]
+mSalario2016 <- violenciaSalario2016$Mujeres[1]
+mSalario2017 <- violenciaSalario2017$Mujeres[1]
+mujeresConSalario <- c(mSalario2008,mSalario2009,mSalario2010,mSalario2011,mSalario2012,
+                       mSalario2013,mSalario2014,mSalario2015,mSalario2016,mSalario2017)
+# Creacion de data frame con victimas hombres (con y sin salario) y victimas mujeres (con y sin salario)
+violenciaSalariosHombresMujeres <- data.frame(Year = years,
+                                              Hombres_Con_Salario = hombresConSalario,
+                                              Mujeres_Con_Salario = mujeresConSalario,
+                                              Hombres_Sin_Salario = hombresSinSalario,
+                                              Mujeres_Sin_Salario = mujeresSinSalario)
+violenciaSalariosHombresMujeres
+# Grafica sin Salario
+{ggplot(violenciaSalariosHombresMujeres,aes(years)) + 
+    geom_line(aes(y=hombresSinSalario),col="blue",group=1) + 
+    geom_line(aes(y=mujeresSinSalario),col="red",group=1) + 
+    geom_vline(xintercept = 5,linetype="dashed",col="black") +
+    labs(title = "Mujeres y Hombres sin Salario 2008 - 2017",x = "Año",
+         y = "Número")}
+# Grafica con Salario
+{ggplot(violenciaSalariosHombresMujeres,aes(years)) + 
+    geom_line(aes(y=hombresConSalario),col="blue",group=1) + 
+    geom_line(aes(y=mujeresConSalario),col="red",group=1) +
+    geom_vline(xintercept = 5,linetype="dashed",col="black") +
+    labs(title = "Mujeres y Hombres con Salario 2008 - 2017",x = "Año",
+         y = "Número")}
+```
+
+
+### Analisis Exploratorio 
 ``` {r }
 
 ```
