@@ -100,6 +100,13 @@ violenciaSalario2017 <- read_excel(paste(path,"/ViolenciaBD/ViolenciaIntrafamili
                               sheet=13,skip=7,col_names=TRUE)
 violenciaNoSalario2017 <- read_excel(paste(path,"/ViolenciaBD/ViolenciaIntrafamiliar2017.xlsx",sep=""),
                               sheet=14,skip=6,col_names=TRUE)
+# Carga de datos violencia pro mes de ocurrencia 2011 - 2013
+violenciaMeses2011 <- read_excel(paste(path,"/DivorciosBD/Divorcios2011.xls",sep=""),
+                              sheet=6,skip=1,col_names=TRUE)
+violenciaMeses2012 <- read_excel(paste(path,"/DivorciosBD/Divorcios2012.xls",sep=""),
+                              sheet=6,skip=1,col_names=TRUE)
+violenciaMeses2013 <- read_excel(paste(path,"/DivorciosBD/Divorcios2013.xls",sep=""),
+                              sheet=6,skip=1,col_names=TRUE)
 ```
 ### Analisis Exploratorio General Matrimonios y Divorcios
 ``` {r }
@@ -238,7 +245,37 @@ violenciaSalariosHombresMujeres
 ```
 
 
-### Analisis Exploratorio 
+### Analisis Exploratorio Meses de ocurrencia 2011 - 2013
 ``` {r }
+# Meses del año
+months <- c("Enero","Febrero","Marzo","Abril","Mayo","Junio",
+            "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre")
+# Numero de divorcios por mes 2011 - 2013
+meses2011 <- c(violenciaMeses2011$Enero[1],violenciaMeses2011$Febrero[1],violenciaMeses2011$Marzo[1],
+               violenciaMeses2011$Abril[1],violenciaMeses2011$Mayo[1],violenciaMeses2011$Junio[1],
+               violenciaMeses2011$Julio[1],violenciaMeses2011$Agosto[1],violenciaMeses2011$Septiembre[1],
+               violenciaMeses2011$Octubre[1],violenciaMeses2011$Noviembre[1],violenciaMeses2011$Diciembre[1])
 
+meses2012 <- c(violenciaMeses2012$Enero[1],violenciaMeses2012$Febrero[1],violenciaMeses2012$Marzo[1],
+               violenciaMeses2012$Abril[1],violenciaMeses2012$Mayo[1],violenciaMeses2012$Junio[1],
+               violenciaMeses2012$Julio[1],violenciaMeses2012$Agosto[1],violenciaMeses2012$Septiembre[1],
+               violenciaMeses2012$Octubre[1],violenciaMeses2012$Noviembre[1],violenciaMeses2012$Diciembre[1])
+
+meses2013 <- c(violenciaMeses2013$Enero[1],violenciaMeses2013$Febrero[1],violenciaMeses2013$Marzo[1],
+               violenciaMeses2013$Abril[1],violenciaMeses2013$Mayo[1],violenciaMeses2013$Junio[1],
+               violenciaMeses2013$Julio[1],violenciaMeses2013$Agosto[1],violenciaMeses2013$Septiembre[1],
+               violenciaMeses2013$Octubre[1],violenciaMeses2013$Noviembre[1],violenciaMeses2013$Diciembre[1])
+
+mesesViolencia <- data.frame(Mes = months,
+                             Año_2011 = meses2011,
+                             Año_2012 = meses2012,
+                             Año_2013 = meses2013)
+mesesViolencia
+# Grafica de ocurrencia por mes 2011 - 20|3
+{plot(mesesViolencia$Año_2011,type="o",col="darkmagenta",ylab="No. Divorcios",xlab="",main="No. Divorcios por mes 2011 - 2013",ylim=c(200,600),xaxt="n")
+lines(mesesViolencia$Año_2012,type="o",col="forestgreen")
+lines(mesesViolencia$Año_2013,type="o",col="darkorange3")
+legend(6,300,legend=c("2011","2012","2013"),
+       col=c("darkmagenta","forestgreen","darkorange3"),lty=1.2,cex=0.8)
+axis(1,1:12,months,las=2)}
 ```
