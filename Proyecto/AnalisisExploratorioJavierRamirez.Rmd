@@ -17,10 +17,14 @@ knitr::opts_chunk$set(echo = TRUE)
 library('readxl')
 library('ggplot2')
 ```
-
+### Limpieza de global environment variables (OPCIONAL)
+``` {r }
+rm(list = ls())
+```
 ### Carga de Datos
 Ingresar el path donde se encuentran los archivos de Divorcios y Matrimonios
 ``` {r }
+path = getwd()
 # Carga de datos de matrimonios 2001 - 2017
 divorcios2010 <- read_excel(paste(path,"/DivorciosBD/Divorcios2001-2010.xls",sep=""),
                               sheet=2,skip=1,col_names=TRUE)
@@ -55,6 +59,47 @@ matrimonios2016 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2016.xlsx",s
                               sheet=6,skip=1,col_names=TRUE)
 matrimonios2017 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2017.xlsx",sep=""),
                               sheet=6,skip=1,col_names=TRUE)
+# Carga de datos de violencia intrafamiliar 2008 - 2017
+violenciaSalario2008 <- read_excel(paste(path,"/ViolenciaBD/ViolenciaIntrafamiliar2008.xlsx",sep=""),
+                              sheet=12,skip=7,col_names=TRUE)
+violenciaNoSalario2008 <- read_excel(paste(path,"/ViolenciaBD/ViolenciaIntrafamiliar2008.xlsx",sep=""),
+                              sheet=13,skip=6,col_names=TRUE)
+violenciaSalario2009 <- read_excel(paste(path,"/ViolenciaBD/ViolenciaIntrafamiliar2009.xlsx",sep=""),
+                              sheet=12,skip=7,col_names=TRUE)
+violenciaNoSalario2009 <- read_excel(paste(path,"/ViolenciaBD/ViolenciaIntrafamiliar2009.xlsx",sep=""),
+                              sheet=13,skip=6,col_names=TRUE)
+violenciaSalario2010 <- read_excel(paste(path,"/ViolenciaBD/ViolenciaIntrafamiliar2010.xlsx",sep=""),
+                              sheet=12,skip=7,col_names=TRUE)
+violenciaNoSalario2010 <- read_excel(paste(path,"/ViolenciaBD/ViolenciaIntrafamiliar2010.xlsx",sep=""),
+                              sheet=13,skip=6,col_names=TRUE)
+violenciaSalario2011 <- read_excel(paste(path,"/ViolenciaBD/ViolenciaIntrafamiliar2011.xlsx",sep=""),
+                              sheet=12,skip=7,col_names=TRUE)
+violenciaNoSalario2011 <- read_excel(paste(path,"/ViolenciaBD/ViolenciaIntrafamiliar2011.xlsx",sep=""),
+                              sheet=13,skip=6,col_names=TRUE)
+violenciaSalario2012 <- read_excel(paste(path,"/ViolenciaBD/ViolenciaIntrafamiliar2012.xlsx",sep=""),
+                              sheet=12,skip=7,col_names=TRUE)
+violenciaNoSalario2012 <- read_excel(paste(path,"/ViolenciaBD/ViolenciaIntrafamiliar2012.xlsx",sep=""),
+                              sheet=13,skip=6,col_names=TRUE)
+violenciaSalario2013 <- read_excel(paste(path,"/ViolenciaBD/ViolenciaIntrafamiliar2013.xlsx",sep=""),
+                              sheet=12,skip=7,col_names=TRUE)
+violenciaNoSalario2013 <- read_excel(paste(path,"/ViolenciaBD/ViolenciaIntrafamiliar2013.xlsx",sep=""),
+                              sheet=13,skip=6,col_names=TRUE)
+violenciaSalario2014 <- read_excel(paste(path,"/ViolenciaBD/ViolenciaIntrafamiliar2014.xlsx",sep=""),
+                              sheet=13,skip=7,col_names=TRUE)
+violenciaNoSalario2014 <- read_excel(paste(path,"/ViolenciaBD/ViolenciaIntrafamiliar2014.xlsx",sep=""),
+                              sheet=14,skip=6,col_names=TRUE)
+violenciaSalario2015 <- read_excel(paste(path,"/ViolenciaBD/ViolenciaIntrafamiliar2015.xlsx",sep=""),
+                              sheet=13,skip=7,col_names=TRUE)
+violenciaNoSalario2015 <- read_excel(paste(path,"/ViolenciaBD/ViolenciaIntrafamiliar2015.xlsx",sep=""),
+                              sheet=14,skip=6,col_names=TRUE)
+violenciaSalario2016 <- read_excel(paste(path,"/ViolenciaBD/ViolenciaIntrafamiliar2016.xlsx",sep=""),
+                              sheet=13,skip=7,col_names=TRUE)
+violenciaNoSalario2016 <- read_excel(paste(path,"/ViolenciaBD/ViolenciaIntrafamiliar2016.xlsx",sep=""),
+                              sheet=14,skip=6,col_names=TRUE)
+violenciaSalario2017 <- read_excel(paste(path,"/ViolenciaBD/ViolenciaIntrafamiliar2017.xlsx",sep=""),
+                              sheet=13,skip=7,col_names=TRUE)
+violenciaNoSalario2017 <- read_excel(paste(path,"/ViolenciaBD/ViolenciaIntrafamiliar2017.xlsx",sep=""),
+                              sheet=14,skip=6,col_names=TRUE)
 ```
 ### Analisis General Matrimonios y Divorcios
 ``` {r }
@@ -112,4 +157,8 @@ p1 <- ggplot() + geom_line(aes(y = Divorcios,x = Year,group = 1),
                            data = df)
 p2 <- ggplot() + geom_line(aes(y = Matrimonios,x = Year,group = 1),
                            data = df)
+```
+### Analisis General Violencia Intrafamiliar
+``` {r }
+
 ```
