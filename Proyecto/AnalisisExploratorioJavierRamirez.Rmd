@@ -107,6 +107,9 @@ violenciaMeses2012 <- read_excel(paste(path,"/DivorciosBD/Divorcios2012.xls",sep
                               sheet=6,skip=1,col_names=TRUE)
 violenciaMeses2013 <- read_excel(paste(path,"/DivorciosBD/Divorcios2013.xls",sep=""),
                               sheet=6,skip=1,col_names=TRUE)
+# Carga de divorcios por ocupacion de la mujer y del hombre 2012
+violenciaOcupacion2012 <- read_excel(paste(path,"/DivorciosBD/Divorcios2012.xls",sep=""),
+                                     sheet=5,skip=2,col_names=TRUE)
 ```
 ### Analisis Exploratorio General Matrimonios y Divorcios
 ``` {r }
@@ -160,10 +163,14 @@ divorciosMatrimoniosGenerales <- data.frame(Year = years,
                                   Divorcios = divorciosGenerales,
                                   Matrimonios = matrimoniosGenerales)
 # Graficas
-p1 <- ggplot() + geom_line(aes(y = Divorcios,x = Year,group = 1),
-                           data = divorciosMatrimoniosGenerales)
-p2 <- ggplot() + geom_line(aes(y = Matrimonios,x = Year,group = 1),
-                           data = divorciosMatrimoniosGenerales)
+{ggplot() + 
+        geom_line(aes(y = Divorcios,x = Year,group = 1),
+                  data = divorciosMatrimoniosGenerales) + 
+        geom_vline(xintercept = 12,linetype="dashed",col="black")}
+{ggplot() + 
+        geom_line(aes(y = Matrimonios,x = Year,group = 1),
+                  data = divorciosMatrimoniosGenerales) +
+        geom_vline(xintercept = 12,linetype="dashed",col="black")}
 ```
 ### Analisis Exploratorio General Violencia Intrafamiliar
 ``` {r }
@@ -227,25 +234,26 @@ violenciaSalariosHombresMujeres <- data.frame(Year = years,
                                               Mujeres_Con_Salario = mujeresConSalario,
                                               Hombres_Sin_Salario = hombresSinSalario,
                                               Mujeres_Sin_Salario = mujeresSinSalario)
-violenciaSalariosHombresMujeres
-# Grafica sin Salario
-{ggplot(violenciaSalariosHombresMujeres,aes(years)) + 
-    geom_line(aes(y=hombresSinSalario),col="blue",group=1) + 
-    geom_line(aes(y=mujeresSinSalario),col="red",group=1) + 
-    geom_vline(xintercept = 5,linetype="dashed",col="black") +
-    labs(title = "Mujeres y Hombres sin Salario 2008 - 2017",x = "Año",
-         y = "Número")}
-# Grafica con Salario
-{ggplot(violenciaSalariosHombresMujeres,aes(years)) + 
-    geom_line(aes(y=hombresConSalario),col="blue",group=1) + 
-    geom_line(aes(y=mujeresConSalario),col="red",group=1) +
-    geom_vline(xintercept = 5,linetype="dashed",col="black") +
-    labs(title = "Mujeres y Hombres con Salario 2008 - 2017",x = "Año",
-         y = "Número")}
+# Grafica Violencia Hombres y Mujeres sin Salario
+{plot(violenciaSalariosHombresMujeres$Hombres_Sin_Salario,type="o",col="red",ylim=c(0,25000),main="Violencia Intrafamiliar Hombres y Mujeres Sin Salario 2008 - 2017",ylab="No. Incidentes",xlab="Años",xaxt="n")
+lines(violenciaSalariosHombresMujeres$Mujeres_Sin_Salario,type="o",col="blue")
+legend(6,12000,legend=c("Hombres","Mujeres"),
+       col=c("red","blue"),lty=1.2,cex=0.8)
+axis(1,1:10,years)}
+# Grafica Violencia Hombres y Mujeres con Salario
+{plot(violenciaSalariosHombresMujeres$Hombres_Con_Salario,type="o",col="red",ylim=c(0,10000),main="Violencia Intrafamiliar Hombres y Mujeres Con Salario 2008 - 2017",ylab="No. Incidentes",xlab="Años",xaxt="n")
+lines(violenciaSalariosHombresMujeres$Mujeres_Con_Salario,type="o",col="blue")
+legend(5,6500,legend=c("Hombres","Mujeres"),
+       col=c("red","blue"),lty=1.2,cex=0.8)
+axis(1,1:10,years)}
 ```
 
 
-### Analisis Exploratorio Meses de ocurrencia 2011 - 2013
+### Analisis Exploratorio General Nacimientos 2009 - 2017
+``` {r }
+
+```
+### Analisis Exploratorio Violencia Intrafamiliar Meses de ocurrencia 2011 - 2013
 ``` {r }
 # Meses del año
 months <- c("Enero","Febrero","Marzo","Abril","Mayo","Junio",
@@ -278,4 +286,67 @@ lines(mesesViolencia$Año_2013,type="o",col="darkorange3")
 legend(6,300,legend=c("2011","2012","2013"),
        col=c("darkmagenta","forestgreen","darkorange3"),lty=1.2,cex=0.8)
 axis(1,1:12,months,las=2)}
+```
+### Analisis Exploratorio Ocupaciones Hombres y Mujeres 2012
+``` {r }
+# Ocupaciones
+ocupaciones <- c("Militares","Directores","Cientificos","Tecnicos","Auxiliar",
+                 "Vendedores","Agricultores","Artesanos","Operadores",
+                 "Elemental","No especificada","Ignorado")
+# Ocupaiones mujeres 2012
+mujeresMilitares2012 <- violenciaOcupacion2012$`Ocupaciones militares`[1]
+mujeresDirectoras2012 <- violenciaOcupacion2012$`Directores y gerentes`[1]
+mujeresCientificas2012 <- violenciaOcupacion2012$`Profesionales científicos e intelectuales`[1]
+mujeresTecnicas2012 <- violenciaOcupacion2012$`Técnicos y profesionales de nivel medio`[1]
+mujeresApoyo2012 <- violenciaOcupacion2012$`Personal de apoyo administrativo`[1]
+mujeresVendedoras2012 <- violenciaOcupacion2012$`Trabajadores de los servicios y vendedores de comercios y mercados`[1]
+mujeresAgricultoras2012 <- violenciaOcupacion2012$`Agricultores y trabajadores calificados agropecuarios, forestales y pesqueros`[1]
+mujeresArtesanas2012 <- violenciaOcupacion2012$`Oficiales, operarios y artesanos de artes mecánicas y de otros oficios`[1]
+mujeresOperadoras2012 <- violenciaOcupacion2012$`Operadores de intalaciones y máquinas y ensambladores`[1]
+mujeresElementales2012 <- violenciaOcupacion2012$`Ocupaciones elementales`[1]
+mujeresNoEspecificadas2012 <- violenciaOcupacion2012$`Ocupación  no especificada`[1]
+mujeresIgnoradas2012 <- violenciaOcupacion2012$Ignorado[1]
+ocupacionesMujeres2012 <- c(mujeresMilitares2012,mujeresDirectoras2012,mujeresCientificas2012,
+                            mujeresTecnicas2012,mujeresApoyo2012,mujeresVendedoras2012,
+                            mujeresAgricultoras2012,mujeresArtesanas2012,mujeresOperadoras2012,
+                            mujeresElementales2012,mujeresNoEspecificadas2012,mujeresIgnoradas2012)
+# Ocupaciones hombres 2012
+hombresMilitares2012 <- violenciaOcupacion2012$Total[2]
+hombresDirectores2012 <- violenciaOcupacion2012$Total[3]
+hombresCientificos2012 <- violenciaOcupacion2012$Total[4]
+hombresTecnicos2012 <- violenciaOcupacion2012$Total[5]
+hombresApoyo2012 <- violenciaOcupacion2012$Total[6]
+hombresVendedores2012 <- violenciaOcupacion2012$Total[7]
+hombresAgricultores2012 <- violenciaOcupacion2012$Total[8]
+hombresArtesanos2012 <- violenciaOcupacion2012$Total[9]
+hombresOperadores2012 <- violenciaOcupacion2012$Total[10]
+hombresElementales2012 <- violenciaOcupacion2012$Total[11]
+hombresNoEspecificados2012 <- violenciaOcupacion2012$Total[12]
+hombresIgnorados2012 <- violenciaOcupacion2012$Total[13]
+ocupacionesHombres2012 <- c(hombresMilitares2012,hombresDirectores2012,hombresCientificos2012,
+                            hombresTecnicos2012,hombresApoyo2012,hombresVendedores2012,
+                            hombresAgricultores2012,hombresArtesanos2012,hombresOperadores2012,
+                            hombresElementales2012,hombresNoEspecificados2012,hombresIgnorados2012)
+# Creacion de data frame
+ocupaciones2012 <- data.frame(Ocupaciones = ocupaciones,
+                              Mujeres = ocupacionesMujeres2012,
+                              Hombres = ocupacionesHombres2012)
+# Histograma Mujeres
+barplot(ocupaciones2012$Mujeres,
+        main="Ocupaciones de Mujeres Divorciadas 2012",
+        ylim=c(0,2000),
+        names.arg = ocupaciones2012$Ocupaciones,
+        ylab="No. Mujeres",
+        las=2,
+        col="darksalmon",
+        cex.names=0.6)
+# Histograma Hombres
+barplot(ocupaciones2012$Hombres,
+        main="Ocupaciones de Hombres Divorciados 2012",
+        ylim=c(0,2500),
+        names.arg = ocupaciones2012$Ocupaciones,
+        ylab="No. Hombres",
+        las=2,
+        col="deepskyblue3",
+        cex.names=0.6)
 ```
