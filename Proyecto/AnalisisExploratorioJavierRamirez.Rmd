@@ -42,6 +42,9 @@ divorcios2016 <- read_excel(paste(path,"/DivorciosBD/Divorcios2016.xls",sep=""),
                               sheet=4,skip=1,col_names=TRUE)
 divorcios2017 <- read_excel(paste(path,"/DivorciosBD/Divorcios2017.xlsx",sep=""),
                               sheet=4,skip=1,col_names=TRUE)
+# Edades al momento de divorciarse esposo y esposa 2012
+divorciosEdades2012 <- read_excel(paste(path,"/DivorciosBD/Divorcios2012.xls",sep=""),
+                              sheet=2,skip=2,col_names=TRUE)
 # Carga de datos de divorcios 2001 - 2017
 matrimonios2010 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2001-2010.xls",sep=""),
                               sheet=2,skip=1,col_names=TRUE)
@@ -59,6 +62,25 @@ matrimonios2016 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2016.xlsx",s
                               sheet=6,skip=1,col_names=TRUE)
 matrimonios2017 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2017.xlsx",sep=""),
                               sheet=6,skip=1,col_names=TRUE)
+# Carga de datos nacimientos 2009 - 2017
+nacimientos2009 <- read_excel(paste(path,"/NacimientosBD/Nacimientos2009.xls",sep=""),
+                              sheet=2,skip=2,col_names=TRUE)
+nacimientos2010 <- read_excel(paste(path,"/NacimientosBD/Nacimientos2010.xls",sep=""),
+                              sheet=2,skip=2,col_names=TRUE)
+nacimientos2011 <- read_excel(paste(path,"/NacimientosBD/Nacimientos2011.xls",sep=""),
+                              sheet=2,skip=2,col_names=TRUE)
+nacimientos2012 <- read_excel(paste(path,"/NacimientosBD/Nacimientos2012.xls",sep=""),
+                              sheet=2,skip=2,col_names=TRUE)
+nacimientos2013 <- read_excel(paste(path,"/NacimientosBD/Nacimientos2013.xls",sep=""),
+                              sheet=2,skip=2,col_names=TRUE)
+nacimientos2014 <- read_excel(paste(path,"/NacimientosBD/Nacimientos2014.xls",sep=""),
+                              sheet=2,skip=2,col_names=TRUE)
+nacimientos2015 <- read_excel(paste(path,"/NacimientosBD/Nacimientos2015.xls",sep=""),
+                              sheet=2,skip=2,col_names=TRUE)
+nacimientos2016 <- read_excel(paste(path,"/NacimientosBD/Nacimientos2016.xlsx",sep=""),
+                              sheet=2,skip=2,col_names=TRUE)
+nacimientos2017 <- read_excel(paste(path,"/NacimientosBD/Nacimientos2017.xlsx",sep=""),
+                              sheet=2,skip=2,col_names=TRUE)
 # Carga de datos de violencia intrafamiliar 2008 - 2017
 violenciaSalario2008 <- read_excel(paste(path,"/ViolenciaBD/ViolenciaIntrafamiliar2008.xlsx",sep=""),
                               sheet=12,skip=7,col_names=TRUE)
@@ -174,6 +196,33 @@ divorciosMatrimoniosGenerales <- data.frame(Year = years,
 ```
 ### Analisis Exploratorio General Violencia Intrafamiliar
 ``` {r }
+# Years
+years <- c("2008","2009","2010","2011","2012","2013","2014","2015","2016","2017")
+# Violencia Intrafamiliar 2008 - 2017
+violencia2008 <- violenciaNoSalario2008$Total[1]
+violencia2009 <- violenciaNoSalario2009$Total[1]
+violencia2010 <- violenciaNoSalario2010$Total[1]
+violencia2011 <- violenciaNoSalario2011$Total[1]
+violencia2012 <- violenciaNoSalario2012$Total[1]
+violencia2013 <- violenciaNoSalario2013$Total[1]
+violencia2014 <- violenciaNoSalario2014$Total[1]
+violencia2015 <- violenciaNoSalario2015$Total[1]
+violencia2016 <- violenciaNoSalario2016$Total[1]
+violencia2017 <- violenciaNoSalario2017$Total[1]
+violenciaIntrafamiliar <- c(violencia2008,violencia2009,violencia2010,violencia2011,
+                            violencia2012,violencia2013,violencia2014,violencia2015,
+                            violencia2016,violencia2017)
+# Data frame de violencia intrafamiliar
+violenciaDF <- data.frame(Years = years,
+                          Violencia = violenciaIntrafamiliar)
+# Grafica para violencia intrafamiliar general 2009 - 2017
+{ggplot() + 
+        geom_line(aes(y = Violencia,x = Years,group = 1),
+                  data = violenciaDF) + 
+        geom_vline(xintercept = 5,linetype="dashed",col="black")}
+```
+### Analisis Exploratorio Violencia Intrafamiliar Con y Sin Salario
+``` {r }
 # Años
 years <- c('2008','2009','2010','2011','2012','2013','2014','2015','2016','2017')
 # Hombres sin Salario
@@ -251,7 +300,27 @@ axis(1,1:10,years)}
 
 ### Analisis Exploratorio General Nacimientos 2009 - 2017
 ``` {r }
-
+# Años
+years <- c("2009","2010","2011","2012","2013","2014","2015","2016","2017")
+# Total de bebes por año 2009 - 2017
+numBebes2009 <- nacimientos2009$Total[1]
+numBebes2010 <- nacimientos2010$Total[1]
+numBebes2011 <- nacimientos2011$Total[1]
+numBebes2012 <- nacimientos2012$Total[1]
+numBebes2013 <- nacimientos2013$Total[1]
+numBebes2014 <- nacimientos2014$Total[1]
+numBebes2015 <- nacimientos2015$Total[1]
+numBebes2016 <- nacimientos2016$Total[1]
+numBebes2017 <- nacimientos2017$Total[1]
+numBebes <- c(numBebes2009,numBebes2010,numBebes2011,numBebes2012,
+              numBebes2013,numBebes2014,numBebes2015,numBebes2016,numBebes2017)
+# Creacion de data frame
+bebesDF <- data.frame(Year = years,
+                      Bebes = numBebes)
+{ggplot() + 
+        geom_line(aes(y = Bebes,x = Year,group = 1),
+                  data = bebesDF) + 
+        geom_vline(xintercept = 4,linetype="dashed",col="black")}
 ```
 ### Analisis Exploratorio Violencia Intrafamiliar Meses de ocurrencia 2011 - 2013
 ``` {r }
@@ -328,25 +397,86 @@ ocupacionesHombres2012 <- c(hombresMilitares2012,hombresDirectores2012,hombresCi
                             hombresAgricultores2012,hombresArtesanos2012,hombresOperadores2012,
                             hombresElementales2012,hombresNoEspecificados2012,hombresIgnorados2012)
 # Creacion de data frame
-ocupaciones2012 <- data.frame(Ocupaciones = ocupaciones,
-                              Mujeres = ocupacionesMujeres2012,
-                              Hombres = ocupacionesHombres2012)
+ocupaciones2012DF <- as.matrix(data.frame(Militares = c(mujeresMilitares2012,hombresMilitares2012),
+                                          Directores = c(mujeresDirectoras2012,hombresDirectores2012),
+                                          Cientificos = c(mujeresCientificas2012,hombresCientificos2012),
+                                          Tecnicos = c(mujeresTecnicas2012,hombresTecnicos2012),
+                                          Auxiliar = c(mujeresApoyo2012,hombresApoyo2012),
+                                          Vendedores = c(mujeresVendedoras2012,hombresVendedores2012),
+                                          Agricultores = c(mujeresAgricultoras2012,hombresAgricultores2012),
+                                          Artesanos = c(mujeresArtesanas2012,hombresArtesanos2012),
+                                          Operadores = c(mujeresOperadoras2012,hombresOperadores2012),
+                                          Elementales = c(mujeresElementales2012,hombresElementales2012),
+                                          No_Especificado = c(mujeresNoEspecificadas2012,hombresNoEspecificados2012),
+                                          Ignorados = c(mujeresIgnoradas2012,hombresIgnorados2012)))
+rownames(ocupaciones2012DF) = c("Esposa","Esposo")
 # Histograma Mujeres
-barplot(ocupaciones2012$Mujeres,
-        main="Ocupaciones de Mujeres Divorciadas 2012",
-        ylim=c(0,2000),
-        names.arg = ocupaciones2012$Ocupaciones,
-        ylab="No. Mujeres",
+barplot(ocupaciones2012DF,
+        main="Ocupaciones de esposo y esposa al momento de divorcio 2012",
+        beside=TRUE,
+        col=c("darksalmon","dodgerblue"),
         las=2,
-        col="darksalmon",
-        cex.names=0.6)
-# Histograma Hombres
-barplot(ocupaciones2012$Hombres,
-        main="Ocupaciones de Hombres Divorciados 2012",
+        cex.names = 0.6,
         ylim=c(0,2500),
-        names.arg = ocupaciones2012$Ocupaciones,
-        ylab="No. Hombres",
+        legend.text = rownames(ocupaciones2012DF))
+```
+### Analisis Exploratorio Edades del esposo y esposa
+``` {r }
+# Edades
+edades <- c("< 15","15 - 19","20 - 24","25 - 29","30 - 34","35 - 39","40 - 44",
+            "45 - 49","50 - 54","55 - 59","60 y mas","Ignorado")
+# Edades esposo
+edadesMenos15Esposo <- divorciosEdades2012$`Menos de 15`[1]
+edades15_19Esposo <- divorciosEdades2012$`15-19`[1]
+edades20_24Esposo <- divorciosEdades2012$`20-24`[1]
+edades25_29Esposo <- divorciosEdades2012$`25-29`[1]
+edades30_34Esposo <- divorciosEdades2012$`30-34`[1]
+edades35_39Esposo <- divorciosEdades2012$`35-39`[1]
+edades40_44Esposo <- divorciosEdades2012$`40-44`[1]
+edades45_49Esposo <- divorciosEdades2012$`45-49`[1]
+edades50_54Esposo <- divorciosEdades2012$`50-54`[1]
+edades55_59Esposo <- divorciosEdades2012$`55-59`[1]
+edadesMas60Esposo <- divorciosEdades2012$`60 y más`[1]
+edadesIgnoradoEsposo <- divorciosEdades2012$Ignorado[1]
+edadesEsposo <- c(edadesMenos15Esposo,edades15_19Esposo,edades20_24Esposo,edades25_29Esposo,
+                  edades30_34Esposo,edades35_39Esposo,edades40_44Esposo,edades45_49Esposo,
+                  edades50_54Esposo,edades55_59Esposo,edadesMas60Esposo,edadesIgnoradoEsposo)
+# Edades esposa
+edadesMenos15Esposa <- divorciosEdades2012$Total[2]
+edades15_19Esposa <- divorciosEdades2012$Total[3]
+edades20_24Esposa <- divorciosEdades2012$Total[4]
+edades25_29Esposa <- divorciosEdades2012$Total[5]
+edades30_34Esposa <- divorciosEdades2012$Total[6]
+edades35_39Esposa <- divorciosEdades2012$Total[7]
+edades40_44Esposa <- divorciosEdades2012$Total[8]
+edades45_49Esposa <- divorciosEdades2012$Total[9]
+edades50_54Esposa <- divorciosEdades2012$Total[10]
+edades55_59Esposa <- divorciosEdades2012$Total[11]
+edadesMas60Esposa <- divorciosEdades2012$Total[12]
+edadesIgnoradoEsposa <- divorciosEdades2012$Total[13]
+edadesEsposa <- c(edadesMenos15Esposa,edades15_19Esposa,edades20_24Esposa,edades25_29Esposa,
+                  edades30_34Esposa,edades35_39Esposa,edades40_44Esposa,edades45_49Esposa,
+                  edades50_54Esposa,edades55_59Esposa,edadesMas60Esposa,edadesIgnoradoEsposa)
+# Creacion de data frame
+edadesDivorciosDF <- as.matrix(data.frame(menor_15 = c(edadesEsposo[1],edadesEsposa[1]),
+                                          X15_19 = c(edadesEsposo[2],edadesEsposa[2]),
+                                          X20_24 = c(edadesEsposo[3],edadesEsposa[3]),
+                                          X25_29 = c(edadesEsposo[4],edadesEsposa[4]),
+                                          X30_24 = c(edadesEsposo[5],edadesEsposa[5]),
+                                          X35_39 = c(edadesEsposo[6],edadesEsposa[6]),
+                                          X40_44 = c(edadesEsposo[7],edadesEsposa[7]),
+                                          X45_49 = c(edadesEsposo[8],edadesEsposa[8]),
+                                          X50_54 = c(edadesEsposo[9],edadesEsposa[9]),
+                                          X55_59 = c(edadesEsposo[10],edadesEsposa[10]),
+                                          X60_mas = c(edadesEsposo[11],edadesEsposa[11]),
+                                          Ignorado = c(edadesEsposo[12],edadesEsposa[12])))
+rownames(edadesDivorciosDF) = c("Esposo","Esposa")
+# Grafica Divorcios segun Edades esposo 2012
+barplot(edadesDivorciosDF,
+        col=c("red","grey"),
+        beside = TRUE,
         las=2,
-        col="deepskyblue3",
-        cex.names=0.6)
+        ylim=c(0,3500),
+        main="Edades Esposo y Esposa al momento de Divorcio 2012",
+        legend.text = rownames(edadesDivorciosDF))
 ```
