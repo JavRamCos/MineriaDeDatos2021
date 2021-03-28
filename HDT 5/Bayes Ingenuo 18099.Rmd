@@ -1,0 +1,99 @@
+---
+title: "Bayes Ingenuo 18099"
+author: "Javier Ramirez Cospin"
+date: "23/3/2021"
+output: html_document
+---
+### Inicializacion de archivo
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+### Instalacion de librerias
+``` {r }
+install.packages("ggplot2")
+install.packages("caret")
+install.packages("caretEnsemble")
+install.packages("psych")
+install.packages("Amelia")
+install.packages("mice")
+install.packages("GGally")
+install.packages("rpart")
+```
+### Carga de librerias
+``` {r }
+library(plyr)
+library(dplyr)
+library(cluster)
+library(e1071)
+library(mclust)
+library(fpc)
+library(NbClust)
+library(factoextra)
+library(tidyverse)
+library(readr)
+library(ppclust)
+library(randomForest)
+library(ggplot2)
+library(broom)
+library(ggpubr)
+library(corrplot)
+library(mctest)
+library(caret)
+library(Amelia)
+library(caretEnsemble)
+library(psych)
+library(mice)
+library(GGally)
+library(rpart)
+library(e1071)
+```
+### Cargar y Limpiar Datos
+``` {r }
+rawData <- read.csv("train.csv",TRUE,",")
+datos <- read.csv("train.csv",TRUE,",")
+rawData[is.na(rawData)] = "NO"
+datos[is.na(datos)] = "NO"
+datos <- select(datos,LotArea,TotalBsmtSF,X1stFlrSF,X2ndFlrSF,WoodDeckSF,OpenPorchSF,
+                EnclosedPorch,X3SsnPorch,ScreenPorch,PoolArea,MiscVal,SalePrice)
+scaledData <- as.matrix(scale(datos))
+```
+### Aplicacion de Clusters a los datos
+``` {r }
+km<-kmeans(scaledData, 3, iter.max = 100)
+fviz_cluster(km, data = scaledData, frame.type = "convex")
+```
+### Aplicacion de clusters a datos
+``` {r }
+rawData$Group <- km$cluster
+head(rawData)
+set.seed(12345)
+# Definir Variable SalePrice como categorica
+rawData$Group <- factor(rawData$Group,levels=c(1,2,3),labels=c("Barata","Media","Cara"))
+```
+### Separacion de Grupos de entrenamiento y prueba
+``` {r }
+set.seed(123)
+indxTrain <- createDataPartition(y = rawData$Group,p = 0.7,list = FALSE)
+trainingSet <- rawData[indxTrain,]
+testingSet <- rawData[-indxTrain,]
+# Separacion de variable Group (casas baratas, medias y caras)
+prop.table(table(trainingSet$Group)) * 100
+```
+### Bayes Ingenuo
+``` {r }
+# Verificacion de datos
+set.seed(123)
+# Escalar datos sobre conjuntos de prueba y entrenamiento
+trainingScale <- scale(select(trainingSet,LotArea,TotalBsmtSF,X1stFlrSF,X2ndFlrSF,WoodDeckSF,OpenPorchSF,
+                EnclosedPorch,X3SsnPorch,ScreenPorch,PoolArea,MiscVal))
+testingScale <- scale(select(testingSet,LotArea,TotalBsmtSF,X1stFlrSF,X2ndFlrSF,WoodDeckSF,OpenPorchSF,
+                EnclosedPorch,X3SsnPorch,ScreenPorch,PoolArea,MiscVal))
+# Clasificador
+classifier <- naiveBayes(Group ~ LotArea,TotalBsmtSF,X1stFlrSF,X2ndFlrSF,WoodDeckSF,OpenPorchSF,
+                EnclosedPorch,X3SsnPorch,ScreenPorch,PoolArea,MiscVal,data = testingSet)
+predicter <- predict(classifier,newdata = trainingSet)
+cm <- table(trainingSet$Group,predicter)
+# Matriz de confusion
+confusionMatrix(cm)
+```
+
