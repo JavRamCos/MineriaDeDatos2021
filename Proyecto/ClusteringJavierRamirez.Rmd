@@ -12,6 +12,15 @@ knitr::opts_chunk$set(echo = TRUE)
 ``` {r }
 library('readxl')
 library('ggplot2')
+library('cluster')
+library('e1071')
+library('mclust')
+library('fpc')
+library('NbClust')
+library('factoextra')
+library('tidyverse')
+library('readr')
+library('ppclust')
 ```
 
 ### Limpieza de global environment variables (OPCIONAL)
@@ -24,536 +33,569 @@ Ingresar el path donde se encuentran los archivos de Divorcios y Matrimonios
 path = getwd()
 # Carga de datos de matrimonios 2001 - 2017
 divorcios2010 <- read_excel(paste(path,"/DivorciosBD/Divorcios2001-2010.xls",sep=""),
-                              sheet=2,skip=1,col_names=TRUE)
+                              sheet=7,skip=1,col_names=TRUE)
 divorcios2011 <- read_excel(paste(path,"/DivorciosBD/Divorcios2011.xls",sep=""),
-                              sheet=4,skip=1,col_names=TRUE)
+                              sheet=6,skip=1,col_names=TRUE)
 divorcios2012 <- read_excel(paste(path,"/DivorciosBD/Divorcios2012.xls",sep=""),
-                              sheet=4,skip=1,col_names=TRUE)
+                              sheet=6,skip=1,col_names=TRUE)
 divorcios2013 <- read_excel(paste(path,"/DivorciosBD/Divorcios2013.xls",sep=""),
-                              sheet=4,skip=1,col_names=TRUE)
+                              sheet=6,skip=1,col_names=TRUE)
 divorcios2014 <- read_excel(paste(path,"/DivorciosBD/Divorcios2014.xls",sep=""),
-                              sheet=4,skip=1,col_names=TRUE)
+                              sheet=6,skip=1,col_names=TRUE)
 divorcios2015 <- read_excel(paste(path,"/DivorciosBD/Divorcios2015.xls",sep=""),
-                              sheet=4,skip=1,col_names=TRUE)
+                              sheet=6,skip=1,col_names=TRUE)
 divorcios2016 <- read_excel(paste(path,"/DivorciosBD/Divorcios2016.xls",sep=""),
-                              sheet=4,skip=1,col_names=TRUE)
+                              sheet=6,skip=1,col_names=TRUE)
 divorcios2017 <- read_excel(paste(path,"/DivorciosBD/Divorcios2017.xlsx",sep=""),
-                              sheet=4,skip=1,col_names=TRUE)
-# Divorcios por meses
-divorciosMeses2010 <- read_excel(paste(path,"/DivorciosBD/Divorcios2001-2010.xls",sep=""),
-                              sheet=5,skip=1,col_names=TRUE)
-divorciosMeses2011 <- read_excel(paste(path,"/DivorciosBD/Divorcios2011.xls",sep=""),
-                              sheet=4,skip=1,col_names=TRUE)
-divorciosMeses2012 <- read_excel(paste(path,"/DivorciosBD/Divorcios2012.xls",sep=""),
-                              sheet=4,skip=1,col_names=TRUE)
-divorciosMeses2013 <- read_excel(paste(path,"/DivorciosBD/Divorcios2013.xls",sep=""),
-                              sheet=4,skip=1,col_names=TRUE)
-divorciosMeses2014 <- read_excel(paste(path,"/DivorciosBD/Divorcios2014.xls",sep=""),
-                              sheet=4,skip=1,col_names=TRUE)
-divorciosMeses2015 <- read_excel(paste(path,"/DivorciosBD/Divorcios2015.xls",sep=""),
-                              sheet=4,skip=1,col_names=TRUE)
-divorciosMeses2016 <- read_excel(paste(path,"/DivorciosBD/Divorcios2016.xls",sep=""),
-                              sheet=4,skip=1,col_names=TRUE)
-divorciosMeses2017 <- read_excel(paste(path,"/DivorciosBD/Divorcios2017.xlsx",sep=""),
-                              sheet=4,skip=1,col_names=TRUE)
-# Divorcios por grupos ocupacionales
-divorciosOcupaciones2010 <- read_excel(paste(path,"/DivorciosBD/Divorcios2001-2010.xls",sep=""),
-                              sheet=6,skip=2,col_names=TRUE)
-divorciosOcupaciones2011 <- read_excel(paste(path,"/DivorciosBD/Divorcios2011.xls",sep=""),
-                              sheet=5,skip=2,col_names=TRUE)
-divorciosOcupaciones2012 <- read_excel(paste(path,"/DivorciosBD/Divorcios2012.xls",sep=""),
-                              sheet=5,skip=2,col_names=TRUE)
-divorciosOcupaciones2013 <- read_excel(paste(path,"/DivorciosBD/Divorcios2013.xls",sep=""),
-                              sheet=5,skip=2,col_names=TRUE)
-divorciosOcupaciones2014 <- read_excel(paste(path,"/DivorciosBD/Divorcios2014.xls",sep=""),
-                              sheet=5,skip=2,col_names=TRUE)
-divorciosOcupaciones2015 <- read_excel(paste(path,"/DivorciosBD/Divorcios2015.xls",sep=""),
-                              sheet=5,skip=2,col_names=TRUE)
-divorciosOcupaciones2016 <- read_excel(paste(path,"/DivorciosBD/Divorcios2016.xls",sep=""),
-                              sheet=5,skip=2,col_names=TRUE)
-divorciosOcupaciones2017 <- read_excel(paste(path,"/DivorciosBD/Divorcios2017.xlsx",sep=""),
-                              sheet=5,skip=2,col_names=TRUE)
+                              sheet=6,skip=1,col_names=TRUE)
 # Carga de datos de divorcios 2001 - 2017
 matrimonios2010 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2001-2010.xls",sep=""),
-                              sheet=2,skip=1,col_names=TRUE)
+                              sheet=8,skip=1,col_names=TRUE)
 matrimonios2011 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2011.xls",sep=""),
-                              sheet=6,skip=1,col_names=TRUE)
-matrimonios2012 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2012.xls",sep=""),
-                              sheet=6,skip=1,col_names=TRUE)
-matrimonios2013 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2013.xls",sep=""),
-                              sheet=6,skip=1,col_names=TRUE)
-matrimonios2014 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2014.xls",sep=""),
-                              sheet=6,skip=1,col_names=TRUE)
-matrimonios2015 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2015.xls",sep=""),
-                              sheet=6,skip=1,col_names=TRUE)
-matrimonios2016 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2016.xlsx",sep=""),
-                              sheet=6,skip=1,col_names=TRUE)
-matrimonios2017 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2017.xlsx",sep=""),
-                              sheet=6,skip=1,col_names=TRUE)
-# Matrimonios por meses
-matrimoniosMeses2010 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2001-2010.xls",sep=""),
                               sheet=7,skip=1,col_names=TRUE)
-matrimoniosMeses2011 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2011.xls",sep=""),
-                              sheet=6,skip=1,col_names=TRUE)
-matrimoniosMeses2012 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2012.xls",sep=""),
-                              sheet=6,skip=1,col_names=TRUE)
-matrimoniosMeses2013 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2013.xls",sep=""),
-                              sheet=6,skip=1,col_names=TRUE)
-matrimoniosMeses2014 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2014.xls",sep=""),
-                              sheet=6,skip=1,col_names=TRUE)
-matrimoniosMeses2015 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2015.xls",sep=""),
-                              sheet=6,skip=1,col_names=TRUE)
-matrimoniosMeses2016 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2016.xlsx",sep=""),
-                              sheet=6,skip=1,col_names=TRUE)
-matrimoniosMeses2017 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2017.xlsx",sep=""),
-                              sheet=6,skip=1,col_names=TRUE)
-# Matrimonios por grupos ocupacionales Novio
-matrimoniosOcupacionNovio2010 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2001-2010.xls",sep=""),
-                              sheet=5,skip=1,col_names=TRUE)
-matrimoniosOcupacionNovio2011 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2011.xls",sep=""),
-                              sheet=4,skip=1,col_names=TRUE)
-matrimoniosOcupacionNovio2012 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2012.xls",sep=""),
-                              sheet=4,skip=1,col_names=TRUE)
-matrimoniosOcupacionNovio2013 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2013.xls",sep=""),
-                              sheet=4,skip=1,col_names=TRUE)
-matrimoniosOcupacionNovio2014 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2014.xls",sep=""),
-                              sheet=4,skip=1,col_names=TRUE)
-matrimoniosOcupacionNovio2015 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2015.xls",sep=""),
-                              sheet=4,skip=1,col_names=TRUE)
-matrimoniosOcupacionNovio2016 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2016.xlsx",sep=""),
-                              sheet=4,skip=1,col_names=TRUE)
-matrimoniosOcupacionNovio2017 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2017.xlsx",sep=""),
-                              sheet=4,skip=1,col_names=TRUE)
-# Matrimonios por grupos ocupacionales Novia
-matrimoniosOcupacionNovia2010 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2001-2010.xls",sep=""),
-                              sheet=6,skip=1,col_names=TRUE)
-matrimoniosOcupacionNovia2011 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2011.xls",sep=""),
-                              sheet=5,skip=1,col_names=TRUE)
-matrimoniosOcupacionNovia2012 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2012.xls",sep=""),
-                              sheet=5,skip=1,col_names=TRUE)
-matrimoniosOcupacionNovia2013 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2013.xls",sep=""),
-                              sheet=5,skip=1,col_names=TRUE)
-matrimoniosOcupacionNovia2014 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2014.xls",sep=""),
-                              sheet=5,skip=1,col_names=TRUE)
-matrimoniosOcupacionNovia2015 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2015.xls",sep=""),
-                              sheet=5,skip=1,col_names=TRUE)
-matrimoniosOcupacionNovia2016 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2016.xlsx",sep=""),
-                              sheet=5,skip=1,col_names=TRUE)
-matrimoniosOcupacionNovia2017 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2017.xlsx",sep=""),
-                              sheet=5,skip=1,col_names=TRUE)
+matrimonios2012 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2012.xls",sep=""),
+                              sheet=7,skip=1,col_names=TRUE)
+matrimonios2013 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2013.xls",sep=""),
+                              sheet=7,skip=1,col_names=TRUE)
+matrimonios2014 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2014.xls",sep=""),
+                              sheet=7,skip=1,col_names=TRUE)
+matrimonios2015 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2015.xls",sep=""),
+                              sheet=7,skip=1,col_names=TRUE)
+matrimonios2016 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2016.xlsx",sep=""),
+                              sheet=7,skip=1,col_names=TRUE)
+matrimonios2017 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2017.xlsx",sep=""),
+                              sheet=7,skip=1,col_names=TRUE)
 ```
 ### Definir Data frame para Divorcios 2010 - 2017
 ``` {r }
 # Seleccion de datos
-anios <- c("2010","2011","2012","2013","2014","2015","2016","2017")
-divorciosGenerales <- c(divorcios2010$`2010`[1],divorcios2011$Total[1],divorcios2012$Total[1],
-                        divorcios2013$Total[1],divorcios2014$Total[1],divorcios2015$Total[1],
-                        divorcios2016$Total[1],divorcios2017$Total[1])
-divorciosMesEnero <- c(divorciosMeses2010$Enero[1],divorciosMeses2011$Enero[1],divorciosMeses2012$Enero[1],
-                       divorciosMeses2013$Enero[1],divorciosMeses2014$Enero[1],divorciosMeses2015$Enero[1],
-                       divorciosMeses2016$Enero[1],divorciosMeses2017$Enero[1])
-divorciosMesFebrero <- c(divorciosMeses2010$Febrero[1],divorciosMeses2011$Febrero[1],divorciosMeses2012$Febrero[1],
-                         divorciosMeses2013$Febrero[1],divorciosMeses2014$Febrero[1],divorciosMeses2015$Febrero[1],
-                         divorciosMeses2016$Febrero[1],divorciosMeses2017$Febrero[1])
-divorciosMesMarzo <- c(divorciosMeses2010$Marzo[1],divorciosMeses2011$Marzo[1],divorciosMeses2012$Marzo[1],
-                       divorciosMeses2013$Marzo[1],divorciosMeses2014$Marzo[1],divorciosMeses2015$Marzo[1],
-                       divorciosMeses2016$Marzo[1],divorciosMeses2017$Marzo[1])
-divorciosMesAbril <- c(divorciosMeses2010$Abril[1],divorciosMeses2011$Abril[1],divorciosMeses2012$Abril[1],
-                       divorciosMeses2013$Abril[1],divorciosMeses2014$Abril[1],divorciosMeses2015$Abril[1],
-                       divorciosMeses2016$Abril[1],divorciosMeses2017$Abril[1])
-divorciosMesMayo <- c(divorciosMeses2010$Mayo[1],divorciosMeses2011$Mayo[1],divorciosMeses2012$Mayo[1],
-                      divorciosMeses2013$Mayo[1],divorciosMeses2014$Mayo[1],divorciosMeses2015$Mayo[1],
-                      divorciosMeses2016$Mayo[1],divorciosMeses2017$Mayo[1])
-divorciosMesJunio <- c(divorciosMeses2010$Junio[1],divorciosMeses2011$Junio[1],divorciosMeses2012$Junio[1],
-                       divorciosMeses2013$Junio[1],divorciosMeses2014$Junio[1],divorciosMeses2015$Junio[1],
-                       divorciosMeses2016$Junio[1],divorciosMeses2017$Junio[1])
-divorciosMesJulio <- c(divorciosMeses2010$Julio[1],divorciosMeses2011$Julio[1],divorciosMeses2012$Julio[1],
-                       divorciosMeses2013$Julio[1],divorciosMeses2014$Julio[1],divorciosMeses2015$Julio[1],
-                       divorciosMeses2016$Julio[1],divorciosMeses2017$Julio[1])
-divorciosMesAgosto <- c(divorciosMeses2010$Agosto[1],divorciosMeses2011$Agosto[1],divorciosMeses2012$Agosto[1],
-                        divorciosMeses2013$Agosto[1],divorciosMeses2014$Agosto[1],divorciosMeses2015$Agosto[1],
-                        divorciosMeses2016$Agosto[1],divorciosMeses2017$Agosto[1])
-divorciosMesSeptiembre <- c(divorciosMeses2010$Septiembre[1],divorciosMeses2011$Septiembre[1],
-                            divorciosMeses2012$Septiembre[1],divorciosMeses2013$Septiembre[1],
-                            divorciosMeses2014$Septiembre[1],divorciosMeses2015$Septiembre[1],
-                            divorciosMeses2016$Septiembre[1],divorciosMeses2017$Septiembre[1])
-divorciosMesOctubre <- c(divorciosMeses2010$Octubre[1],divorciosMeses2011$Octubre[1],divorciosMeses2012$Octubre[1],
-                         divorciosMeses2013$Octubre[1],divorciosMeses2014$Octubre[1],divorciosMeses2015$Octubre[1],
-                         divorciosMeses2016$Octubre[1],divorciosMeses2017$Octubre[1])
-divorciosMesNoviembre <- c(divorciosMeses2010$Noviembre[1],divorciosMeses2011$Noviembre[1],
-                           divorciosMeses2012$Noviembre[1],divorciosMeses2013$Noviembre[1],
-                           divorciosMeses2014$Noviembre[1],divorciosMeses2015$Noviembre[1],
-                           divorciosMeses2016$Noviembre[1],divorciosMeses2017$Noviembre[1])
-divorciosMesDiciembre <- c(divorciosMeses2010$Diciembre[1],divorciosMeses2011$Diciembre[1],
-                           divorciosMeses2012$Diciembre[1],divorciosMeses2013$Diciembre[1],
-                           divorciosMeses2014$Diciembre[1],divorciosMeses2015$Diciembre[1],
-                           divorciosMeses2016$Diciembre[1],divorciosMeses2017$Diciembre[1])
-divorciosHombresMilitares <- c(divorciosOcupaciones2010$Total[2],divorciosOcupaciones2011$Total[2],
-                               divorciosOcupaciones2012$Total[2],divorciosOcupaciones2013$Total[2],
-                               divorciosOcupaciones2014$Total[2],divorciosOcupaciones2015$Total[2],
-                               divorciosOcupaciones2016$Total[2],divorciosOcupaciones2017$Total[2])
-divorciosHombresGerentes <- c(divorciosOcupaciones2010$Total[3],divorciosOcupaciones2011$Total[3],
-                              divorciosOcupaciones2012$Total[3],divorciosOcupaciones2013$Total[3],
-                              divorciosOcupaciones2014$Total[3],divorciosOcupaciones2015$Total[3],
-                              divorciosOcupaciones2016$Total[3],divorciosOcupaciones2017$Total[3])
-divorciosHombresCientificos <- c(divorciosOcupaciones2010$Total[4],divorciosOcupaciones2011$Total[4],
-                                 divorciosOcupaciones2012$Total[4],divorciosOcupaciones2013$Total[4],
-                                 divorciosOcupaciones2014$Total[4],divorciosOcupaciones2015$Total[4],
-                                 divorciosOcupaciones2016$Total[4],divorciosOcupaciones2017$Total[4])
-divorciosHombresTecnicos <- c(divorciosOcupaciones2010$Total[5],divorciosOcupaciones2011$Total[5],
-                              divorciosOcupaciones2012$Total[5],divorciosOcupaciones2013$Total[5],
-                              divorciosOcupaciones2014$Total[5],divorciosOcupaciones2015$Total[5],
-                              divorciosOcupaciones2016$Total[5],divorciosOcupaciones2017$Total[5])
-divorciosHombresPersonaldeApoyo <- c(divorciosOcupaciones2010$Total[6],divorciosOcupaciones2011$Total[6],
-                                     divorciosOcupaciones2012$Total[6],divorciosOcupaciones2013$Total[6],
-                                     divorciosOcupaciones2014$Total[6],divorciosOcupaciones2015$Total[6],
-                                     divorciosOcupaciones2016$Total[6],divorciosOcupaciones2017$Total[6])
-divorciosHombresVendedoresComercio <- c(divorciosOcupaciones2010$Total[7],divorciosOcupaciones2011$Total[7],
-                                        divorciosOcupaciones2012$Total[7],divorciosOcupaciones2013$Total[7],
-                                        divorciosOcupaciones2014$Total[7],divorciosOcupaciones2015$Total[7],
-                                        divorciosOcupaciones2016$Total[7],divorciosOcupaciones2017$Total[7])
-divorciosHombresAgricultores <- c(divorciosOcupaciones2010$Total[8],divorciosOcupaciones2011$Total[8],
-                                  divorciosOcupaciones2012$Total[8],divorciosOcupaciones2013$Total[8],
-                                  divorciosOcupaciones2014$Total[8],divorciosOcupaciones2015$Total[8],
-                                  divorciosOcupaciones2016$Total[8],divorciosOcupaciones2017$Total[8])
-divorciosHombresArtesanos <- c(divorciosOcupaciones2010$Total[9],divorciosOcupaciones2011$Total[9],
-                               divorciosOcupaciones2012$Total[9],divorciosOcupaciones2013$Total[9],
-                               divorciosOcupaciones2014$Total[9],divorciosOcupaciones2015$Total[9],
-                               divorciosOcupaciones2016$Total[9],divorciosOcupaciones2017$Total[9])
-divorciosHombresEnsambladores <- c(divorciosOcupaciones2010$Total[10],divorciosOcupaciones2011$Total[10],
-                                   divorciosOcupaciones2012$Total[10],divorciosOcupaciones2013$Total[10],
-                                   divorciosOcupaciones2014$Total[10],divorciosOcupaciones2015$Total[10],
-                                   divorciosOcupaciones2016$Total[10],divorciosOcupaciones2017$Total[10])
-divorciosHombresElementales <- c(divorciosOcupaciones2010$Total[11],divorciosOcupaciones2011$Total[11],
-                                 divorciosOcupaciones2012$Total[11],divorciosOcupaciones2013$Total[11],
-                                 divorciosOcupaciones2014$Total[11],divorciosOcupaciones2015$Total[11],
-                                 divorciosOcupaciones2016$Total[11],divorciosOcupaciones2017$Total[11])
-divorciosHombresNoEspecificados <- c(divorciosOcupaciones2010$Total[12],divorciosOcupaciones2011$Total[12],
-                                     divorciosOcupaciones2012$Total[12],divorciosOcupaciones2013$Total[12],
-                                     divorciosOcupaciones2014$Total[12],divorciosOcupaciones2015$Total[12],
-                                     divorciosOcupaciones2016$Total[12],divorciosOcupaciones2017$Total[12])
-divorciosHombresIgnorados <- c(divorciosOcupaciones2010$Total[13],divorciosOcupaciones2011$Total[13],
-                               divorciosOcupaciones2012$Total[13],divorciosOcupaciones2013$Total[13],
-                               divorciosOcupaciones2014$Total[13],divorciosOcupaciones2015$Total[13],
-                               divorciosOcupaciones2016$Total[13],divorciosOcupaciones2017$Total[13])
-divorciosMujeresMilitares <- c(divorciosOcupaciones2010$`Ocupaciones militares`[1],
-                               divorciosOcupaciones2011$`Ocupaciones militares`[1],
-                               divorciosOcupaciones2012$`Ocupaciones militares`[1],
-                               divorciosOcupaciones2013$`Ocupaciones militares`[1],
-                               divorciosOcupaciones2014$`Ocupaciones militares`[1],
-                               divorciosOcupaciones2015$`Ocupaciones militares`[1],
-                               divorciosOcupaciones2016$`Ocupaciones militares`[1],
-                               divorciosOcupaciones2017$`Ocupaciones militares`[1])
-divorciosMujeresGerentes <- c(divorciosOcupaciones2010$`Directores y gerentes`[1],
-                              divorciosOcupaciones2011$`Directores y gerentes`[1],
-                              divorciosOcupaciones2012$`Directores y gerentes`[1],
-                              divorciosOcupaciones2013$`Directores y gerentes`[1],
-                              divorciosOcupaciones2014$`Directores y gerentes`[1],
-                              divorciosOcupaciones2015$`Directores y gerentes`[1],
-                              divorciosOcupaciones2016$`Directores y gerentes`[1],
-                              divorciosOcupaciones2017$`Directores y gerentes`[1])
-divorciosMujeresCientificas <- c(divorciosOcupaciones2010$`Profesionales científicos e intelectuales`[1],
-                                 divorciosOcupaciones2011$`Profesionales científicos e intelectuales`[1],
-                                 divorciosOcupaciones2012$`Profesionales científicos e intelectuales`[1],
-                                 divorciosOcupaciones2013$`Profesionales científicos e intelectuales`[1],
-                                 divorciosOcupaciones2014$`Profesionales científicos e intelectuales`[1],
-                                 divorciosOcupaciones2015$`Profesionales científicos e intelectuales`[1],
-                                 divorciosOcupaciones2016$`Profesionales científicos e intelectuales`[1],
-                                 divorciosOcupaciones2017$`Profesionales científicos e intelectuales`[1])
-divorciosMujeresTecnicas <- c(divorciosOcupaciones2010$`Técnicos y profesionales de nivel medio`[1],
-                              divorciosOcupaciones2011$`Técnicos y profesionales de nivel medio`[1],
-                              divorciosOcupaciones2012$`Técnicos y profesionales de nivel medio`[1],
-                              divorciosOcupaciones2013$`Técnicos y profesionales de nivel medio`[1],
-                              divorciosOcupaciones2014$`Técnicos y profesionales de nivel medio`[1],
-                              divorciosOcupaciones2015$`Técnicos y profesionales de nivel medio`[1],
-                              divorciosOcupaciones2016$`Técnicos y profesionales de nivel medio`[1],
-                              divorciosOcupaciones2017$`Técnicos y profesionales de nivel medio`[1])
-divorciosMujeresPersonaldeApoyo <- c(divorciosOcupaciones2010$`Personal de apoyo administrativo`[1],
-                                     divorciosOcupaciones2011$`Personal de apoyo administrativo`[1],
-                                     divorciosOcupaciones2012$`Personal de apoyo administrativo`[1],
-                                     divorciosOcupaciones2013$`Personal de apoyo administrativo`[1],
-                                     divorciosOcupaciones2014$`Personal de apoyo administrativo`[1],
-                                     divorciosOcupaciones2015$`Personal de apoyo administrativo`[1],
-                                     divorciosOcupaciones2016$`Personal de apoyo administrativo`[1],
-                                     divorciosOcupaciones2017$`Personal de apoyo administrativo`[1])
-divorciosMujeresVendedorasComercio <- c(divorciosOcupaciones2010$`Trabajadores de los servicios y vendedores de comercios y mercados`[1],
-                                        divorciosOcupaciones2011$`Trabajadores de los servicios y vendedores de comercios y mercados`[1],
-                                        divorciosOcupaciones2012$`Trabajadores de los servicios y vendedores de comercios y mercados`[1],
-                                        divorciosOcupaciones2013$`Trabajadores de los servicios y vendedores de comercios y mercados`[1],
-                                        divorciosOcupaciones2014$`Trabajadores de los servicios y vendedores de comercios y mercados`[1],
-                                        divorciosOcupaciones2015$`Trabajadores de los servicios y vendedores de comercios y mercados`[1],
-                                        divorciosOcupaciones2016$`Trabajadores de los servicios y vendedores de comercios y mercados`[1],
-                                        divorciosOcupaciones2017$`Trabajadores de los servicios y vendedores de comercios y mercados`[1])
-divorciosMujeresAgricultoras <- c(divorciosOcupaciones2010$`Agricultores y trabajadores calificados agropecuarios, forestales y pesqueros`[1],
-                               divorciosOcupaciones2011$`Agricultores y trabajadores calificados agropecuarios, forestales y pesqueros`[1],
-                               divorciosOcupaciones2012$`Agricultores y trabajadores calificados agropecuarios, forestales y pesqueros`[1],
-                               divorciosOcupaciones2013$`Agricultores y trabajadores calificados agropecuarios, forestales y pesqueros`[1],
-                               divorciosOcupaciones2014$`Agricultores y trabajadores calificados agropecuarios, forestales y pesqueros`[1],
-                               divorciosOcupaciones2015$`Agricultores y trabajadores calificados agropecuarios, forestales y pesqueros`[1],
-                               divorciosOcupaciones2016$`Agricultores y trabajadores calificados agropecuarios, forestales y pesqueros`[1],
-                               divorciosOcupaciones2017$`Agricultores y trabajadores calificados agropecuarios, forestales y pesqueros`[1])
-divorciosMujeresArtesanas <- c(divorciosOcupaciones2010$`Oficiales, operarios y artesanos de artes mecánicas y de otros oficios`[1],
-                               divorciosOcupaciones2011$`Oficiales, operarios y artesanos de artes mecánicas y de otros oficios`[1],
-                               divorciosOcupaciones2012$`Oficiales, operarios y artesanos de artes mecánicas y de otros oficios`[1],
-                               divorciosOcupaciones2013$`Oficiales, operarios y artesanos de artes mecánicas y de otros oficios`[1],
-                               divorciosOcupaciones2014$`Oficiales, operarios y artesanos de artes mecánicas y de otros oficios`[1],
-                               divorciosOcupaciones2015$`Oficiales, operarios y artesanos de artes mecánicas y de otros oficios`[1],
-                               divorciosOcupaciones2016$`Oficiales, operarios y artesanos de artes mecánicas y de otros oficios`[1],
-                               divorciosOcupaciones2017$`Oficiales, operarios y artesanos de artes mecánicas y de otros oficios`[1])
-divorciosMujeresEnsambladoras <- c(divorciosOcupaciones2010$`Operadores de intalaciones y máquinas y ensambladores`[1],
-                                   divorciosOcupaciones2011$`Operadores de intalaciones y máquinas y ensambladores`[1],
-                                   divorciosOcupaciones2012$`Operadores de intalaciones y máquinas y ensambladores`[1],
-                                   divorciosOcupaciones2013$`Operadores de intalaciones y máquinas y ensambladores`[1],
-                                   divorciosOcupaciones2014$`Operadores de intalaciones y máquinas y ensambladores`[1],
-                                   divorciosOcupaciones2015$`Operadores de intalaciones y máquinas y ensambladores`[1],
-                                   divorciosOcupaciones2016$`Operadores de intalaciones y máquinas y ensambladores`[1],
-                                   divorciosOcupaciones2017$`Operadores de intalaciones y máquinas y ensambladores`[1])
-divorciosMujeresElementales <- c(divorciosOcupaciones2010$`Ocupaciones elementales`[1],
-                                 divorciosOcupaciones2011$`Ocupaciones elementales`[1],
-                                 divorciosOcupaciones2012$`Ocupaciones elementales`[1],
-                                 divorciosOcupaciones2013$`Ocupaciones elementales`[1],
-                                 divorciosOcupaciones2014$`Ocupaciones elementales`[1],
-                                 divorciosOcupaciones2015$`Ocupaciones elementales`[1],
-                                 divorciosOcupaciones2016$`Ocupaciones elementales`[1],
-                                 divorciosOcupaciones2017$`Ocupaciones elementales`[1])
-divorciosMujeresNoEspecificadas <- c(divorciosOcupaciones2010$`Ocupación  no especificada`[1],
-                                     divorciosOcupaciones2011$`Ocupación  no especificada`[1],
-                                     divorciosOcupaciones2012$`Ocupación  no especificada`[1],
-                                     divorciosOcupaciones2013$`Ocupación  no especificada`[1],
-                                     divorciosOcupaciones2014$`Ocupación  no especificada`[1],
-                                     divorciosOcupaciones2015$`Ocupación  no especificada`[1],
-                                     divorciosOcupaciones2016$`Ocupación  no especificada`[1],
-                                     divorciosOcupaciones2017$`Ocupación  no especificada`[1])
-divorciosMujeresIgnoradas <- c(divorciosOcupaciones2010$Ignorado[1],
-                               divorciosOcupaciones2011$Ignorado[1],
-                               divorciosOcupaciones2012$Ignorado[1],
-                               divorciosOcupaciones2013$Ignorado[1],
-                               divorciosOcupaciones2014$Ignorado[1],
-                               divorciosOcupaciones2015$Ignorado[1],
-                               divorciosOcupaciones2016$Ignorado[1],
-                               divorciosOcupaciones2017$Ignorado[1])
+meses <- c("Enero 2010","Febrero 2010","Marzo 2010","Abril 2010","Mayo 2010","Junio 2010",
+           "Julio 2010","Agosto 2010","Septiembre 2010","Octubre 2010","Noviembre 2010","Diciembre 2010",
+           "Enero 2011","Febrero 2011","Marzo 2011","Abril 2011","Mayo 2011","Junio 2011",
+           "Julio 2011","Agosto 2011","Septiembre 2011","Octubre 2011","Noviembre 2011","Diciembre 2011",
+           "Enero 2012","Febrero 2012","Marzo 2012","Abril 2012","Mayo 2012","Junio 2012",
+           "Julio 2012","Agosto 2012","Septiembre 2012","Octubre 2012","Noviembre 2012","Diciembre 2012",
+           "Enero 2013","Febrero 2013","Marzo 2013","Abril 2013","Mayo 2013","Junio 2013",
+           "Julio 2013","Agosto 2013","Septiembre 2013","Octubre 2013","Noviembre 2013","Diciembre 2013",
+           "Enero 2014","Febrero 2014","Marzo 2014","Abril 2014","Mayo 2014","Junio 2014",
+           "Julio 2014","Agosto 2014","Septiembre 2014","Octubre 2014","Noviembre 2014","Diciembre 2014")
+divorciosTotales <- c(divorcios2010$Enero[1],divorcios2010$Febrero[1],divorcios2010$Marzo[1],divorcios2010$Abril[1],
+                      divorcios2010$Mayo[1],divorcios2010$Junio[1],divorcios2010$Julio[1],divorcios2010$Agosto[1],
+                      divorcios2010$Septiembre[1],divorcios2010$Octubre[1],divorcios2010$Noviembre[1],divorcios2010$Diciembre[1],
+                      divorcios2011$Enero[1],divorcios2011$Febrero[1],divorcios2011$Marzo[1],divorcios2011$Abril[1],
+                      divorcios2011$Mayo[1],divorcios2011$Junio[1],divorcios2011$Julio[1],divorcios2011$Agosto[1],
+                      divorcios2011$Septiembre[1],divorcios2011$Octubre[1],divorcios2011$Noviembre[1],divorcios2011$Diciembre[1],
+                      divorcios2012$Enero[1],divorcios2012$Febrero[1],divorcios2012$Marzo[1],divorcios2012$Abril[1],
+                      divorcios2012$Mayo[1],divorcios2012$Junio[1],divorcios2012$Julio[1],divorcios2012$Agosto[1],
+                      divorcios2012$Septiembre[1],divorcios2012$Octubre[1],divorcios2012$Noviembre[1],divorcios2012$Diciembre[1],
+                      divorcios2013$Enero[1],divorcios2013$Febrero[1],divorcios2013$Marzo[1],divorcios2013$Abril[1],
+                      divorcios2013$Mayo[1],divorcios2013$Junio[1],divorcios2013$Julio[1],divorcios2013$Agosto[1],
+                      divorcios2013$Septiembre[1],divorcios2013$Octubre[1],divorcios2013$Noviembre[1],divorcios2013$Diciembre[1],
+                      divorcios2014$Enero[1],divorcios2014$Febrero[1],divorcios2014$Marzo[1],divorcios2014$Abril[1],
+                      divorcios2014$Mayo[1],divorcios2014$Junio[1],divorcios2014$Julio[1],divorcios2014$Agosto[1],
+                      divorcios2014$Septiembre[1],divorcios2014$Octubre[1],divorcios2014$Noviembre[1],divorcios2014$Diciembre[1])
+X01 <- c(divorcios2010$Enero[2],divorcios2010$Febrero[2],divorcios2010$Marzo[2],divorcios2010$Abril[2],
+         divorcios2010$Mayo[2],divorcios2010$Junio[2],divorcios2010$Julio[2],divorcios2010$Agosto[2],
+         divorcios2010$Septiembre[2],divorcios2010$Octubre[2],divorcios2010$Noviembre[2],divorcios2010$Diciembre[2],
+         divorcios2011$Enero[2],divorcios2011$Febrero[2],divorcios2011$Marzo[2],divorcios2011$Abril[2],
+         divorcios2011$Mayo[2],divorcios2011$Junio[2],divorcios2011$Julio[2],divorcios2011$Agosto[2],
+         divorcios2011$Septiembre[2],divorcios2011$Octubre[2],divorcios2011$Noviembre[2],divorcios2011$Diciembre[2],
+         divorcios2012$Enero[2],divorcios2012$Febrero[2],divorcios2012$Marzo[2],divorcios2012$Abril[2],
+         divorcios2012$Mayo[2],divorcios2012$Junio[2],divorcios2012$Julio[2],divorcios2012$Agosto[2],
+         divorcios2012$Septiembre[2],divorcios2012$Octubre[2],divorcios2012$Noviembre[2],divorcios2012$Diciembre[2],
+         divorcios2013$Enero[2],divorcios2013$Febrero[2],divorcios2013$Marzo[2],divorcios2013$Abril[2],
+         divorcios2013$Mayo[2],divorcios2013$Junio[2],divorcios2013$Julio[2],divorcios2013$Agosto[2],
+         divorcios2013$Septiembre[2],divorcios2013$Octubre[2],divorcios2013$Noviembre[2],divorcios2013$Diciembre[2],
+         divorcios2014$Enero[2],divorcios2014$Febrero[2],divorcios2014$Marzo[2],divorcios2014$Abril[2],
+         divorcios2014$Mayo[2],divorcios2014$Junio[2],divorcios2014$Julio[2],divorcios2014$Agosto[2],
+         divorcios2014$Septiembre[2],divorcios2014$Octubre[2],divorcios2014$Noviembre[2],divorcios2014$Diciembre[2])
+X02 <- c(divorcios2010$Enero[3],divorcios2010$Febrero[3],divorcios2010$Marzo[3],divorcios2010$Abril[3],
+         divorcios2010$Mayo[3],divorcios2010$Junio[3],divorcios2010$Julio[3],divorcios2010$Agosto[3],
+         divorcios2010$Septiembre[3],divorcios2010$Octubre[3],divorcios2010$Noviembre[3],divorcios2010$Diciembre[3],
+         divorcios2011$Enero[3],divorcios2011$Febrero[3],divorcios2011$Marzo[3],divorcios2011$Abril[3],
+         divorcios2011$Mayo[3],divorcios2011$Junio[3],divorcios2011$Julio[3],divorcios2011$Agosto[3],
+         divorcios2011$Septiembre[3],divorcios2011$Octubre[3],divorcios2011$Noviembre[3],divorcios2011$Diciembre[3],
+         divorcios2012$Enero[3],divorcios2012$Febrero[3],divorcios2012$Marzo[3],divorcios2012$Abril[3],
+         divorcios2012$Mayo[3],divorcios2012$Junio[3],divorcios2012$Julio[3],divorcios2012$Agosto[3],
+         divorcios2012$Septiembre[3],divorcios2012$Octubre[3],divorcios2012$Noviembre[3],divorcios2012$Diciembre[3],
+         divorcios2013$Enero[3],divorcios2013$Febrero[3],divorcios2013$Marzo[3],divorcios2013$Abril[3],
+         divorcios2013$Mayo[3],divorcios2013$Junio[3],divorcios2013$Julio[3],divorcios2013$Agosto[3],
+         divorcios2013$Septiembre[3],divorcios2013$Octubre[3],divorcios2013$Noviembre[3],divorcios2013$Diciembre[3],
+         divorcios2014$Enero[3],divorcios2014$Febrero[3],divorcios2014$Marzo[3],divorcios2014$Abril[3],
+         divorcios2014$Mayo[3],divorcios2014$Junio[3],divorcios2014$Julio[3],divorcios2014$Agosto[3],
+         divorcios2014$Septiembre[3],divorcios2014$Octubre[3],divorcios2014$Noviembre[3],divorcios2014$Diciembre[3])
+X03 <- c(divorcios2010$Enero[4],divorcios2010$Febrero[4],divorcios2010$Marzo[4],divorcios2010$Abril[4],
+         divorcios2010$Mayo[4],divorcios2010$Junio[4],divorcios2010$Julio[4],divorcios2010$Agosto[4],
+         divorcios2010$Septiembre[4],divorcios2010$Octubre[4],divorcios2010$Noviembre[4],divorcios2010$Diciembre[4],
+         divorcios2011$Enero[4],divorcios2011$Febrero[4],divorcios2011$Marzo[4],divorcios2011$Abril[4],
+         divorcios2011$Mayo[4],divorcios2011$Junio[4],divorcios2011$Julio[4],divorcios2011$Agosto[4],
+         divorcios2011$Septiembre[4],divorcios2011$Octubre[4],divorcios2011$Noviembre[4],divorcios2011$Diciembre[4],
+         divorcios2012$Enero[4],divorcios2012$Febrero[4],divorcios2012$Marzo[4],divorcios2012$Abril[4],
+         divorcios2012$Mayo[4],divorcios2012$Junio[4],divorcios2012$Julio[4],divorcios2012$Agosto[4],
+         divorcios2012$Septiembre[4],divorcios2012$Octubre[4],divorcios2012$Noviembre[4],divorcios2012$Diciembre[4],
+         divorcios2013$Enero[4],divorcios2013$Febrero[4],divorcios2013$Marzo[4],divorcios2013$Abril[4],
+         divorcios2013$Mayo[4],divorcios2013$Junio[4],divorcios2013$Julio[4],divorcios2013$Agosto[4],
+         divorcios2013$Septiembre[4],divorcios2013$Octubre[4],divorcios2013$Noviembre[4],divorcios2013$Diciembre[4],
+         divorcios2014$Enero[4],divorcios2014$Febrero[4],divorcios2014$Marzo[4],divorcios2014$Abril[4],
+         divorcios2014$Mayo[4],divorcios2014$Junio[4],divorcios2014$Julio[4],divorcios2014$Agosto[4],
+         divorcios2014$Septiembre[4],divorcios2014$Octubre[4],divorcios2014$Noviembre[4],divorcios2014$Diciembre[4])
+X04 <- c(divorcios2010$Enero[5],divorcios2010$Febrero[5],divorcios2010$Marzo[5],divorcios2010$Abril[5],
+         divorcios2010$Mayo[5],divorcios2010$Junio[5],divorcios2010$Julio[5],divorcios2010$Agosto[5],
+         divorcios2010$Septiembre[5],divorcios2010$Octubre[5],divorcios2010$Noviembre[5],divorcios2010$Diciembre[5],
+         divorcios2011$Enero[5],divorcios2011$Febrero[5],divorcios2011$Marzo[5],divorcios2011$Abril[5],
+         divorcios2011$Mayo[5],divorcios2011$Junio[5],divorcios2011$Julio[5],divorcios2011$Agosto[5],
+         divorcios2011$Septiembre[5],divorcios2011$Octubre[5],divorcios2011$Noviembre[5],divorcios2011$Diciembre[5],
+         divorcios2012$Enero[5],divorcios2012$Febrero[5],divorcios2012$Marzo[5],divorcios2012$Abril[5],
+         divorcios2012$Mayo[5],divorcios2012$Junio[5],divorcios2012$Julio[5],divorcios2012$Agosto[5],
+         divorcios2012$Septiembre[5],divorcios2012$Octubre[5],divorcios2012$Noviembre[5],divorcios2012$Diciembre[5],
+         divorcios2013$Enero[5],divorcios2013$Febrero[5],divorcios2013$Marzo[5],divorcios2013$Abril[5],
+         divorcios2013$Mayo[5],divorcios2013$Junio[5],divorcios2013$Julio[5],divorcios2013$Agosto[5],
+         divorcios2013$Septiembre[5],divorcios2013$Octubre[5],divorcios2013$Noviembre[5],divorcios2013$Diciembre[5],
+         divorcios2014$Enero[5],divorcios2014$Febrero[5],divorcios2014$Marzo[5],divorcios2014$Abril[5],
+         divorcios2014$Mayo[5],divorcios2014$Junio[5],divorcios2014$Julio[5],divorcios2014$Agosto[5],
+         divorcios2014$Septiembre[5],divorcios2014$Octubre[5],divorcios2014$Noviembre[5],divorcios2014$Diciembre[5])
+X05 <- c(divorcios2010$Enero[6],divorcios2010$Febrero[6],divorcios2010$Marzo[6],divorcios2010$Abril[6],
+         divorcios2010$Mayo[6],divorcios2010$Junio[6],divorcios2010$Julio[6],divorcios2010$Agosto[6],
+         divorcios2010$Septiembre[6],divorcios2010$Octubre[6],divorcios2010$Noviembre[6],divorcios2010$Diciembre[6],
+         divorcios2011$Enero[6],divorcios2011$Febrero[6],divorcios2011$Marzo[6],divorcios2011$Abril[6],
+         divorcios2011$Mayo[6],divorcios2011$Junio[6],divorcios2011$Julio[6],divorcios2011$Agosto[6],
+         divorcios2011$Septiembre[6],divorcios2011$Octubre[6],divorcios2011$Noviembre[6],divorcios2011$Diciembre[6],
+         divorcios2012$Enero[6],divorcios2012$Febrero[6],divorcios2012$Marzo[6],divorcios2012$Abril[6],
+         divorcios2012$Mayo[6],divorcios2012$Junio[6],divorcios2012$Julio[6],divorcios2012$Agosto[6],
+         divorcios2012$Septiembre[6],divorcios2012$Octubre[6],divorcios2012$Noviembre[6],divorcios2012$Diciembre[6],
+         divorcios2013$Enero[6],divorcios2013$Febrero[6],divorcios2013$Marzo[6],divorcios2013$Abril[6],
+         divorcios2013$Mayo[6],divorcios2013$Junio[6],divorcios2013$Julio[6],divorcios2013$Agosto[6],
+         divorcios2013$Septiembre[6],divorcios2013$Octubre[6],divorcios2013$Noviembre[6],divorcios2013$Diciembre[6],
+         divorcios2014$Enero[6],divorcios2014$Febrero[6],divorcios2014$Marzo[6],divorcios2014$Abril[6],
+         divorcios2014$Mayo[6],divorcios2014$Junio[6],divorcios2014$Julio[6],divorcios2014$Agosto[6],
+         divorcios2014$Septiembre[6],divorcios2014$Octubre[6],divorcios2014$Noviembre[6],divorcios2014$Diciembre[6])
+X06 <- c(divorcios2010$Enero[7],divorcios2010$Febrero[7],divorcios2010$Marzo[7],divorcios2010$Abril[7],
+         divorcios2010$Mayo[7],divorcios2010$Junio[7],divorcios2010$Julio[7],divorcios2010$Agosto[7],
+         divorcios2010$Septiembre[7],divorcios2010$Octubre[7],divorcios2010$Noviembre[7],divorcios2010$Diciembre[7],
+         divorcios2011$Enero[7],divorcios2011$Febrero[7],divorcios2011$Marzo[7],divorcios2011$Abril[7],
+         divorcios2011$Mayo[7],divorcios2011$Junio[7],divorcios2011$Julio[7],divorcios2011$Agosto[7],
+         divorcios2011$Septiembre[7],divorcios2011$Octubre[7],divorcios2011$Noviembre[7],divorcios2011$Diciembre[7],
+         divorcios2012$Enero[7],divorcios2012$Febrero[7],divorcios2012$Marzo[7],divorcios2012$Abril[7],
+         divorcios2012$Mayo[7],divorcios2012$Junio[7],divorcios2012$Julio[7],divorcios2012$Agosto[7],
+         divorcios2012$Septiembre[7],divorcios2012$Octubre[7],divorcios2012$Noviembre[7],divorcios2012$Diciembre[7],
+         divorcios2013$Enero[7],divorcios2013$Febrero[7],divorcios2013$Marzo[7],divorcios2013$Abril[7],
+         divorcios2013$Mayo[7],divorcios2013$Junio[7],divorcios2013$Julio[7],divorcios2013$Agosto[7],
+         divorcios2013$Septiembre[7],divorcios2013$Octubre[7],divorcios2013$Noviembre[7],divorcios2013$Diciembre[7],
+         divorcios2014$Enero[7],divorcios2014$Febrero[7],divorcios2014$Marzo[7],divorcios2014$Abril[7],
+         divorcios2014$Mayo[7],divorcios2014$Junio[7],divorcios2014$Julio[7],divorcios2014$Agosto[7],
+         divorcios2014$Septiembre[7],divorcios2014$Octubre[7],divorcios2014$Noviembre[7],divorcios2014$Diciembre[7])
+X07 <- c(divorcios2010$Enero[8],divorcios2010$Febrero[8],divorcios2010$Marzo[8],divorcios2010$Abril[8],
+         divorcios2010$Mayo[8],divorcios2010$Junio[8],divorcios2010$Julio[8],divorcios2010$Agosto[8],
+         divorcios2010$Septiembre[8],divorcios2010$Octubre[8],divorcios2010$Noviembre[8],divorcios2010$Diciembre[8],
+         divorcios2011$Enero[8],divorcios2011$Febrero[8],divorcios2011$Marzo[8],divorcios2011$Abril[8],
+         divorcios2011$Mayo[8],divorcios2011$Junio[8],divorcios2011$Julio[8],divorcios2011$Agosto[8],
+         divorcios2011$Septiembre[8],divorcios2011$Octubre[8],divorcios2011$Noviembre[8],divorcios2011$Diciembre[8],
+         divorcios2012$Enero[8],divorcios2012$Febrero[8],divorcios2012$Marzo[8],divorcios2012$Abril[8],
+         divorcios2012$Mayo[8],divorcios2012$Junio[8],divorcios2012$Julio[8],divorcios2012$Agosto[8],
+         divorcios2012$Septiembre[8],divorcios2012$Octubre[8],divorcios2012$Noviembre[8],divorcios2012$Diciembre[8],
+         divorcios2013$Enero[8],divorcios2013$Febrero[8],divorcios2013$Marzo[8],divorcios2013$Abril[8],
+         divorcios2013$Mayo[8],divorcios2013$Junio[8],divorcios2013$Julio[8],divorcios2013$Agosto[8],
+         divorcios2013$Septiembre[8],divorcios2013$Octubre[8],divorcios2013$Noviembre[8],divorcios2013$Diciembre[8],
+         divorcios2014$Enero[8],divorcios2014$Febrero[8],divorcios2014$Marzo[8],divorcios2014$Abril[8],
+         divorcios2014$Mayo[8],divorcios2014$Junio[8],divorcios2014$Julio[8],divorcios2014$Agosto[8],
+         divorcios2014$Septiembre[8],divorcios2014$Octubre[8],divorcios2014$Noviembre[8],divorcios2014$Diciembre[8])
+X08 <- c(divorcios2010$Enero[9],divorcios2010$Febrero[9],divorcios2010$Marzo[9],divorcios2010$Abril[9],
+         divorcios2010$Mayo[9],divorcios2010$Junio[9],divorcios2010$Julio[9],divorcios2010$Agosto[9],
+         divorcios2010$Septiembre[9],divorcios2010$Octubre[9],divorcios2010$Noviembre[9],divorcios2010$Diciembre[9],
+         divorcios2011$Enero[9],divorcios2011$Febrero[9],divorcios2011$Marzo[9],divorcios2011$Abril[9],
+         divorcios2011$Mayo[9],divorcios2011$Junio[9],divorcios2011$Julio[9],divorcios2011$Agosto[9],
+         divorcios2011$Septiembre[9],divorcios2011$Octubre[9],divorcios2011$Noviembre[9],divorcios2011$Diciembre[9],
+         divorcios2012$Enero[9],divorcios2012$Febrero[9],divorcios2012$Marzo[9],divorcios2012$Abril[9],
+         divorcios2012$Mayo[9],divorcios2012$Junio[9],divorcios2012$Julio[9],divorcios2012$Agosto[9],
+         divorcios2012$Septiembre[9],divorcios2012$Octubre[9],divorcios2012$Noviembre[9],divorcios2012$Diciembre[9],
+         divorcios2013$Enero[9],divorcios2013$Febrero[9],divorcios2013$Marzo[9],divorcios2013$Abril[9],
+         divorcios2013$Mayo[9],divorcios2013$Junio[9],divorcios2013$Julio[9],divorcios2013$Agosto[9],
+         divorcios2013$Septiembre[9],divorcios2013$Octubre[9],divorcios2013$Noviembre[9],divorcios2013$Diciembre[9],
+         divorcios2014$Enero[9],divorcios2014$Febrero[9],divorcios2014$Marzo[9],divorcios2014$Abril[9],
+         divorcios2014$Mayo[9],divorcios2014$Junio[9],divorcios2014$Julio[9],divorcios2014$Agosto[9],
+         divorcios2014$Septiembre[9],divorcios2014$Octubre[9],divorcios2014$Noviembre[9],divorcios2014$Diciembre[9])
+X09 <- c(divorcios2010$Enero[10],divorcios2010$Febrero[10],divorcios2010$Marzo[10],divorcios2010$Abril[10],
+         divorcios2010$Mayo[10],divorcios2010$Junio[10],divorcios2010$Julio[10],divorcios2010$Agosto[10],
+         divorcios2010$Septiembre[10],divorcios2010$Octubre[10],divorcios2010$Noviembre[10],divorcios2010$Diciembre[10],
+         divorcios2011$Enero[10],divorcios2011$Febrero[10],divorcios2011$Marzo[10],divorcios2011$Abril[10],
+         divorcios2011$Mayo[10],divorcios2011$Junio[10],divorcios2011$Julio[10],divorcios2011$Agosto[10],
+         divorcios2011$Septiembre[10],divorcios2011$Octubre[10],divorcios2011$Noviembre[10],divorcios2011$Diciembre[10],
+         divorcios2012$Enero[10],divorcios2012$Febrero[10],divorcios2012$Marzo[10],divorcios2012$Abril[10],
+         divorcios2012$Mayo[10],divorcios2012$Junio[10],divorcios2012$Julio[10],divorcios2012$Agosto[10],
+         divorcios2012$Septiembre[10],divorcios2012$Octubre[10],divorcios2012$Noviembre[10],divorcios2012$Diciembre[10],
+         divorcios2013$Enero[10],divorcios2013$Febrero[10],divorcios2013$Marzo[10],divorcios2013$Abril[10],
+         divorcios2013$Mayo[10],divorcios2013$Junio[10],divorcios2013$Julio[10],divorcios2013$Agosto[10],
+         divorcios2013$Septiembre[10],divorcios2013$Octubre[10],divorcios2013$Noviembre[10],divorcios2013$Diciembre[10],
+         divorcios2014$Enero[10],divorcios2014$Febrero[10],divorcios2014$Marzo[10],divorcios2014$Abril[10],
+         divorcios2014$Mayo[10],divorcios2014$Junio[10],divorcios2014$Julio[10],divorcios2014$Agosto[10],
+         divorcios2014$Septiembre[10],divorcios2014$Octubre[10],divorcios2014$Noviembre[10],divorcios2014$Diciembre[10])
+X10 <- c(divorcios2010$Enero[11],divorcios2010$Febrero[11],divorcios2010$Marzo[11],divorcios2010$Abril[11],
+         divorcios2010$Mayo[11],divorcios2010$Junio[11],divorcios2010$Julio[11],divorcios2010$Agosto[11],
+         divorcios2010$Septiembre[11],divorcios2010$Octubre[11],divorcios2010$Noviembre[11],divorcios2010$Diciembre[11],
+         divorcios2011$Enero[11],divorcios2011$Febrero[11],divorcios2011$Marzo[11],divorcios2011$Abril[11],
+         divorcios2011$Mayo[11],divorcios2011$Junio[11],divorcios2011$Julio[11],divorcios2011$Agosto[11],
+         divorcios2011$Septiembre[11],divorcios2011$Octubre[11],divorcios2011$Noviembre[11],divorcios2011$Diciembre[11],
+         divorcios2012$Enero[11],divorcios2012$Febrero[11],divorcios2012$Marzo[11],divorcios2012$Abril[11],
+         divorcios2012$Mayo[11],divorcios2012$Junio[11],divorcios2012$Julio[11],divorcios2012$Agosto[11],
+         divorcios2012$Septiembre[11],divorcios2012$Octubre[11],divorcios2012$Noviembre[11],divorcios2012$Diciembre[11],
+         divorcios2013$Enero[11],divorcios2013$Febrero[11],divorcios2013$Marzo[11],divorcios2013$Abril[11],
+         divorcios2013$Mayo[11],divorcios2013$Junio[11],divorcios2013$Julio[11],divorcios2013$Agosto[11],
+         divorcios2013$Septiembre[11],divorcios2013$Octubre[11],divorcios2013$Noviembre[11],divorcios2013$Diciembre[11],
+         divorcios2014$Enero[11],divorcios2014$Febrero[11],divorcios2014$Marzo[11],divorcios2014$Abril[11],
+         divorcios2014$Mayo[11],divorcios2014$Junio[11],divorcios2014$Julio[11],divorcios2014$Agosto[11],
+         divorcios2014$Septiembre[11],divorcios2014$Octubre[11],divorcios2014$Noviembre[11],divorcios2014$Diciembre[11])
+X11 <- c(divorcios2010$Enero[12],divorcios2010$Febrero[12],divorcios2010$Marzo[12],divorcios2010$Abril[12],
+         divorcios2010$Mayo[12],divorcios2010$Junio[12],divorcios2010$Julio[12],divorcios2010$Agosto[12],
+         divorcios2010$Septiembre[12],divorcios2010$Octubre[12],divorcios2010$Noviembre[12],divorcios2010$Diciembre[12],
+         divorcios2011$Enero[12],divorcios2011$Febrero[12],divorcios2011$Marzo[12],divorcios2011$Abril[12],
+         divorcios2011$Mayo[12],divorcios2011$Junio[12],divorcios2011$Julio[12],divorcios2011$Agosto[12],
+         divorcios2011$Septiembre[12],divorcios2011$Octubre[12],divorcios2011$Noviembre[12],divorcios2011$Diciembre[12],
+         divorcios2012$Enero[12],divorcios2012$Febrero[12],divorcios2012$Marzo[12],divorcios2012$Abril[12],
+         divorcios2012$Mayo[12],divorcios2012$Junio[12],divorcios2012$Julio[12],divorcios2012$Agosto[12],
+         divorcios2012$Septiembre[12],divorcios2012$Octubre[12],divorcios2012$Noviembre[12],divorcios2012$Diciembre[12],
+         divorcios2013$Enero[12],divorcios2013$Febrero[12],divorcios2013$Marzo[12],divorcios2013$Abril[12],
+         divorcios2013$Mayo[12],divorcios2013$Junio[12],divorcios2013$Julio[12],divorcios2013$Agosto[12],
+         divorcios2013$Septiembre[12],divorcios2013$Octubre[12],divorcios2013$Noviembre[12],divorcios2013$Diciembre[12],
+         divorcios2014$Enero[12],divorcios2014$Febrero[12],divorcios2014$Marzo[12],divorcios2014$Abril[12],
+         divorcios2014$Mayo[12],divorcios2014$Junio[12],divorcios2014$Julio[12],divorcios2014$Agosto[12],
+         divorcios2014$Septiembre[12],divorcios2014$Octubre[12],divorcios2014$Noviembre[12],divorcios2014$Diciembre[12])
+X12 <- c(divorcios2010$Enero[13],divorcios2010$Febrero[13],divorcios2010$Marzo[13],divorcios2010$Abril[13],
+         divorcios2010$Mayo[13],divorcios2010$Junio[13],divorcios2010$Julio[13],divorcios2010$Agosto[13],
+         divorcios2010$Septiembre[13],divorcios2010$Octubre[13],divorcios2010$Noviembre[13],divorcios2010$Diciembre[13],
+         divorcios2011$Enero[13],divorcios2011$Febrero[13],divorcios2011$Marzo[13],divorcios2011$Abril[13],
+         divorcios2011$Mayo[13],divorcios2011$Junio[13],divorcios2011$Julio[13],divorcios2011$Agosto[13],
+         divorcios2011$Septiembre[13],divorcios2011$Octubre[13],divorcios2011$Noviembre[13],divorcios2011$Diciembre[13],
+         divorcios2012$Enero[13],divorcios2012$Febrero[13],divorcios2012$Marzo[13],divorcios2012$Abril[13],
+         divorcios2012$Mayo[13],divorcios2012$Junio[13],divorcios2012$Julio[13],divorcios2012$Agosto[13],
+         divorcios2012$Septiembre[13],divorcios2012$Octubre[13],divorcios2012$Noviembre[13],divorcios2012$Diciembre[13],
+         divorcios2013$Enero[13],divorcios2013$Febrero[13],divorcios2013$Marzo[13],divorcios2013$Abril[13],
+         divorcios2013$Mayo[13],divorcios2013$Junio[13],divorcios2013$Julio[13],divorcios2013$Agosto[13],
+         divorcios2013$Septiembre[13],divorcios2013$Octubre[13],divorcios2013$Noviembre[13],divorcios2013$Diciembre[13],
+         divorcios2014$Enero[13],divorcios2014$Febrero[13],divorcios2014$Marzo[13],divorcios2014$Abril[13],
+         divorcios2014$Mayo[13],divorcios2014$Junio[13],divorcios2014$Julio[13],divorcios2014$Agosto[13],
+         divorcios2014$Septiembre[13],divorcios2014$Octubre[13],divorcios2014$Noviembre[13],divorcios2014$Diciembre[13])
+X13 <- c(divorcios2010$Enero[14],divorcios2010$Febrero[14],divorcios2010$Marzo[14],divorcios2010$Abril[14],
+         divorcios2010$Mayo[14],divorcios2010$Junio[14],divorcios2010$Julio[14],divorcios2010$Agosto[14],
+         divorcios2010$Septiembre[14],divorcios2010$Octubre[14],divorcios2010$Noviembre[14],divorcios2010$Diciembre[14],
+         divorcios2011$Enero[14],divorcios2011$Febrero[14],divorcios2011$Marzo[14],divorcios2011$Abril[14],
+         divorcios2011$Mayo[14],divorcios2011$Junio[14],divorcios2011$Julio[14],divorcios2011$Agosto[14],
+         divorcios2011$Septiembre[14],divorcios2011$Octubre[14],divorcios2011$Noviembre[14],divorcios2011$Diciembre[14],
+         divorcios2012$Enero[14],divorcios2012$Febrero[14],divorcios2012$Marzo[14],divorcios2012$Abril[14],
+         divorcios2012$Mayo[14],divorcios2012$Junio[14],divorcios2012$Julio[14],divorcios2012$Agosto[14],
+         divorcios2012$Septiembre[14],divorcios2012$Octubre[14],divorcios2012$Noviembre[14],divorcios2012$Diciembre[14],
+         divorcios2013$Enero[14],divorcios2013$Febrero[14],divorcios2013$Marzo[14],divorcios2013$Abril[14],
+         divorcios2013$Mayo[14],divorcios2013$Junio[14],divorcios2013$Julio[14],divorcios2013$Agosto[14],
+         divorcios2013$Septiembre[14],divorcios2013$Octubre[14],divorcios2013$Noviembre[14],divorcios2013$Diciembre[14],
+         divorcios2014$Enero[14],divorcios2014$Febrero[14],divorcios2014$Marzo[14],divorcios2014$Abril[14],
+         divorcios2014$Mayo[14],divorcios2014$Junio[14],divorcios2014$Julio[14],divorcios2014$Agosto[14],
+         divorcios2014$Septiembre[14],divorcios2014$Octubre[14],divorcios2014$Noviembre[14],divorcios2014$Diciembre[14])
+X14 <- c(divorcios2010$Enero[15],divorcios2010$Febrero[15],divorcios2010$Marzo[15],divorcios2010$Abril[15],
+         divorcios2010$Mayo[15],divorcios2010$Junio[15],divorcios2010$Julio[15],divorcios2010$Agosto[15],
+         divorcios2010$Septiembre[15],divorcios2010$Octubre[15],divorcios2010$Noviembre[15],divorcios2010$Diciembre[15],
+         divorcios2011$Enero[15],divorcios2011$Febrero[15],divorcios2011$Marzo[15],divorcios2011$Abril[15],
+         divorcios2011$Mayo[15],divorcios2011$Junio[15],divorcios2011$Julio[15],divorcios2011$Agosto[15],
+         divorcios2011$Septiembre[15],divorcios2011$Octubre[15],divorcios2011$Noviembre[15],divorcios2011$Diciembre[15],
+         divorcios2012$Enero[15],divorcios2012$Febrero[15],divorcios2012$Marzo[15],divorcios2012$Abril[15],
+         divorcios2012$Mayo[15],divorcios2012$Junio[15],divorcios2012$Julio[15],divorcios2012$Agosto[15],
+         divorcios2012$Septiembre[15],divorcios2012$Octubre[15],divorcios2012$Noviembre[15],divorcios2012$Diciembre[15],
+         divorcios2013$Enero[15],divorcios2013$Febrero[15],divorcios2013$Marzo[15],divorcios2013$Abril[15],
+         divorcios2013$Mayo[15],divorcios2013$Junio[15],divorcios2013$Julio[15],divorcios2013$Agosto[15],
+         divorcios2013$Septiembre[15],divorcios2013$Octubre[15],divorcios2013$Noviembre[15],divorcios2013$Diciembre[15],
+         divorcios2014$Enero[15],divorcios2014$Febrero[15],divorcios2014$Marzo[15],divorcios2014$Abril[15],
+         divorcios2014$Mayo[15],divorcios2014$Junio[15],divorcios2014$Julio[15],divorcios2014$Agosto[15],
+         divorcios2014$Septiembre[15],divorcios2014$Octubre[15],divorcios2014$Noviembre[15],divorcios2014$Diciembre[15])
+X15 <- c(divorcios2010$Enero[16],divorcios2010$Febrero[16],divorcios2010$Marzo[16],divorcios2010$Abril[16],
+         divorcios2010$Mayo[16],divorcios2010$Junio[16],divorcios2010$Julio[16],divorcios2010$Agosto[16],
+         divorcios2010$Septiembre[16],divorcios2010$Octubre[16],divorcios2010$Noviembre[16],divorcios2010$Diciembre[16],
+         divorcios2011$Enero[16],divorcios2011$Febrero[16],divorcios2011$Marzo[16],divorcios2011$Abril[16],
+         divorcios2011$Mayo[16],divorcios2011$Junio[16],divorcios2011$Julio[16],divorcios2011$Agosto[16],
+         divorcios2011$Septiembre[16],divorcios2011$Octubre[16],divorcios2011$Noviembre[16],divorcios2011$Diciembre[16],
+         divorcios2012$Enero[16],divorcios2012$Febrero[16],divorcios2012$Marzo[16],divorcios2012$Abril[16],
+         divorcios2012$Mayo[16],divorcios2012$Junio[16],divorcios2012$Julio[16],divorcios2012$Agosto[16],
+         divorcios2012$Septiembre[16],divorcios2012$Octubre[16],divorcios2012$Noviembre[16],divorcios2012$Diciembre[16],
+         divorcios2013$Enero[16],divorcios2013$Febrero[16],divorcios2013$Marzo[16],divorcios2013$Abril[16],
+         divorcios2013$Mayo[16],divorcios2013$Junio[16],divorcios2013$Julio[16],divorcios2013$Agosto[16],
+         divorcios2013$Septiembre[16],divorcios2013$Octubre[16],divorcios2013$Noviembre[16],divorcios2013$Diciembre[16],
+         divorcios2014$Enero[16],divorcios2014$Febrero[16],divorcios2014$Marzo[16],divorcios2014$Abril[16],
+         divorcios2014$Mayo[16],divorcios2014$Junio[16],divorcios2014$Julio[16],divorcios2014$Agosto[16],
+         divorcios2014$Septiembre[16],divorcios2014$Octubre[16],divorcios2014$Noviembre[16],divorcios2014$Diciembre[16])
+X16 <- c(divorcios2010$Enero[17],divorcios2010$Febrero[17],divorcios2010$Marzo[17],divorcios2010$Abril[17],
+         divorcios2010$Mayo[17],divorcios2010$Junio[17],divorcios2010$Julio[17],divorcios2010$Agosto[17],
+         divorcios2010$Septiembre[17],divorcios2010$Octubre[17],divorcios2010$Noviembre[17],divorcios2010$Diciembre[17],
+         divorcios2011$Enero[17],divorcios2011$Febrero[17],divorcios2011$Marzo[17],divorcios2011$Abril[17],
+         divorcios2011$Mayo[17],divorcios2011$Junio[17],divorcios2011$Julio[17],divorcios2011$Agosto[17],
+         divorcios2011$Septiembre[17],divorcios2011$Octubre[17],divorcios2011$Noviembre[17],divorcios2011$Diciembre[17],
+         divorcios2012$Enero[17],divorcios2012$Febrero[17],divorcios2012$Marzo[17],divorcios2012$Abril[17],
+         divorcios2012$Mayo[17],divorcios2012$Junio[17],divorcios2012$Julio[17],divorcios2012$Agosto[17],
+         divorcios2012$Septiembre[17],divorcios2012$Octubre[17],divorcios2012$Noviembre[17],divorcios2012$Diciembre[17],
+         divorcios2013$Enero[17],divorcios2013$Febrero[17],divorcios2013$Marzo[17],divorcios2013$Abril[17],
+         divorcios2013$Mayo[17],divorcios2013$Junio[17],divorcios2013$Julio[17],divorcios2013$Agosto[17],
+         divorcios2013$Septiembre[17],divorcios2013$Octubre[17],divorcios2013$Noviembre[17],divorcios2013$Diciembre[17],
+         divorcios2014$Enero[17],divorcios2014$Febrero[17],divorcios2014$Marzo[17],divorcios2014$Abril[17],
+         divorcios2014$Mayo[17],divorcios2014$Junio[17],divorcios2014$Julio[17],divorcios2014$Agosto[17],
+         divorcios2014$Septiembre[17],divorcios2014$Octubre[17],divorcios2014$Noviembre[17],divorcios2014$Diciembre[17])
+X17 <- c(divorcios2010$Enero[18],divorcios2010$Febrero[18],divorcios2010$Marzo[18],divorcios2010$Abril[18],
+         divorcios2010$Mayo[18],divorcios2010$Junio[18],divorcios2010$Julio[18],divorcios2010$Agosto[18],
+         divorcios2010$Septiembre[18],divorcios2010$Octubre[18],divorcios2010$Noviembre[18],divorcios2010$Diciembre[18],
+         divorcios2011$Enero[18],divorcios2011$Febrero[18],divorcios2011$Marzo[18],divorcios2011$Abril[18],
+         divorcios2011$Mayo[18],divorcios2011$Junio[18],divorcios2011$Julio[18],divorcios2011$Agosto[18],
+         divorcios2011$Septiembre[18],divorcios2011$Octubre[18],divorcios2011$Noviembre[18],divorcios2011$Diciembre[18],
+         divorcios2012$Enero[18],divorcios2012$Febrero[18],divorcios2012$Marzo[18],divorcios2012$Abril[18],
+         divorcios2012$Mayo[18],divorcios2012$Junio[18],divorcios2012$Julio[18],divorcios2012$Agosto[18],
+         divorcios2012$Septiembre[18],divorcios2012$Octubre[18],divorcios2012$Noviembre[18],divorcios2012$Diciembre[18],
+         divorcios2013$Enero[18],divorcios2013$Febrero[18],divorcios2013$Marzo[18],divorcios2013$Abril[18],
+         divorcios2013$Mayo[18],divorcios2013$Junio[18],divorcios2013$Julio[18],divorcios2013$Agosto[18],
+         divorcios2013$Septiembre[18],divorcios2013$Octubre[18],divorcios2013$Noviembre[18],divorcios2013$Diciembre[18],
+         divorcios2014$Enero[18],divorcios2014$Febrero[18],divorcios2014$Marzo[18],divorcios2014$Abril[18],
+         divorcios2014$Mayo[18],divorcios2014$Junio[18],divorcios2014$Julio[18],divorcios2014$Agosto[18],
+         divorcios2014$Septiembre[18],divorcios2014$Octubre[18],divorcios2014$Noviembre[18],divorcios2014$Diciembre[18])
+X18 <- c(divorcios2010$Enero[19],divorcios2010$Febrero[19],divorcios2010$Marzo[19],divorcios2010$Abril[19],
+         divorcios2010$Mayo[19],divorcios2010$Junio[19],divorcios2010$Julio[19],divorcios2010$Agosto[19],
+         divorcios2010$Septiembre[19],divorcios2010$Octubre[19],divorcios2010$Noviembre[19],divorcios2010$Diciembre[19],
+         divorcios2011$Enero[19],divorcios2011$Febrero[19],divorcios2011$Marzo[19],divorcios2011$Abril[19],
+         divorcios2011$Mayo[19],divorcios2011$Junio[19],divorcios2011$Julio[19],divorcios2011$Agosto[19],
+         divorcios2011$Septiembre[19],divorcios2011$Octubre[19],divorcios2011$Noviembre[19],divorcios2011$Diciembre[19],
+         divorcios2012$Enero[19],divorcios2012$Febrero[19],divorcios2012$Marzo[19],divorcios2012$Abril[19],
+         divorcios2012$Mayo[19],divorcios2012$Junio[19],divorcios2012$Julio[19],divorcios2012$Agosto[19],
+         divorcios2012$Septiembre[19],divorcios2012$Octubre[19],divorcios2012$Noviembre[19],divorcios2012$Diciembre[19],
+         divorcios2013$Enero[19],divorcios2013$Febrero[19],divorcios2013$Marzo[19],divorcios2013$Abril[19],
+         divorcios2013$Mayo[19],divorcios2013$Junio[19],divorcios2013$Julio[19],divorcios2013$Agosto[19],
+         divorcios2013$Septiembre[19],divorcios2013$Octubre[19],divorcios2013$Noviembre[19],divorcios2013$Diciembre[19],
+         divorcios2014$Enero[19],divorcios2014$Febrero[19],divorcios2014$Marzo[19],divorcios2014$Abril[19],
+         divorcios2014$Mayo[19],divorcios2014$Junio[19],divorcios2014$Julio[19],divorcios2014$Agosto[19],
+         divorcios2014$Septiembre[19],divorcios2014$Octubre[19],divorcios2014$Noviembre[19],divorcios2014$Diciembre[19])
+X19 <- c(divorcios2010$Enero[20],divorcios2010$Febrero[20],divorcios2010$Marzo[20],divorcios2010$Abril[20],
+         divorcios2010$Mayo[20],divorcios2010$Junio[20],divorcios2010$Julio[20],divorcios2010$Agosto[20],
+         divorcios2010$Septiembre[20],divorcios2010$Octubre[20],divorcios2010$Noviembre[20],divorcios2010$Diciembre[20],
+         divorcios2011$Enero[20],divorcios2011$Febrero[20],divorcios2011$Marzo[20],divorcios2011$Abril[20],
+         divorcios2011$Mayo[20],divorcios2011$Junio[20],divorcios2011$Julio[20],divorcios2011$Agosto[20],
+         divorcios2011$Septiembre[20],divorcios2011$Octubre[20],divorcios2011$Noviembre[20],divorcios2011$Diciembre[20],
+         divorcios2012$Enero[20],divorcios2012$Febrero[20],divorcios2012$Marzo[20],divorcios2012$Abril[20],
+         divorcios2012$Mayo[20],divorcios2012$Junio[20],divorcios2012$Julio[20],divorcios2012$Agosto[20],
+         divorcios2012$Septiembre[20],divorcios2012$Octubre[20],divorcios2012$Noviembre[20],divorcios2012$Diciembre[20],
+         divorcios2013$Enero[20],divorcios2013$Febrero[20],divorcios2013$Marzo[20],divorcios2013$Abril[20],
+         divorcios2013$Mayo[20],divorcios2013$Junio[20],divorcios2013$Julio[20],divorcios2013$Agosto[20],
+         divorcios2013$Septiembre[20],divorcios2013$Octubre[20],divorcios2013$Noviembre[20],divorcios2013$Diciembre[20],
+         divorcios2014$Enero[20],divorcios2014$Febrero[20],divorcios2014$Marzo[20],divorcios2014$Abril[20],
+         divorcios2014$Mayo[20],divorcios2014$Junio[20],divorcios2014$Julio[20],divorcios2014$Agosto[20],
+         divorcios2014$Septiembre[20],divorcios2014$Octubre[20],divorcios2014$Noviembre[20],divorcios2014$Diciembre[20])
+X20 <- c(divorcios2010$Enero[21],divorcios2010$Febrero[21],divorcios2010$Marzo[21],divorcios2010$Abril[21],
+         divorcios2010$Mayo[21],divorcios2010$Junio[21],divorcios2010$Julio[21],divorcios2010$Agosto[21],
+         divorcios2010$Septiembre[21],divorcios2010$Octubre[21],divorcios2010$Noviembre[21],divorcios2010$Diciembre[21],
+         divorcios2011$Enero[21],divorcios2011$Febrero[21],divorcios2011$Marzo[21],divorcios2011$Abril[21],
+         divorcios2011$Mayo[21],divorcios2011$Junio[21],divorcios2011$Julio[21],divorcios2011$Agosto[21],
+         divorcios2011$Septiembre[21],divorcios2011$Octubre[21],divorcios2011$Noviembre[21],divorcios2011$Diciembre[21],
+         divorcios2012$Enero[21],divorcios2012$Febrero[21],divorcios2012$Marzo[21],divorcios2012$Abril[21],
+         divorcios2012$Mayo[21],divorcios2012$Junio[21],divorcios2012$Julio[21],divorcios2012$Agosto[21],
+         divorcios2012$Septiembre[21],divorcios2012$Octubre[21],divorcios2012$Noviembre[21],divorcios2012$Diciembre[21],
+         divorcios2013$Enero[21],divorcios2013$Febrero[21],divorcios2013$Marzo[21],divorcios2013$Abril[21],
+         divorcios2013$Mayo[21],divorcios2013$Junio[21],divorcios2013$Julio[21],divorcios2013$Agosto[21],
+         divorcios2013$Septiembre[21],divorcios2013$Octubre[21],divorcios2013$Noviembre[21],divorcios2013$Diciembre[21],
+         divorcios2014$Enero[21],divorcios2014$Febrero[21],divorcios2014$Marzo[21],divorcios2014$Abril[21],
+         divorcios2014$Mayo[21],divorcios2014$Junio[21],divorcios2014$Julio[21],divorcios2014$Agosto[21],
+         divorcios2014$Septiembre[21],divorcios2014$Octubre[21],divorcios2014$Noviembre[21],divorcios2014$Diciembre[21])
+X21 <- c(divorcios2010$Enero[22],divorcios2010$Febrero[22],divorcios2010$Marzo[22],divorcios2010$Abril[22],
+         divorcios2010$Mayo[22],divorcios2010$Junio[22],divorcios2010$Julio[22],divorcios2010$Agosto[22],
+         divorcios2010$Septiembre[22],divorcios2010$Octubre[22],divorcios2010$Noviembre[22],divorcios2010$Diciembre[22],
+         divorcios2011$Enero[22],divorcios2011$Febrero[22],divorcios2011$Marzo[22],divorcios2011$Abril[22],
+         divorcios2011$Mayo[22],divorcios2011$Junio[22],divorcios2011$Julio[22],divorcios2011$Agosto[22],
+         divorcios2011$Septiembre[22],divorcios2011$Octubre[22],divorcios2011$Noviembre[22],divorcios2011$Diciembre[22],
+         divorcios2012$Enero[22],divorcios2012$Febrero[22],divorcios2012$Marzo[22],divorcios2012$Abril[22],
+         divorcios2012$Mayo[22],divorcios2012$Junio[22],divorcios2012$Julio[22],divorcios2012$Agosto[22],
+         divorcios2012$Septiembre[22],divorcios2012$Octubre[22],divorcios2012$Noviembre[22],divorcios2012$Diciembre[22],
+         divorcios2013$Enero[22],divorcios2013$Febrero[22],divorcios2013$Marzo[22],divorcios2013$Abril[22],
+         divorcios2013$Mayo[22],divorcios2013$Junio[22],divorcios2013$Julio[22],divorcios2013$Agosto[22],
+         divorcios2013$Septiembre[22],divorcios2013$Octubre[22],divorcios2013$Noviembre[22],divorcios2013$Diciembre[22],
+         divorcios2014$Enero[22],divorcios2014$Febrero[22],divorcios2014$Marzo[22],divorcios2014$Abril[22],
+         divorcios2014$Mayo[22],divorcios2014$Junio[22],divorcios2014$Julio[22],divorcios2014$Agosto[22],
+         divorcios2014$Septiembre[22],divorcios2014$Octubre[22],divorcios2014$Noviembre[22],divorcios2014$Diciembre[22])
+X22 <- c(divorcios2010$Enero[23],divorcios2010$Febrero[23],divorcios2010$Marzo[23],divorcios2010$Abril[23],
+         divorcios2010$Mayo[23],divorcios2010$Junio[23],divorcios2010$Julio[23],divorcios2010$Agosto[23],
+         divorcios2010$Septiembre[23],divorcios2010$Octubre[23],divorcios2010$Noviembre[23],divorcios2010$Diciembre[23],
+         divorcios2011$Enero[23],divorcios2011$Febrero[23],divorcios2011$Marzo[23],divorcios2011$Abril[23],
+         divorcios2011$Mayo[23],divorcios2011$Junio[23],divorcios2011$Julio[23],divorcios2011$Agosto[23],
+         divorcios2011$Septiembre[23],divorcios2011$Octubre[23],divorcios2011$Noviembre[23],divorcios2011$Diciembre[23],
+         divorcios2012$Enero[23],divorcios2012$Febrero[23],divorcios2012$Marzo[23],divorcios2012$Abril[23],
+         divorcios2012$Mayo[23],divorcios2012$Junio[23],divorcios2012$Julio[23],divorcios2012$Agosto[23],
+         divorcios2012$Septiembre[23],divorcios2012$Octubre[23],divorcios2012$Noviembre[23],divorcios2012$Diciembre[23],
+         divorcios2013$Enero[23],divorcios2013$Febrero[23],divorcios2013$Marzo[23],divorcios2013$Abril[23],
+         divorcios2013$Mayo[23],divorcios2013$Junio[23],divorcios2013$Julio[23],divorcios2013$Agosto[23],
+         divorcios2013$Septiembre[23],divorcios2013$Octubre[23],divorcios2013$Noviembre[23],divorcios2013$Diciembre[23],
+         divorcios2014$Enero[23],divorcios2014$Febrero[23],divorcios2014$Marzo[23],divorcios2014$Abril[23],
+         divorcios2014$Mayo[23],divorcios2014$Junio[23],divorcios2014$Julio[23],divorcios2014$Agosto[23],
+         divorcios2014$Septiembre[23],divorcios2014$Octubre[23],divorcios2014$Noviembre[23],divorcios2014$Diciembre[23])
+X23 <- c(divorcios2010$Enero[24],divorcios2010$Febrero[24],divorcios2010$Marzo[24],divorcios2010$Abril[24],
+         divorcios2010$Mayo[24],divorcios2010$Junio[24],divorcios2010$Julio[24],divorcios2010$Agosto[24],
+         divorcios2010$Septiembre[24],divorcios2010$Octubre[24],divorcios2010$Noviembre[24],divorcios2010$Diciembre[24],
+         divorcios2011$Enero[24],divorcios2011$Febrero[24],divorcios2011$Marzo[24],divorcios2011$Abril[24],
+         divorcios2011$Mayo[24],divorcios2011$Junio[24],divorcios2011$Julio[24],divorcios2011$Agosto[24],
+         divorcios2011$Septiembre[24],divorcios2011$Octubre[24],divorcios2011$Noviembre[24],divorcios2011$Diciembre[24],
+         divorcios2012$Enero[24],divorcios2012$Febrero[24],divorcios2012$Marzo[24],divorcios2012$Abril[24],
+         divorcios2012$Mayo[24],divorcios2012$Junio[24],divorcios2012$Julio[24],divorcios2012$Agosto[24],
+         divorcios2012$Septiembre[24],divorcios2012$Octubre[24],divorcios2012$Noviembre[24],divorcios2012$Diciembre[24],
+         divorcios2013$Enero[24],divorcios2013$Febrero[24],divorcios2013$Marzo[24],divorcios2013$Abril[24],
+         divorcios2013$Mayo[24],divorcios2013$Junio[24],divorcios2013$Julio[24],divorcios2013$Agosto[24],
+         divorcios2013$Septiembre[24],divorcios2013$Octubre[24],divorcios2013$Noviembre[24],divorcios2013$Diciembre[24],
+         divorcios2014$Enero[24],divorcios2014$Febrero[24],divorcios2014$Marzo[24],divorcios2014$Abril[24],
+         divorcios2014$Mayo[24],divorcios2014$Junio[24],divorcios2014$Julio[24],divorcios2014$Agosto[24],
+         divorcios2014$Septiembre[24],divorcios2014$Octubre[24],divorcios2014$Noviembre[24],divorcios2014$Diciembre[24])
+X24 <- c(divorcios2010$Enero[25],divorcios2010$Febrero[25],divorcios2010$Marzo[25],divorcios2010$Abril[25],
+         divorcios2010$Mayo[25],divorcios2010$Junio[25],divorcios2010$Julio[25],divorcios2010$Agosto[25],
+         divorcios2010$Septiembre[25],divorcios2010$Octubre[25],divorcios2010$Noviembre[25],divorcios2010$Diciembre[25],
+         divorcios2011$Enero[25],divorcios2011$Febrero[25],divorcios2011$Marzo[25],divorcios2011$Abril[25],
+         divorcios2011$Mayo[25],divorcios2011$Junio[25],divorcios2011$Julio[25],divorcios2011$Agosto[25],
+         divorcios2011$Septiembre[25],divorcios2011$Octubre[25],divorcios2011$Noviembre[25],divorcios2011$Diciembre[25],
+         divorcios2012$Enero[25],divorcios2012$Febrero[25],divorcios2012$Marzo[25],divorcios2012$Abril[25],
+         divorcios2012$Mayo[25],divorcios2012$Junio[25],divorcios2012$Julio[25],divorcios2012$Agosto[25],
+         divorcios2012$Septiembre[25],divorcios2012$Octubre[25],divorcios2012$Noviembre[25],divorcios2012$Diciembre[25],
+         divorcios2013$Enero[25],divorcios2013$Febrero[25],divorcios2013$Marzo[25],divorcios2013$Abril[25],
+         divorcios2013$Mayo[25],divorcios2013$Junio[25],divorcios2013$Julio[25],divorcios2013$Agosto[25],
+         divorcios2013$Septiembre[25],divorcios2013$Octubre[25],divorcios2013$Noviembre[25],divorcios2013$Diciembre[25],
+         divorcios2014$Enero[25],divorcios2014$Febrero[25],divorcios2014$Marzo[25],divorcios2014$Abril[25],
+         divorcios2014$Mayo[25],divorcios2014$Junio[25],divorcios2014$Julio[25],divorcios2014$Agosto[25],
+         divorcios2014$Septiembre[25],divorcios2014$Octubre[25],divorcios2014$Noviembre[25],divorcios2014$Diciembre[25])
+X25 <- c(divorcios2010$Enero[26],divorcios2010$Febrero[26],divorcios2010$Marzo[26],divorcios2010$Abril[26],
+         divorcios2010$Mayo[26],divorcios2010$Junio[26],divorcios2010$Julio[26],divorcios2010$Agosto[26],
+         divorcios2010$Septiembre[26],divorcios2010$Octubre[26],divorcios2010$Noviembre[26],divorcios2010$Diciembre[26],
+         divorcios2011$Enero[26],divorcios2011$Febrero[26],divorcios2011$Marzo[26],divorcios2011$Abril[26],
+         divorcios2011$Mayo[26],divorcios2011$Junio[26],divorcios2011$Julio[26],divorcios2011$Agosto[26],
+         divorcios2011$Septiembre[26],divorcios2011$Octubre[26],divorcios2011$Noviembre[26],divorcios2011$Diciembre[26],
+         divorcios2012$Enero[26],divorcios2012$Febrero[26],divorcios2012$Marzo[26],divorcios2012$Abril[26],
+         divorcios2012$Mayo[26],divorcios2012$Junio[26],divorcios2012$Julio[26],divorcios2012$Agosto[26],
+         divorcios2012$Septiembre[26],divorcios2012$Octubre[26],divorcios2012$Noviembre[26],divorcios2012$Diciembre[26],
+         divorcios2013$Enero[26],divorcios2013$Febrero[26],divorcios2013$Marzo[26],divorcios2013$Abril[26],
+         divorcios2013$Mayo[26],divorcios2013$Junio[26],divorcios2013$Julio[26],divorcios2013$Agosto[26],
+         divorcios2013$Septiembre[26],divorcios2013$Octubre[26],divorcios2013$Noviembre[26],divorcios2013$Diciembre[26],
+         divorcios2014$Enero[26],divorcios2014$Febrero[26],divorcios2014$Marzo[26],divorcios2014$Abril[26],
+         divorcios2014$Mayo[26],divorcios2014$Junio[26],divorcios2014$Julio[26],divorcios2014$Agosto[26],
+         divorcios2014$Septiembre[26],divorcios2014$Octubre[26],divorcios2014$Noviembre[26],divorcios2014$Diciembre[26])
+X26 <- c(divorcios2010$Enero[27],divorcios2010$Febrero[27],divorcios2010$Marzo[27],divorcios2010$Abril[27],
+         divorcios2010$Mayo[27],divorcios2010$Junio[27],divorcios2010$Julio[27],divorcios2010$Agosto[27],
+         divorcios2010$Septiembre[27],divorcios2010$Octubre[27],divorcios2010$Noviembre[27],divorcios2010$Diciembre[27],
+         divorcios2011$Enero[27],divorcios2011$Febrero[27],divorcios2011$Marzo[27],divorcios2011$Abril[27],
+         divorcios2011$Mayo[27],divorcios2011$Junio[27],divorcios2011$Julio[27],divorcios2011$Agosto[27],
+         divorcios2011$Septiembre[27],divorcios2011$Octubre[27],divorcios2011$Noviembre[27],divorcios2011$Diciembre[27],
+         divorcios2012$Enero[27],divorcios2012$Febrero[27],divorcios2012$Marzo[27],divorcios2012$Abril[27],
+         divorcios2012$Mayo[27],divorcios2012$Junio[27],divorcios2012$Julio[27],divorcios2012$Agosto[27],
+         divorcios2012$Septiembre[27],divorcios2012$Octubre[27],divorcios2012$Noviembre[27],divorcios2012$Diciembre[27],
+         divorcios2013$Enero[27],divorcios2013$Febrero[27],divorcios2013$Marzo[27],divorcios2013$Abril[27],
+         divorcios2013$Mayo[27],divorcios2013$Junio[27],divorcios2013$Julio[27],divorcios2013$Agosto[27],
+         divorcios2013$Septiembre[27],divorcios2013$Octubre[27],divorcios2013$Noviembre[27],divorcios2013$Diciembre[27],
+         divorcios2014$Enero[27],divorcios2014$Febrero[27],divorcios2014$Marzo[27],divorcios2014$Abril[27],
+         divorcios2014$Mayo[27],divorcios2014$Junio[27],divorcios2014$Julio[27],divorcios2014$Agosto[27],
+         divorcios2014$Septiembre[27],divorcios2014$Octubre[27],divorcios2014$Noviembre[27],divorcios2014$Diciembre[27])
+X27 <- c(divorcios2010$Enero[28],divorcios2010$Febrero[28],divorcios2010$Marzo[28],divorcios2010$Abril[28],
+         divorcios2010$Mayo[28],divorcios2010$Junio[28],divorcios2010$Julio[28],divorcios2010$Agosto[28],
+         divorcios2010$Septiembre[28],divorcios2010$Octubre[28],divorcios2010$Noviembre[28],divorcios2010$Diciembre[28],
+         divorcios2011$Enero[28],divorcios2011$Febrero[28],divorcios2011$Marzo[28],divorcios2011$Abril[28],
+         divorcios2011$Mayo[28],divorcios2011$Junio[28],divorcios2011$Julio[28],divorcios2011$Agosto[28],
+         divorcios2011$Septiembre[28],divorcios2011$Octubre[28],divorcios2011$Noviembre[28],divorcios2011$Diciembre[28],
+         divorcios2012$Enero[28],divorcios2012$Febrero[28],divorcios2012$Marzo[28],divorcios2012$Abril[28],
+         divorcios2012$Mayo[28],divorcios2012$Junio[28],divorcios2012$Julio[28],divorcios2012$Agosto[28],
+         divorcios2012$Septiembre[28],divorcios2012$Octubre[28],divorcios2012$Noviembre[28],divorcios2012$Diciembre[28],
+         divorcios2013$Enero[28],divorcios2013$Febrero[28],divorcios2013$Marzo[28],divorcios2013$Abril[28],
+         divorcios2013$Mayo[28],divorcios2013$Junio[28],divorcios2013$Julio[28],divorcios2013$Agosto[28],
+         divorcios2013$Septiembre[28],divorcios2013$Octubre[28],divorcios2013$Noviembre[28],divorcios2013$Diciembre[28],
+         divorcios2014$Enero[28],divorcios2014$Febrero[28],divorcios2014$Marzo[28],divorcios2014$Abril[28],
+         divorcios2014$Mayo[28],divorcios2014$Junio[28],divorcios2014$Julio[28],divorcios2014$Agosto[28],
+         divorcios2014$Septiembre[28],divorcios2014$Octubre[28],divorcios2014$Noviembre[28],divorcios2014$Diciembre[28])
+X28 <- c(divorcios2010$Enero[29],divorcios2010$Febrero[29],divorcios2010$Marzo[29],divorcios2010$Abril[29],
+         divorcios2010$Mayo[29],divorcios2010$Junio[29],divorcios2010$Julio[29],divorcios2010$Agosto[29],
+         divorcios2010$Septiembre[29],divorcios2010$Octubre[29],divorcios2010$Noviembre[29],divorcios2010$Diciembre[29],
+         divorcios2011$Enero[29],divorcios2011$Febrero[29],divorcios2011$Marzo[29],divorcios2011$Abril[29],
+         divorcios2011$Mayo[29],divorcios2011$Junio[29],divorcios2011$Julio[29],divorcios2011$Agosto[29],
+         divorcios2011$Septiembre[29],divorcios2011$Octubre[29],divorcios2011$Noviembre[29],divorcios2011$Diciembre[29],
+         divorcios2012$Enero[29],divorcios2012$Febrero[29],divorcios2012$Marzo[29],divorcios2012$Abril[29],
+         divorcios2012$Mayo[29],divorcios2012$Junio[29],divorcios2012$Julio[29],divorcios2012$Agosto[29],
+         divorcios2012$Septiembre[29],divorcios2012$Octubre[29],divorcios2012$Noviembre[29],divorcios2012$Diciembre[29],
+         divorcios2013$Enero[29],divorcios2013$Febrero[29],divorcios2013$Marzo[29],divorcios2013$Abril[29],
+         divorcios2013$Mayo[29],divorcios2013$Junio[29],divorcios2013$Julio[29],divorcios2013$Agosto[29],
+         divorcios2013$Septiembre[29],divorcios2013$Octubre[29],divorcios2013$Noviembre[29],divorcios2013$Diciembre[29],
+         divorcios2014$Enero[29],divorcios2014$Febrero[29],divorcios2014$Marzo[29],divorcios2014$Abril[29],
+         divorcios2014$Mayo[29],divorcios2014$Junio[29],divorcios2014$Julio[29],divorcios2014$Agosto[29],
+         divorcios2014$Septiembre[29],divorcios2014$Octubre[29],divorcios2014$Noviembre[29],divorcios2014$Diciembre[29])
+X29 <- c(divorcios2010$Enero[30],divorcios2010$Febrero[30],divorcios2010$Marzo[30],divorcios2010$Abril[30],
+         divorcios2010$Mayo[30],divorcios2010$Junio[30],divorcios2010$Julio[30],divorcios2010$Agosto[30],
+         divorcios2010$Septiembre[30],divorcios2010$Octubre[30],divorcios2010$Noviembre[30],divorcios2010$Diciembre[30],
+         divorcios2011$Enero[30],divorcios2011$Febrero[30],divorcios2011$Marzo[30],divorcios2011$Abril[30],
+         divorcios2011$Mayo[30],divorcios2011$Junio[30],divorcios2011$Julio[30],divorcios2011$Agosto[30],
+         divorcios2011$Septiembre[30],divorcios2011$Octubre[30],divorcios2011$Noviembre[30],divorcios2011$Diciembre[30],
+         divorcios2012$Enero[30],divorcios2012$Febrero[30],divorcios2012$Marzo[30],divorcios2012$Abril[30],
+         divorcios2012$Mayo[30],divorcios2012$Junio[30],divorcios2012$Julio[30],divorcios2012$Agosto[30],
+         divorcios2012$Septiembre[30],divorcios2012$Octubre[30],divorcios2012$Noviembre[30],divorcios2012$Diciembre[30],
+         divorcios2013$Enero[30],divorcios2013$Febrero[30],divorcios2013$Marzo[30],divorcios2013$Abril[30],
+         divorcios2013$Mayo[30],divorcios2013$Junio[30],divorcios2013$Julio[30],divorcios2013$Agosto[30],
+         divorcios2013$Septiembre[30],divorcios2013$Octubre[30],divorcios2013$Noviembre[30],divorcios2013$Diciembre[30],
+         divorcios2014$Enero[30],divorcios2014$Febrero[30],divorcios2014$Marzo[30],divorcios2014$Abril[30],
+         divorcios2014$Mayo[30],divorcios2014$Junio[30],divorcios2014$Julio[30],divorcios2014$Agosto[30],
+         divorcios2014$Septiembre[30],divorcios2014$Octubre[30],divorcios2014$Noviembre[30],divorcios2014$Diciembre[30])
+X30 <- c(divorcios2010$Enero[31],divorcios2010$Febrero[31],divorcios2010$Marzo[31],divorcios2010$Abril[31],
+         divorcios2010$Mayo[31],divorcios2010$Junio[31],divorcios2010$Julio[31],divorcios2010$Agosto[31],
+         divorcios2010$Septiembre[31],divorcios2010$Octubre[31],divorcios2010$Noviembre[31],divorcios2010$Diciembre[31],
+         divorcios2011$Enero[31],divorcios2011$Febrero[31],divorcios2011$Marzo[31],divorcios2011$Abril[31],
+         divorcios2011$Mayo[31],divorcios2011$Junio[31],divorcios2011$Julio[31],divorcios2011$Agosto[31],
+         divorcios2011$Septiembre[31],divorcios2011$Octubre[31],divorcios2011$Noviembre[31],divorcios2011$Diciembre[31],
+         divorcios2012$Enero[31],divorcios2012$Febrero[31],divorcios2012$Marzo[31],divorcios2012$Abril[31],
+         divorcios2012$Mayo[31],divorcios2012$Junio[31],divorcios2012$Julio[31],divorcios2012$Agosto[31],
+         divorcios2012$Septiembre[31],divorcios2012$Octubre[31],divorcios2012$Noviembre[31],divorcios2012$Diciembre[31],
+         divorcios2013$Enero[31],divorcios2013$Febrero[31],divorcios2013$Marzo[31],divorcios2013$Abril[31],
+         divorcios2013$Mayo[31],divorcios2013$Junio[31],divorcios2013$Julio[31],divorcios2013$Agosto[31],
+         divorcios2013$Septiembre[31],divorcios2013$Octubre[31],divorcios2013$Noviembre[31],divorcios2013$Diciembre[31],
+         divorcios2014$Enero[31],divorcios2014$Febrero[31],divorcios2014$Marzo[31],divorcios2014$Abril[31],
+         divorcios2014$Mayo[31],divorcios2014$Junio[31],divorcios2014$Julio[31],divorcios2014$Agosto[31],
+         divorcios2014$Septiembre[31],divorcios2014$Octubre[31],divorcios2014$Noviembre[31],divorcios2014$Diciembre[31])
+X31 <- c(divorcios2010$Enero[32],divorcios2010$Febrero[32],divorcios2010$Marzo[32],divorcios2010$Abril[32],
+         divorcios2010$Mayo[32],divorcios2010$Junio[32],divorcios2010$Julio[32],divorcios2010$Agosto[32],
+         divorcios2010$Septiembre[32],divorcios2010$Octubre[32],divorcios2010$Noviembre[32],divorcios2010$Diciembre[32],
+         divorcios2011$Enero[32],divorcios2011$Febrero[32],divorcios2011$Marzo[32],divorcios2011$Abril[32],
+         divorcios2011$Mayo[32],divorcios2011$Junio[32],divorcios2011$Julio[32],divorcios2011$Agosto[32],
+         divorcios2011$Septiembre[32],divorcios2011$Octubre[32],divorcios2011$Noviembre[32],divorcios2011$Diciembre[32],
+         divorcios2012$Enero[32],divorcios2012$Febrero[32],divorcios2012$Marzo[32],divorcios2012$Abril[32],
+         divorcios2012$Mayo[32],divorcios2012$Junio[32],divorcios2012$Julio[32],divorcios2012$Agosto[32],
+         divorcios2012$Septiembre[32],divorcios2012$Octubre[32],divorcios2012$Noviembre[32],divorcios2012$Diciembre[32],
+         divorcios2013$Enero[32],divorcios2013$Febrero[32],divorcios2013$Marzo[32],divorcios2013$Abril[32],
+         divorcios2013$Mayo[32],divorcios2013$Junio[32],divorcios2013$Julio[32],divorcios2013$Agosto[32],
+         divorcios2013$Septiembre[32],divorcios2013$Octubre[32],divorcios2013$Noviembre[32],divorcios2013$Diciembre[32],
+         divorcios2014$Enero[32],divorcios2014$Febrero[32],divorcios2014$Marzo[32],divorcios2014$Abril[32],
+         divorcios2014$Mayo[32],divorcios2014$Junio[32],divorcios2014$Julio[32],divorcios2014$Agosto[32],
+         divorcios2014$Septiembre[32],divorcios2014$Octubre[32],divorcios2014$Noviembre[32],divorcios2014$Diciembre[32])
 # Data frame
-divorciosMainDF <- data.frame("Año" = anios,
-                     "Divorcios_Totales" = divorciosGenerales,
-                     "Divorcios_Enero" = divorciosMesEnero,
-                     "Divorcios_Febrero" = divorciosMesFebrero,
-                     "Divorcios_Marzo" = divorciosMesMarzo,
-                     "Divorcios_Abril" = divorciosMesAbril,
-                     "Divorcios_Mayo" = divorciosMesMayo,
-                     "Divorcios_Junio" = divorciosMesJunio,
-                     "Divorcios_Julio" = divorciosMesJulio,
-                     "Divorcios_Agosto" = divorciosMesAgosto,
-                     "Divorcios_Septiembre" = divorciosMesSeptiembre,
-                     "Divorcios_Octubre" = divorciosMesOctubre,
-                     "Divorcios_Noviembre" = divorciosMesNoviembre,
-                     "Divorcios_Diciembre" = divorciosMesDiciembre,
-                     "Num_Hombres_Militares" = divorciosHombresMilitares,
-                     "Num_Hombres_Gerentes" = divorciosHombresGerentes,
-                     "Num_Hombres_Cientificos" = divorciosHombresCientificos,
-                     "Num_Hombres_Tecnicos" = divorciosHombresTecnicos,
-                     "Num_Hombres_Personal_de_Apoyo" = divorciosHombresPersonaldeApoyo,
-                     "Num_Hombres_Comerciantes" = divorciosHombresVendedoresComercio,
-                     "Num_Hombres_Agricultores" = divorciosHombresAgricultores,
-                     "Num_Hombres_Artesanos" = divorciosHombresArtesanos,
-                     "Num_Hombres_Ensambladores" = divorciosHombresEnsambladores,
-                     "Num_Hombres_Elementales" = divorciosHombresElementales,
-                     "Num_Hombres_No_Especificados" = divorciosHombresNoEspecificados,
-                     "Num_Hombres_Ignorados" = divorciosHombresIgnorados,
-                     "Num_Mujeres_Militares" = divorciosMujeresMilitares,
-                     "Num_Mujeres_Gerentes" = divorciosMujeresGerentes,
-                     "Num_Mujeres_Cientificas" = divorciosMujeresCientificas,
-                     "Num_Mujeres_Tecnicas" = divorciosMujeresTecnicas,
-                     "Num_Mujeres_Personal_de_Apoyo" = divorciosMujeresPersonaldeApoyo,
-                     "Num_Mujeres_Comerciantes" = divorciosMujeresVendedorasComercio,
-                     "Num_Mujeres_Agricultoras" = divorciosMujeresAgricultoras,
-                     "Num_Mujeres_Artesanas" = divorciosMujeresArtesanas,
-                     "Num_Mujeres_Ensambladoras" = divorciosMujeresEnsambladoras,
-                     "Num_Mujeres_Elementales" = divorciosMujeresElementales,
-                     "Num_Mujeres_No_Especificadas" = divorciosMujeresNoEspecificadas,
-                     "Num_Mujeres_Ignoradas" = divorciosMujeresIgnoradas)
+divorciosMainDF <- data.frame("Mes / Año" = meses,
+                              "Total" = divorciosTotales,
+                              "X01" = X01,"X02" = X02,"X03" = X03,"X04" = X04,"X05" = X05,
+                              "X06" = X06,"X07" = X07,"X08" = X08,"X09" = X09,"X10" = X10,
+                              "X11" = X11,"X12" = X12,"X13" = X13,"X14" = X14,"X15" = X15,
+                              "X16" = X16,"X17" = X17,"X18" = X18,"X19" = X19,"X20" = X20,
+                              "X21" = X21,"X22" = X22,"X23" = X23,"X24" = X24,"X25" = X25,
+                              "X26" = X26,"X27" = X27,"X28" = X28,"X29" = X29,"X30" = X30,
+                              "X31" = X31)
+divorciosDF <- divorciosMainDF
 ```
-### Definir Data frame para Matrimonios 2010 - 2017
+### Numero de clusters data frame divorcios (Grafica de codo)
 ``` {r }
-# Seleccion de datos
-anios <- c("2010","2011","2012","2013","2014","2015","2016","2017")
-matrimoniosGenerales <- c(matrimonios2010$`2010`[1],matrimonios2011$Total[1],matrimonios2012$Total[1],
-                          matrimonios2013$Total[1],matrimonios2014$Total[1],matrimonios2015$Total[1],
-                          matrimonios2016$Total[1],matrimonios2017$Total[1])
-matrimoniosMesEnero <- c(matrimoniosMeses2010$Enero[1],matrimoniosMeses2011$Enero[1],matrimoniosMeses2012$Enero[1],
-                         matrimoniosMeses2013$Enero[1],matrimoniosMeses2014$Enero[1],matrimoniosMeses2015$Enero[1],
-                         matrimoniosMeses2016$Enero[1],matrimoniosMeses2017$Enero[1])
-matrimoniosMesFebrero <- c(matrimoniosMeses2010$Febrero[1],matrimoniosMeses2011$Febrero[1],
-                           matrimoniosMeses2012$Febrero[1],matrimoniosMeses2013$Febrero[1],
-                           matrimoniosMeses2014$Febrero[1],matrimoniosMeses2015$Febrero[1],
-                           matrimoniosMeses2016$Febrero[1],matrimoniosMeses2017$Febrero[1])
-matrimoniosMesMarzo <- c(matrimoniosMeses2010$Marzo[1],matrimoniosMeses2011$Marzo[1],matrimoniosMeses2012$Marzo[1],
-                         matrimoniosMeses2013$Marzo[1],matrimoniosMeses2014$Marzo[1],matrimoniosMeses2015$Marzo[1],
-                         matrimoniosMeses2016$Marzo[1],matrimoniosMeses2017$Marzo[1])
-matrimoniosMesAbril <- c(matrimoniosMeses2010$Abril[1],matrimoniosMeses2011$Abril[1],matrimoniosMeses2012$Abril[1],
-                         matrimoniosMeses2013$Abril[1],matrimoniosMeses2014$Abril[1],matrimoniosMeses2015$Abril[1],
-                         matrimoniosMeses2016$Abril[1],matrimoniosMeses2017$Abril[1])
-matrimoniosMesMayo <- c(matrimoniosMeses2010$Mayo[1],matrimoniosMeses2011$Mayo[1],matrimoniosMeses2012$Mayo[1],
-                        matrimoniosMeses2013$Mayo[1],matrimoniosMeses2014$Mayo[1],matrimoniosMeses2015$Mayo[1],
-                        matrimoniosMeses2016$Mayo[1],matrimoniosMeses2017$Mayo[1])
-matrimoniosMesJunio <- c(matrimoniosMeses2010$Junio[1],matrimoniosMeses2011$Junio[1],matrimoniosMeses2012$Junio[1],
-                         matrimoniosMeses2013$Junio[1],matrimoniosMeses2014$Junio[1],matrimoniosMeses2015$Junio[1],
-                         matrimoniosMeses2016$Junio[1],matrimoniosMeses2017$Junio[1])
-matrimoniosMesJulio <- c(matrimoniosMeses2010$Julio[1],matrimoniosMeses2011$Julio[1],matrimoniosMeses2012$Julio[1],
-                         matrimoniosMeses2013$Julio[1],matrimoniosMeses2014$Julio[1],matrimoniosMeses2015$Julio[1],
-                         matrimoniosMeses2016$Julio[1],matrimoniosMeses2017$Julio[1])
-matrimoniosMesAgosto <- c(matrimoniosMeses2010$Agosto[1],matrimonios2011$Agosto[1],matrimonios2012$Agosto[1],
-                          matrimoniosMeses2013$Agosto[1],matrimonios2014$Agosto[1],matrimonios2015$Agosto[1],
-                          matrimoniosMeses2016$Agosto[1],matrimoniosMeses2017$Agosto[1])
-matrimoniosMesSeptiembre <- c(matrimoniosMeses2010$Septiembre[1],matrimoniosMeses2011$Septiembre[1],
-                              matrimoniosMeses2012$Septiembre[1],matrimoniosMeses2013$Septiembre[1],
-                              matrimoniosMeses2014$Septiembre[1],matrimoniosMeses2015$Septiembre[1],
-                              matrimoniosMeses2016$Septiembre[1],matrimoniosMeses2017$Septiembre[1])
-matrimoniosMesOctubre <- c(matrimoniosMeses2010$Octubre[1],matrimoniosMeses2011$Octubre[1],
-                           matrimoniosMeses2012$Octubre[1],matrimoniosMeses2013$Octubre[1],
-                           matrimoniosMeses2014$Octubre[1],matrimoniosMeses2015$Octubre[1],
-                           matrimoniosMeses2016$Octubre[1],matrimoniosMeses2017$Octubre[1])
-matrimoniosMesNoviembre <- c(matrimoniosMeses2010$Noviembre[1],matrimoniosMeses2011$Noviembre[1],
-                             matrimoniosMeses2012$Noviembre[1],matrimoniosMeses2013$Noviembre[1],
-                             matrimoniosMeses2014$Noviembre[1],matrimoniosMeses2015$Noviembre[1],
-                             matrimoniosMeses2016$Noviembre[1],matrimoniosMeses2017$Noviembre[1])
-matrimoniosMesDiciembre <- c(matrimoniosMeses2010$Diciembre[1],matrimoniosMeses2011$Diciembre[1],
-                             matrimoniosMeses2012$Diciembre[1],matrimoniosMeses2013$Diciembre[1],
-                             matrimoniosMeses2014$Diciembre[1],matrimoniosMeses2015$Diciembre[1],
-                             matrimoniosMeses2016$Diciembre[1],matrimoniosMeses2017$Diciembre[1])
-matrimoniosHombresMilitares <- c(matrimoniosOcupacionNovio2010$Matrimonios[2],matrimoniosOcupacionNovio2011$Matrimonios[2],
-                                 matrimoniosOcupacionNovio2012$Matrimonios[2],matrimoniosOcupacionNovio2013$Matrimonios[2],
-                                 matrimoniosOcupacionNovio2014$Matrimonios[2],matrimoniosOcupacionNovio2015$Matrimonios[2],
-                                 matrimoniosOcupacionNovio2016$Matrimonios[2],matrimoniosOcupacionNovio2017$Matrimonios[2])
-matrimoniosHombresGerentes <- c(matrimoniosOcupacionNovio2010$Matrimonios[3],matrimoniosOcupacionNovio2011$Matrimonios[3],
-                                matrimoniosOcupacionNovio2012$Matrimonios[3],matrimoniosOcupacionNovio2013$Matrimonios[3],
-                                matrimoniosOcupacionNovio2014$Matrimonios[3],matrimoniosOcupacionNovio2015$Matrimonios[3],
-                                matrimoniosOcupacionNovio2016$Matrimonios[3],matrimoniosOcupacionNovio2017$Matrimonios[3])
-matrimoniosHombresCientificos <- c(matrimoniosOcupacionNovio2010$Matrimonios[4],matrimoniosOcupacionNovio2011$Matrimonios[4],
-                                 matrimoniosOcupacionNovio2012$Matrimonios[4],matrimoniosOcupacionNovio2013$Matrimonios[4],
-                                 matrimoniosOcupacionNovio2014$Matrimonios[4],matrimoniosOcupacionNovio2015$Matrimonios[4],
-                                 matrimoniosOcupacionNovio2016$Matrimonios[4],matrimoniosOcupacionNovio2017$Matrimonios[4])
-matrimoniosHombresTecnicos <- c(matrimoniosOcupacionNovio2010$Matrimonios[5],matrimoniosOcupacionNovio2011$Matrimonios[5],
-                                matrimoniosOcupacionNovio2012$Matrimonios[5],matrimoniosOcupacionNovio2013$Matrimonios[5],
-                                matrimoniosOcupacionNovio2014$Matrimonios[5],matrimoniosOcupacionNovio2015$Matrimonios[5],
-                                matrimoniosOcupacionNovio2016$Matrimonios[5],matrimoniosOcupacionNovio2017$Matrimonios[5])
-matrimoniosHombresApoyo <- c(matrimoniosOcupacionNovio2010$Matrimonios[6],matrimoniosOcupacionNovio2011$Matrimonios[6],
-                             matrimoniosOcupacionNovio2012$Matrimonios[6],matrimoniosOcupacionNovio2013$Matrimonios[6],
-                             matrimoniosOcupacionNovio2014$Matrimonios[6],matrimoniosOcupacionNovio2015$Matrimonios[6],
-                             matrimoniosOcupacionNovio2016$Matrimonios[6],matrimoniosOcupacionNovio2017$Matrimonios[6])
-matrimoniosHombresComercio <- c(matrimoniosOcupacionNovio2010$Matrimonios[7],matrimoniosOcupacionNovio2011$Matrimonios[7],
-                                matrimoniosOcupacionNovio2012$Matrimonios[7],matrimoniosOcupacionNovio2013$Matrimonios[7],
-                                matrimoniosOcupacionNovio2014$Matrimonios[7],matrimoniosOcupacionNovio2015$Matrimonios[7],
-                                matrimoniosOcupacionNovio2016$Matrimonios[7],matrimoniosOcupacionNovio2017$Matrimonios[7])
-matrimoniosHombresAgricult <- c(matrimoniosOcupacionNovio2010$Matrimonios[8],matrimoniosOcupacionNovio2011$Matrimonios[8],
-                                matrimoniosOcupacionNovio2012$Matrimonios[8],matrimoniosOcupacionNovio2013$Matrimonios[8],
-                                matrimoniosOcupacionNovio2014$Matrimonios[8],matrimoniosOcupacionNovio2015$Matrimonios[8],
-                                matrimoniosOcupacionNovio2016$Matrimonios[8],matrimoniosOcupacionNovio2017$Matrimonios[8])
-matrimoniosHombresArtesano <- c(matrimoniosOcupacionNovio2010$Matrimonios[9],matrimoniosOcupacionNovio2011$Matrimonios[9],
-                                matrimoniosOcupacionNovio2012$Matrimonios[9],matrimoniosOcupacionNovio2013$Matrimonios[9],
-                                matrimoniosOcupacionNovio2014$Matrimonios[9],matrimoniosOcupacionNovio2015$Matrimonios[9],
-                                matrimoniosOcupacionNovio2016$Matrimonios[9],matrimoniosOcupacionNovio2017$Matrimonios[9])
-matrimoniosHombresEnsamble <- c(matrimoniosOcupacionNovio2010$Matrimonios[10],matrimoniosOcupacionNovio2011$Matrimonios[10],
-                                matrimoniosOcupacionNovio2012$Matrimonios[10],matrimoniosOcupacionNovio2013$Matrimonios[10],
-                                matrimoniosOcupacionNovio2014$Matrimonios[10],matrimoniosOcupacionNovio2015$Matrimonios[10],
-                                matrimoniosOcupacionNovio2016$Matrimonios[10],matrimoniosOcupacionNovio2017$Matrimonios[10])
-matrimoniosHombresElemental <- c(matrimoniosOcupacionNovio2010$Matrimonios[11],matrimoniosOcupacionNovio2011$Matrimonios[11],
-                                 matrimoniosOcupacionNovio2012$Matrimonios[11],matrimoniosOcupacionNovio2013$Matrimonios[11],
-                                 matrimoniosOcupacionNovio2014$Matrimonios[11],matrimoniosOcupacionNovio2015$Matrimonios[11],
-                                 matrimoniosOcupacionNovio2016$Matrimonios[11],matrimoniosOcupacionNovio2017$Matrimonios[11])
-matrimoniosHombresNoEspecificado <- c(matrimoniosOcupacionNovio2010$Matrimonios[12],matrimoniosOcupacionNovio2011$Matrimonios[7],
-                                matrimoniosOcupacionNovio2012$Matrimonios[12],matrimoniosOcupacionNovio2013$Matrimonios[12],
-                                matrimoniosOcupacionNovio2014$Matrimonios[12],matrimoniosOcupacionNovio2015$Matrimonios[12],
-                                matrimoniosOcupacionNovio2016$Matrimonios[12],matrimoniosOcupacionNovio2017$Matrimonios[12])
-matrimoniosHombresIgnorado <- c(matrimoniosOcupacionNovio2010$Matrimonios[13],matrimoniosOcupacionNovio2011$Matrimonios[13],
-                                matrimoniosOcupacionNovio2012$Matrimonios[13],matrimoniosOcupacionNovio2013$Matrimonios[13],
-                                matrimoniosOcupacionNovio2014$Matrimonios[13],matrimoniosOcupacionNovio2015$Matrimonios[13],
-                                matrimoniosOcupacionNovio2016$Matrimonios[13],matrimoniosOcupacionNovio2017$Matrimonios[13])
-matrimoniosMujeresMilitares <- c(matrimoniosOcupacionNovia2010$Matrimonios[2],matrimoniosOcupacionNovia2011$Matrimonios[2],
-                                 matrimoniosOcupacionNovia2012$Matrimonios[2],matrimoniosOcupacionNovia2013$Matrimonios[2],
-                                 matrimoniosOcupacionNovia2014$Matrimonios[2],matrimoniosOcupacionNovia2015$Matrimonios[2],
-                                 matrimoniosOcupacionNovia2016$Matrimonios[2],matrimoniosOcupacionNovia2017$Matrimonios[2])
-matrimoniosMujeresGerentes <- c(matrimoniosOcupacionNovia2010$Matrimonios[3],matrimoniosOcupacionNovia2011$Matrimonios[3],
-                                matrimoniosOcupacionNovia2012$Matrimonios[3],matrimoniosOcupacionNovia2013$Matrimonios[3],
-                                matrimoniosOcupacionNovia2014$Matrimonios[3],matrimoniosOcupacionNovia2015$Matrimonios[3],
-                                matrimoniosOcupacionNovia2016$Matrimonios[3],matrimoniosOcupacionNovia2017$Matrimonios[3])
-matrimoniosMujeresCientificas <- c(matrimoniosOcupacionNovia2010$Matrimonios[4],matrimoniosOcupacionNovia2011$Matrimonios[4],
-                                 matrimoniosOcupacionNovia2012$Matrimonios[4],matrimoniosOcupacionNovia2013$Matrimonios[4],
-                                 matrimoniosOcupacionNovia2014$Matrimonios[4],matrimoniosOcupacionNovia2015$Matrimonios[4],
-                                 matrimoniosOcupacionNovia2016$Matrimonios[4],matrimoniosOcupacionNovia2017$Matrimonios[4])
-matrimoniosMujeresTecnicas <- c(matrimoniosOcupacionNovia2010$Matrimonios[5],matrimoniosOcupacionNovia2011$Matrimonios[5],
-                                matrimoniosOcupacionNovia2012$Matrimonios[5],matrimoniosOcupacionNovia2013$Matrimonios[5],
-                                matrimoniosOcupacionNovia2014$Matrimonios[5],matrimoniosOcupacionNovia2015$Matrimonios[5],
-                                matrimoniosOcupacionNovia2016$Matrimonios[5],matrimoniosOcupacionNovia2017$Matrimonios[5])
-matrimoniosMujeresApoyo <- c(matrimoniosOcupacionNovia2010$Matrimonios[6],matrimoniosOcupacionNovia2011$Matrimonios[6],
-                             matrimoniosOcupacionNovia2012$Matrimonios[6],matrimoniosOcupacionNovia2013$Matrimonios[6],
-                             matrimoniosOcupacionNovia2014$Matrimonios[6],matrimoniosOcupacionNovia2015$Matrimonios[6],
-                             matrimoniosOcupacionNovia2016$Matrimonios[6],matrimoniosOcupacionNovia2017$Matrimonios[6])
-matrimoniosMujeresComercio <- c(matrimoniosOcupacionNovia2010$Matrimonios[7],matrimoniosOcupacionNovia2011$Matrimonios[7],
-                                matrimoniosOcupacionNovia2012$Matrimonios[7],matrimoniosOcupacionNovia2013$Matrimonios[7],
-                                matrimoniosOcupacionNovia2014$Matrimonios[7],matrimoniosOcupacionNovia2015$Matrimonios[7],
-                                matrimoniosOcupacionNovia2016$Matrimonios[7],matrimoniosOcupacionNovia2017$Matrimonios[7])
-matrimoniosMujeresAgricult <- c(matrimoniosOcupacionNovia2010$Matrimonios[8],matrimoniosOcupacionNovia2011$Matrimonios[8],
-                                matrimoniosOcupacionNovia2012$Matrimonios[8],matrimoniosOcupacionNovia2013$Matrimonios[8],
-                                matrimoniosOcupacionNovia2014$Matrimonios[8],matrimoniosOcupacionNovia2015$Matrimonios[8],
-                                matrimoniosOcupacionNovia2016$Matrimonios[8],matrimoniosOcupacionNovia2017$Matrimonios[8])
-matrimoniosMujeresArtesana <- c(matrimoniosOcupacionNovia2010$Matrimonios[9],matrimoniosOcupacionNovia2011$Matrimonios[9],
-                                matrimoniosOcupacionNovia2012$Matrimonios[9],matrimoniosOcupacionNovia2013$Matrimonios[9],
-                                matrimoniosOcupacionNovia2014$Matrimonios[9],matrimoniosOcupacionNovia2015$Matrimonios[9],
-                                matrimoniosOcupacionNovia2016$Matrimonios[9],matrimoniosOcupacionNovia2017$Matrimonios[9])
-matrimoniosMujeresEnsambla <- c(matrimoniosOcupacionNovia2010$Matrimonios[10],matrimoniosOcupacionNovia2011$Matrimonios[10],
-                                matrimoniosOcupacionNovia2012$Matrimonios[10],matrimoniosOcupacionNovia2013$Matrimonios[10],
-                                matrimoniosOcupacionNovia2014$Matrimonios[10],matrimoniosOcupacionNovia2015$Matrimonios[10],
-                                matrimoniosOcupacionNovia2016$Matrimonios[10],matrimoniosOcupacionNovia2017$Matrimonios[10])
-matrimoniosMujeresElemental <- c(matrimoniosOcupacionNovia2010$Matrimonios[11],matrimoniosOcupacionNovia2011$Matrimonios[11],
-                                 matrimoniosOcupacionNovia2012$Matrimonios[11],matrimoniosOcupacionNovia2013$Matrimonios[11],
-                                 matrimoniosOcupacionNovia2014$Matrimonios[11],matrimoniosOcupacionNovia2015$Matrimonios[11],
-                                 matrimoniosOcupacionNovia2016$Matrimonios[11],matrimoniosOcupacionNovia2017$Matrimonios[11])
-matrimoniosMujeresNoEspecificada <- c(matrimoniosOcupacionNovia2010$Matrimonios[12],matrimoniosOcupacionNovia2011$Matrimonios[12],
-                                 matrimoniosOcupacionNovia2012$Matrimonios[12],matrimoniosOcupacionNovia2013$Matrimonios[12],
-                                 matrimoniosOcupacionNovia2014$Matrimonios[12],matrimoniosOcupacionNovia2015$Matrimonios[12],
-                                 matrimoniosOcupacionNovia2016$Matrimonios[12],matrimoniosOcupacionNovia2017$Matrimonios[12])
-matrimoniosMujeresIgnoradas <- c(matrimoniosOcupacionNovia2010$Matrimonios[13],matrimoniosOcupacionNovia2011$Matrimonios[13],
-                                 matrimoniosOcupacionNovia2012$Matrimonios[13],matrimoniosOcupacionNovia2013$Matrimonios[13],
-                                 matrimoniosOcupacionNovia2014$Matrimonios[13],matrimoniosOcupacionNovia2015$Matrimonios[13],
-                                 matrimoniosOcupacionNovia2016$Matrimonios[13],matrimoniosOcupacionNovia2017$Matrimonios[13])
-# Data frame
-matrimoniosMainDF <- data.frame("Año" = anios,
-                     "Matrimonios_Totales" = matrimoniosGenerales,
-                     "Matrimonios_Enero" = matrimoniosMesEnero,
-                     "Matrimonios_Febrero" = matrimoniosMesFebrero,
-                     "Matrimonios_Marzo" = matrimoniosMesMarzo,
-                     "Matrimonios_Abril" = matrimoniosMesAbril,
-                     "Matrimonios_Mayo" = matrimoniosMesMayo,
-                     "Matrimonios_Junio" = matrimoniosMesJunio,
-                     "Matrimonios_Julio" = matrimoniosMesJulio,
-                     "Matrimonios_Agosto" = matrimoniosMesAgosto,
-                     "Matrimonios_Septiembre" = matrimoniosMesSeptiembre,
-                     "Matrimonios_Octubre" = matrimoniosMesOctubre,
-                     "Matrimonios_Noviembre" = matrimoniosMesNoviembre,
-                     "Matrimonios_Diciembre" = matrimoniosMesDiciembre,
-                     "Num_Hombres_Militares" = matrimoniosHombresMilitares,
-                     "Num_Hombres_Gerentes" = matrimoniosHombresGerentes,
-                     "Num_Hombres_Cientificos" = matrimoniosHombresCientificos,
-                     "Num_Hombres_Tecnicos" = matrimoniosHombresTecnicos,
-                     "Num_Hombres_Personal_de_Apoyo" = matrimoniosHombresApoyo,
-                     "Num_Hombres_Comerciantes" = matrimoniosHombresComercio,
-                     "Num_Hombres_Agricultores" = matrimoniosHombresAgricult,
-                     "Num_Hombres_Artesanos" = matrimoniosHombresArtesano,
-                     "Num_Hombres_Ensambladores" = matrimoniosHombresEnsamble,
-                     "Num_Hombres_Elementales" = matrimoniosHombresElemental,
-                     "Num_Hombres_No_Especificados" = matrimoniosHombresNoEspecificado,
-                     "Num_Hombres_Ignorados" = matrimoniosHombresIgnorado,
-                     "Num_Mujeres_Militares" = matrimoniosMujeresMilitares,
-                     "Num_Mujeres_Gerentes" = matrimoniosMujeresGerentes,
-                     "Num_Mujeres_Cientificas" = matrimoniosMujeresCientificas,
-                     "Num_Mujeres_Tecnicas" = matrimoniosMujeresTecnicas,
-                     "Num_Mujeres_Personal_de_Apoyo" = matrimoniosMujeresApoyo,
-                     "Num_Mujeres_Comerciantes" = matrimoniosMujeresComercio,
-                     "Num_Mujeres_Agricultoras" = matrimoniosMujeresAgricult,
-                     "Num_Mujeres_Artesanas" = matrimoniosMujeresArtesana,
-                     "Num_Mujeres_Ensambladoras" = matrimoniosMujeresEnsambla,
-                     "Num_Mujeres_Elementales" = matrimoniosMujeresElemental,
-                     "Num_Mujeres_No_Especificadas" = matrimoniosMujeresNoEspecificada,
-                     "Num_Mujeres_Ignoradas" = matrimoniosMujeresIgnoradas)
-matrimoniosMainDF
+datos <- select(divorciosDF,Total,X01,X02,X03,X04,X05,X06,X07,X08,X09,X10,
+                X11,X12,X13,X14,X15,X16,X17,X18,X19,X20,X21,X22,X23,X24,X25,X26,X27,X28,X29,X30,X31)
+scaledData <- as.matrix(scale(datos))
+k.max  <- 15
+wss <- sapply(1:k.max, 
+              function(k){kmeans(datos,k,iter.max = 100 )$tot.withinss})
+plot(1:k.max,wss,
+        type="b",
+        xlab="No. clusters",
+        ylab="No. Suma de cuadrados")
+```
+### Numero de Clusters (Grafica de Silueta)
+``` {r }
+km<-kmeans(scaledData, 3, iter.max = 100)
+fviz_cluster(km, data = scaledData, frame.type = "convex")
+```
+### Aplicacion de clusters a Data Inicial y Separacion de grupos
+``` {r }
+set.seed(123)
+divorciosDF$Categoria <- km$cluster
+divorciosDF
+groupOne <- divorciosDF[divorciosDF$Categoria == 1,]
+groupTwo <- divorciosDF[divorciosDF$Categoria == 2,]
+groupThree <- divorciosDF[divorciosDF$Categoria == 3,]
+summary(groupThree$Total)
 ```
