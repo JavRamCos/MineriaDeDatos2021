@@ -39,23 +39,6 @@ divorcios2016 <- read_excel(paste(path,"/DivorciosBD/Divorcios2016.xls",sep=""),
                               sheet=4,skip=1,col_names=TRUE)
 divorcios2017 <- read_excel(paste(path,"/DivorciosBD/Divorcios2017.xlsx",sep=""),
                               sheet=4,skip=1,col_names=TRUE)
-# Carga de datos de divorcios 2001 - 2017
-matrimonios2010 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2001-2010.xls",sep=""),
-                              sheet=2,skip=1,col_names=TRUE)
-matrimonios2011 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2011.xls",sep=""),
-                              sheet=6,skip=1,col_names=TRUE)
-matrimonios2012 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2012.xls",sep=""),
-                              sheet=6,skip=1,col_names=TRUE)
-matrimonios2013 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2013.xls",sep=""),
-                              sheet=6,skip=1,col_names=TRUE)
-matrimonios2014 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2014.xls",sep=""),
-                              sheet=6,skip=1,col_names=TRUE)
-matrimonios2015 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2015.xls",sep=""),
-                              sheet=6,skip=1,col_names=TRUE)
-matrimonios2016 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2016.xlsx",sep=""),
-                              sheet=6,skip=1,col_names=TRUE)
-matrimonios2017 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2017.xlsx",sep=""),
-                              sheet=6,skip=1,col_names=TRUE)
 # Divorcios por meses
 divorciosMeses2010 <- read_excel(paste(path,"/DivorciosBD/Divorcios2001-2010.xls",sep=""),
                               sheet=5,skip=1,col_names=TRUE)
@@ -90,6 +73,74 @@ divorciosOcupaciones2016 <- read_excel(paste(path,"/DivorciosBD/Divorcios2016.xl
                               sheet=5,skip=2,col_names=TRUE)
 divorciosOcupaciones2017 <- read_excel(paste(path,"/DivorciosBD/Divorcios2017.xlsx",sep=""),
                               sheet=5,skip=2,col_names=TRUE)
+# Carga de datos de divorcios 2001 - 2017
+matrimonios2010 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2001-2010.xls",sep=""),
+                              sheet=2,skip=1,col_names=TRUE)
+matrimonios2011 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2011.xls",sep=""),
+                              sheet=6,skip=1,col_names=TRUE)
+matrimonios2012 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2012.xls",sep=""),
+                              sheet=6,skip=1,col_names=TRUE)
+matrimonios2013 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2013.xls",sep=""),
+                              sheet=6,skip=1,col_names=TRUE)
+matrimonios2014 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2014.xls",sep=""),
+                              sheet=6,skip=1,col_names=TRUE)
+matrimonios2015 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2015.xls",sep=""),
+                              sheet=6,skip=1,col_names=TRUE)
+matrimonios2016 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2016.xlsx",sep=""),
+                              sheet=6,skip=1,col_names=TRUE)
+matrimonios2017 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2017.xlsx",sep=""),
+                              sheet=6,skip=1,col_names=TRUE)
+# Matrimonios por meses
+matrimoniosMeses2010 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2001-2010.xls",sep=""),
+                              sheet=7,skip=1,col_names=TRUE)
+matrimoniosMeses2011 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2011.xls",sep=""),
+                              sheet=6,skip=1,col_names=TRUE)
+matrimoniosMeses2012 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2012.xls",sep=""),
+                              sheet=6,skip=1,col_names=TRUE)
+matrimoniosMeses2013 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2013.xls",sep=""),
+                              sheet=6,skip=1,col_names=TRUE)
+matrimoniosMeses2014 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2014.xls",sep=""),
+                              sheet=6,skip=1,col_names=TRUE)
+matrimoniosMeses2015 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2015.xls",sep=""),
+                              sheet=6,skip=1,col_names=TRUE)
+matrimoniosMeses2016 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2016.xlsx",sep=""),
+                              sheet=6,skip=1,col_names=TRUE)
+matrimoniosMeses2017 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2017.xlsx",sep=""),
+                              sheet=6,skip=1,col_names=TRUE)
+# Matrimonios por grupos ocupacionales Novio
+matrimoniosOcupacionNovio2010 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2001-2010.xls",sep=""),
+                              sheet=5,skip=1,col_names=TRUE)
+matrimoniosOcupacionNovio2011 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2011.xls",sep=""),
+                              sheet=4,skip=1,col_names=TRUE)
+matrimoniosOcupacionNovio2012 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2012.xls",sep=""),
+                              sheet=4,skip=1,col_names=TRUE)
+matrimoniosOcupacionNovio2013 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2013.xls",sep=""),
+                              sheet=4,skip=1,col_names=TRUE)
+matrimoniosOcupacionNovio2014 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2014.xls",sep=""),
+                              sheet=4,skip=1,col_names=TRUE)
+matrimoniosOcupacionNovio2015 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2015.xls",sep=""),
+                              sheet=4,skip=1,col_names=TRUE)
+matrimoniosOcupacionNovio2016 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2016.xlsx",sep=""),
+                              sheet=4,skip=1,col_names=TRUE)
+matrimoniosOcupacionNovio2017 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2017.xlsx",sep=""),
+                              sheet=4,skip=1,col_names=TRUE)
+# Matrimonios por grupos ocupacionales Novia
+matrimoniosOcupacionNovia2010 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2001-2010.xls",sep=""),
+                              sheet=6,skip=1,col_names=TRUE)
+matrimoniosOcupacionNovia2011 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2011.xls",sep=""),
+                              sheet=5,skip=1,col_names=TRUE)
+matrimoniosOcupacionNovia2012 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2012.xls",sep=""),
+                              sheet=5,skip=1,col_names=TRUE)
+matrimoniosOcupacionNovia2013 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2013.xls",sep=""),
+                              sheet=5,skip=1,col_names=TRUE)
+matrimoniosOcupacionNovia2014 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2014.xls",sep=""),
+                              sheet=5,skip=1,col_names=TRUE)
+matrimoniosOcupacionNovia2015 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2015.xls",sep=""),
+                              sheet=5,skip=1,col_names=TRUE)
+matrimoniosOcupacionNovia2016 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2016.xlsx",sep=""),
+                              sheet=5,skip=1,col_names=TRUE)
+matrimoniosOcupacionNovia2017 <- read_excel(paste(path,"/MatrimoniosBD/Matrimonios2017.xlsx",sep=""),
+                              sheet=5,skip=1,col_names=TRUE)
 ```
 ### Definir Data frame para Divorcios 2010 - 2017
 ``` {r }
@@ -98,41 +149,44 @@ anios <- c("2010","2011","2012","2013","2014","2015","2016","2017")
 divorciosGenerales <- c(divorcios2010$`2010`[1],divorcios2011$Total[1],divorcios2012$Total[1],
                         divorcios2013$Total[1],divorcios2014$Total[1],divorcios2015$Total[1],
                         divorcios2016$Total[1],divorcios2017$Total[1])
-divorciosMesEnero <- c(divorciosMeses2010$Enero[1],divorcios2011$Enero[1],divorcios2012$Enero[1],
-                       divorciosMeses2013$Enero[1],divorcios2014$Enero[1],divorcios2015$Enero[1],
+divorciosMesEnero <- c(divorciosMeses2010$Enero[1],divorciosMeses2011$Enero[1],divorciosMeses2012$Enero[1],
+                       divorciosMeses2013$Enero[1],divorciosMeses2014$Enero[1],divorciosMeses2015$Enero[1],
                        divorciosMeses2016$Enero[1],divorciosMeses2017$Enero[1])
-divorciosMesFebrero <- c(divorciosMeses2010$Febrero[1],divorcios2011$Febrero[1],divorcios2012$Febrero[1],
-                       divorciosMeses2013$Febrero[1],divorcios2014$Febrero[1],divorcios2015$Febrero[1],
-                       divorciosMeses2016$Febrero[1],divorciosMeses2017$Febrero[1])
-divorciosMesMarzo <- c(divorciosMeses2010$Marzo[1],divorcios2011$Marzo[1],divorcios2012$Marzo[1],
-                       divorciosMeses2013$Marzo[1],divorcios2014$Marzo[1],divorcios2015$Marzo[1],
+divorciosMesFebrero <- c(divorciosMeses2010$Febrero[1],divorciosMeses2011$Febrero[1],divorciosMeses2012$Febrero[1],
+                         divorciosMeses2013$Febrero[1],divorciosMeses2014$Febrero[1],divorciosMeses2015$Febrero[1],
+                         divorciosMeses2016$Febrero[1],divorciosMeses2017$Febrero[1])
+divorciosMesMarzo <- c(divorciosMeses2010$Marzo[1],divorciosMeses2011$Marzo[1],divorciosMeses2012$Marzo[1],
+                       divorciosMeses2013$Marzo[1],divorciosMeses2014$Marzo[1],divorciosMeses2015$Marzo[1],
                        divorciosMeses2016$Marzo[1],divorciosMeses2017$Marzo[1])
-divorciosMesAbril <- c(divorciosMeses2010$Abril[1],divorcios2011$Abril[1],divorcios2012$Abril[1],
-                       divorciosMeses2013$Abril[1],divorcios2014$Abril[1],divorcios2015$Abril[1],
+divorciosMesAbril <- c(divorciosMeses2010$Abril[1],divorciosMeses2011$Abril[1],divorciosMeses2012$Abril[1],
+                       divorciosMeses2013$Abril[1],divorciosMeses2014$Abril[1],divorciosMeses2015$Abril[1],
                        divorciosMeses2016$Abril[1],divorciosMeses2017$Abril[1])
-divorciosMesMayo <- c(divorciosMeses2010$Mayo[1],divorcios2011$Mayo[1],divorcios2012$Mayo[1],
-                       divorciosMeses2013$Mayo[1],divorcios2014$Mayo[1],divorcios2015$Mayo[1],
-                       divorciosMeses2016$Mayo[1],divorciosMeses2017$Mayo[1])
-divorciosMesJunio <- c(divorciosMeses2010$Junio[1],divorcios2011$Junio[1],divorcios2012$Junio[1],
-                       divorciosMeses2013$Junio[1],divorcios2014$Junio[1],divorcios2015$Junio[1],
+divorciosMesMayo <- c(divorciosMeses2010$Mayo[1],divorciosMeses2011$Mayo[1],divorciosMeses2012$Mayo[1],
+                      divorciosMeses2013$Mayo[1],divorciosMeses2014$Mayo[1],divorciosMeses2015$Mayo[1],
+                      divorciosMeses2016$Mayo[1],divorciosMeses2017$Mayo[1])
+divorciosMesJunio <- c(divorciosMeses2010$Junio[1],divorciosMeses2011$Junio[1],divorciosMeses2012$Junio[1],
+                       divorciosMeses2013$Junio[1],divorciosMeses2014$Junio[1],divorciosMeses2015$Junio[1],
                        divorciosMeses2016$Junio[1],divorciosMeses2017$Junio[1])
-divorciosMesJulio <- c(divorciosMeses2010$Julio[1],divorcios2011$Julio[1],divorcios2012$Julio[1],
-                       divorciosMeses2013$Julio[1],divorcios2014$Julio[1],divorcios2015$Julio[1],
+divorciosMesJulio <- c(divorciosMeses2010$Julio[1],divorciosMeses2011$Julio[1],divorciosMeses2012$Julio[1],
+                       divorciosMeses2013$Julio[1],divorciosMeses2014$Julio[1],divorciosMeses2015$Julio[1],
                        divorciosMeses2016$Julio[1],divorciosMeses2017$Julio[1])
-divorciosMesAgosto <- c(divorciosMeses2010$Agosto[1],divorcios2011$Agosto[1],divorcios2012$Agosto[1],
-                        divorciosMeses2013$Agosto[1],divorcios2014$Agosto[1],divorcios2015$Agosto[1],
+divorciosMesAgosto <- c(divorciosMeses2010$Agosto[1],divorciosMeses2011$Agosto[1],divorciosMeses2012$Agosto[1],
+                        divorciosMeses2013$Agosto[1],divorciosMeses2014$Agosto[1],divorciosMeses2015$Agosto[1],
                         divorciosMeses2016$Agosto[1],divorciosMeses2017$Agosto[1])
-divorciosMesSeptiembre <- c(divorciosMeses2010$Septiembre[1],divorcios2011$Septiembre[1],divorcios2012$Septiembre[1],
-                             divorciosMeses2013$Septiembre[1],divorcios2014$Septiembre[1],divorcios2015$Septiembre[1],
-                             divorciosMeses2016$Septiembre[1],divorciosMeses2017$Septiembre[1])
-divorciosMesOctubre <- c(divorciosMeses2010$Octubre[1],divorcios2011$Octubre[1],divorcios2012$Octubre[1],
-                         divorciosMeses2013$Octubre[1],divorcios2014$Octubre[1],divorcios2015$Octubre[1],
+divorciosMesSeptiembre <- c(divorciosMeses2010$Septiembre[1],divorciosMeses2011$Septiembre[1],
+                            divorciosMeses2012$Septiembre[1],divorciosMeses2013$Septiembre[1],
+                            divorciosMeses2014$Septiembre[1],divorciosMeses2015$Septiembre[1],
+                            divorciosMeses2016$Septiembre[1],divorciosMeses2017$Septiembre[1])
+divorciosMesOctubre <- c(divorciosMeses2010$Octubre[1],divorciosMeses2011$Octubre[1],divorciosMeses2012$Octubre[1],
+                         divorciosMeses2013$Octubre[1],divorciosMeses2014$Octubre[1],divorciosMeses2015$Octubre[1],
                          divorciosMeses2016$Octubre[1],divorciosMeses2017$Octubre[1])
-divorciosMesNoviembre <- c(divorciosMeses2010$Noviembre[1],divorcios2011$Noviembre[1],divorcios2012$Noviembre[1],
-                           divorciosMeses2013$Noviembre[1],divorcios2014$Noviembre[1],divorcios2015$Noviembre[1],
+divorciosMesNoviembre <- c(divorciosMeses2010$Noviembre[1],divorciosMeses2011$Noviembre[1],
+                           divorciosMeses2012$Noviembre[1],divorciosMeses2013$Noviembre[1],
+                           divorciosMeses2014$Noviembre[1],divorciosMeses2015$Noviembre[1],
                            divorciosMeses2016$Noviembre[1],divorciosMeses2017$Noviembre[1])
-divorciosMesDiciembre <- c(divorciosMeses2010$Diciembre[1],divorcios2011$Diciembre[1],divorcios2012$Diciembre[1],
-                           divorciosMeses2013$Diciembre[1],divorcios2014$Diciembre[1],divorcios2015$Diciembre[1],
+divorciosMesDiciembre <- c(divorciosMeses2010$Diciembre[1],divorciosMeses2011$Diciembre[1],
+                           divorciosMeses2012$Diciembre[1],divorciosMeses2013$Diciembre[1],
+                           divorciosMeses2014$Diciembre[1],divorciosMeses2015$Diciembre[1],
                            divorciosMeses2016$Diciembre[1],divorciosMeses2017$Diciembre[1])
 divorciosHombresMilitares <- c(divorciosOcupaciones2010$Total[2],divorciosOcupaciones2011$Total[2],
                                divorciosOcupaciones2012$Total[2],divorciosOcupaciones2013$Total[2],
@@ -279,7 +333,7 @@ divorciosMujeresIgnoradas <- c(divorciosOcupaciones2010$Ignorado[1],
                                divorciosOcupaciones2016$Ignorado[1],
                                divorciosOcupaciones2017$Ignorado[1])
 # Data frame
-mainDF <- data.frame("Año" = anios,
+divorciosMainDF <- data.frame("Año" = anios,
                      "Divorcios_Totales" = divorciosGenerales,
                      "Divorcios_Enero" = divorciosMesEnero,
                      "Divorcios_Febrero" = divorciosMesFebrero,
@@ -321,7 +375,185 @@ mainDF <- data.frame("Año" = anios,
 ### Definir Data frame para Matrimonios 2010 - 2017
 ``` {r }
 # Seleccion de datos
+anios <- c("2010","2011","2012","2013","2014","2015","2016","2017")
 matrimoniosGenerales <- c(matrimonios2010$`2010`[1],matrimonios2011$Total[1],matrimonios2012$Total[1],
                           matrimonios2013$Total[1],matrimonios2014$Total[1],matrimonios2015$Total[1],
                           matrimonios2016$Total[1],matrimonios2017$Total[1])
+matrimoniosMesEnero <- c(matrimoniosMeses2010$Enero[1],matrimoniosMeses2011$Enero[1],matrimoniosMeses2012$Enero[1],
+                         matrimoniosMeses2013$Enero[1],matrimoniosMeses2014$Enero[1],matrimoniosMeses2015$Enero[1],
+                         matrimoniosMeses2016$Enero[1],matrimoniosMeses2017$Enero[1])
+matrimoniosMesFebrero <- c(matrimoniosMeses2010$Febrero[1],matrimoniosMeses2011$Febrero[1],
+                           matrimoniosMeses2012$Febrero[1],matrimoniosMeses2013$Febrero[1],
+                           matrimoniosMeses2014$Febrero[1],matrimoniosMeses2015$Febrero[1],
+                           matrimoniosMeses2016$Febrero[1],matrimoniosMeses2017$Febrero[1])
+matrimoniosMesMarzo <- c(matrimoniosMeses2010$Marzo[1],matrimoniosMeses2011$Marzo[1],matrimoniosMeses2012$Marzo[1],
+                         matrimoniosMeses2013$Marzo[1],matrimoniosMeses2014$Marzo[1],matrimoniosMeses2015$Marzo[1],
+                         matrimoniosMeses2016$Marzo[1],matrimoniosMeses2017$Marzo[1])
+matrimoniosMesAbril <- c(matrimoniosMeses2010$Abril[1],matrimoniosMeses2011$Abril[1],matrimoniosMeses2012$Abril[1],
+                         matrimoniosMeses2013$Abril[1],matrimoniosMeses2014$Abril[1],matrimoniosMeses2015$Abril[1],
+                         matrimoniosMeses2016$Abril[1],matrimoniosMeses2017$Abril[1])
+matrimoniosMesMayo <- c(matrimoniosMeses2010$Mayo[1],matrimoniosMeses2011$Mayo[1],matrimoniosMeses2012$Mayo[1],
+                        matrimoniosMeses2013$Mayo[1],matrimoniosMeses2014$Mayo[1],matrimoniosMeses2015$Mayo[1],
+                        matrimoniosMeses2016$Mayo[1],matrimoniosMeses2017$Mayo[1])
+matrimoniosMesJunio <- c(matrimoniosMeses2010$Junio[1],matrimoniosMeses2011$Junio[1],matrimoniosMeses2012$Junio[1],
+                         matrimoniosMeses2013$Junio[1],matrimoniosMeses2014$Junio[1],matrimoniosMeses2015$Junio[1],
+                         matrimoniosMeses2016$Junio[1],matrimoniosMeses2017$Junio[1])
+matrimoniosMesJulio <- c(matrimoniosMeses2010$Julio[1],matrimoniosMeses2011$Julio[1],matrimoniosMeses2012$Julio[1],
+                         matrimoniosMeses2013$Julio[1],matrimoniosMeses2014$Julio[1],matrimoniosMeses2015$Julio[1],
+                         matrimoniosMeses2016$Julio[1],matrimoniosMeses2017$Julio[1])
+matrimoniosMesAgosto <- c(matrimoniosMeses2010$Agosto[1],matrimonios2011$Agosto[1],matrimonios2012$Agosto[1],
+                          matrimoniosMeses2013$Agosto[1],matrimonios2014$Agosto[1],matrimonios2015$Agosto[1],
+                          matrimoniosMeses2016$Agosto[1],matrimoniosMeses2017$Agosto[1])
+matrimoniosMesSeptiembre <- c(matrimoniosMeses2010$Septiembre[1],matrimoniosMeses2011$Septiembre[1],
+                              matrimoniosMeses2012$Septiembre[1],matrimoniosMeses2013$Septiembre[1],
+                              matrimoniosMeses2014$Septiembre[1],matrimoniosMeses2015$Septiembre[1],
+                              matrimoniosMeses2016$Septiembre[1],matrimoniosMeses2017$Septiembre[1])
+matrimoniosMesOctubre <- c(matrimoniosMeses2010$Octubre[1],matrimoniosMeses2011$Octubre[1],
+                           matrimoniosMeses2012$Octubre[1],matrimoniosMeses2013$Octubre[1],
+                           matrimoniosMeses2014$Octubre[1],matrimoniosMeses2015$Octubre[1],
+                           matrimoniosMeses2016$Octubre[1],matrimoniosMeses2017$Octubre[1])
+matrimoniosMesNoviembre <- c(matrimoniosMeses2010$Noviembre[1],matrimoniosMeses2011$Noviembre[1],
+                             matrimoniosMeses2012$Noviembre[1],matrimoniosMeses2013$Noviembre[1],
+                             matrimoniosMeses2014$Noviembre[1],matrimoniosMeses2015$Noviembre[1],
+                             matrimoniosMeses2016$Noviembre[1],matrimoniosMeses2017$Noviembre[1])
+matrimoniosMesDiciembre <- c(matrimoniosMeses2010$Diciembre[1],matrimoniosMeses2011$Diciembre[1],
+                             matrimoniosMeses2012$Diciembre[1],matrimoniosMeses2013$Diciembre[1],
+                             matrimoniosMeses2014$Diciembre[1],matrimoniosMeses2015$Diciembre[1],
+                             matrimoniosMeses2016$Diciembre[1],matrimoniosMeses2017$Diciembre[1])
+matrimoniosHombresMilitares <- c(matrimoniosOcupacionNovio2010$Matrimonios[2],matrimoniosOcupacionNovio2011$Matrimonios[2],
+                                 matrimoniosOcupacionNovio2012$Matrimonios[2],matrimoniosOcupacionNovio2013$Matrimonios[2],
+                                 matrimoniosOcupacionNovio2014$Matrimonios[2],matrimoniosOcupacionNovio2015$Matrimonios[2],
+                                 matrimoniosOcupacionNovio2016$Matrimonios[2],matrimoniosOcupacionNovio2017$Matrimonios[2])
+matrimoniosHombresGerentes <- c(matrimoniosOcupacionNovio2010$Matrimonios[3],matrimoniosOcupacionNovio2011$Matrimonios[3],
+                                matrimoniosOcupacionNovio2012$Matrimonios[3],matrimoniosOcupacionNovio2013$Matrimonios[3],
+                                matrimoniosOcupacionNovio2014$Matrimonios[3],matrimoniosOcupacionNovio2015$Matrimonios[3],
+                                matrimoniosOcupacionNovio2016$Matrimonios[3],matrimoniosOcupacionNovio2017$Matrimonios[3])
+matrimoniosHombresCientificos <- c(matrimoniosOcupacionNovio2010$Matrimonios[4],matrimoniosOcupacionNovio2011$Matrimonios[4],
+                                 matrimoniosOcupacionNovio2012$Matrimonios[4],matrimoniosOcupacionNovio2013$Matrimonios[4],
+                                 matrimoniosOcupacionNovio2014$Matrimonios[4],matrimoniosOcupacionNovio2015$Matrimonios[4],
+                                 matrimoniosOcupacionNovio2016$Matrimonios[4],matrimoniosOcupacionNovio2017$Matrimonios[4])
+matrimoniosHombresTecnicos <- c(matrimoniosOcupacionNovio2010$Matrimonios[5],matrimoniosOcupacionNovio2011$Matrimonios[5],
+                                matrimoniosOcupacionNovio2012$Matrimonios[5],matrimoniosOcupacionNovio2013$Matrimonios[5],
+                                matrimoniosOcupacionNovio2014$Matrimonios[5],matrimoniosOcupacionNovio2015$Matrimonios[5],
+                                matrimoniosOcupacionNovio2016$Matrimonios[5],matrimoniosOcupacionNovio2017$Matrimonios[5])
+matrimoniosHombresApoyo <- c(matrimoniosOcupacionNovio2010$Matrimonios[6],matrimoniosOcupacionNovio2011$Matrimonios[6],
+                             matrimoniosOcupacionNovio2012$Matrimonios[6],matrimoniosOcupacionNovio2013$Matrimonios[6],
+                             matrimoniosOcupacionNovio2014$Matrimonios[6],matrimoniosOcupacionNovio2015$Matrimonios[6],
+                             matrimoniosOcupacionNovio2016$Matrimonios[6],matrimoniosOcupacionNovio2017$Matrimonios[6])
+matrimoniosHombresComercio <- c(matrimoniosOcupacionNovio2010$Matrimonios[7],matrimoniosOcupacionNovio2011$Matrimonios[7],
+                                matrimoniosOcupacionNovio2012$Matrimonios[7],matrimoniosOcupacionNovio2013$Matrimonios[7],
+                                matrimoniosOcupacionNovio2014$Matrimonios[7],matrimoniosOcupacionNovio2015$Matrimonios[7],
+                                matrimoniosOcupacionNovio2016$Matrimonios[7],matrimoniosOcupacionNovio2017$Matrimonios[7])
+matrimoniosHombresAgricult <- c(matrimoniosOcupacionNovio2010$Matrimonios[8],matrimoniosOcupacionNovio2011$Matrimonios[8],
+                                matrimoniosOcupacionNovio2012$Matrimonios[8],matrimoniosOcupacionNovio2013$Matrimonios[8],
+                                matrimoniosOcupacionNovio2014$Matrimonios[8],matrimoniosOcupacionNovio2015$Matrimonios[8],
+                                matrimoniosOcupacionNovio2016$Matrimonios[8],matrimoniosOcupacionNovio2017$Matrimonios[8])
+matrimoniosHombresArtesano <- c(matrimoniosOcupacionNovio2010$Matrimonios[9],matrimoniosOcupacionNovio2011$Matrimonios[9],
+                                matrimoniosOcupacionNovio2012$Matrimonios[9],matrimoniosOcupacionNovio2013$Matrimonios[9],
+                                matrimoniosOcupacionNovio2014$Matrimonios[9],matrimoniosOcupacionNovio2015$Matrimonios[9],
+                                matrimoniosOcupacionNovio2016$Matrimonios[9],matrimoniosOcupacionNovio2017$Matrimonios[9])
+matrimoniosHombresEnsamble <- c(matrimoniosOcupacionNovio2010$Matrimonios[10],matrimoniosOcupacionNovio2011$Matrimonios[10],
+                                matrimoniosOcupacionNovio2012$Matrimonios[10],matrimoniosOcupacionNovio2013$Matrimonios[10],
+                                matrimoniosOcupacionNovio2014$Matrimonios[10],matrimoniosOcupacionNovio2015$Matrimonios[10],
+                                matrimoniosOcupacionNovio2016$Matrimonios[10],matrimoniosOcupacionNovio2017$Matrimonios[10])
+matrimoniosHombresElemental <- c(matrimoniosOcupacionNovio2010$Matrimonios[11],matrimoniosOcupacionNovio2011$Matrimonios[11],
+                                 matrimoniosOcupacionNovio2012$Matrimonios[11],matrimoniosOcupacionNovio2013$Matrimonios[11],
+                                 matrimoniosOcupacionNovio2014$Matrimonios[11],matrimoniosOcupacionNovio2015$Matrimonios[11],
+                                 matrimoniosOcupacionNovio2016$Matrimonios[11],matrimoniosOcupacionNovio2017$Matrimonios[11])
+matrimoniosHombresNoEspecificado <- c(matrimoniosOcupacionNovio2010$Matrimonios[12],matrimoniosOcupacionNovio2011$Matrimonios[7],
+                                matrimoniosOcupacionNovio2012$Matrimonios[12],matrimoniosOcupacionNovio2013$Matrimonios[12],
+                                matrimoniosOcupacionNovio2014$Matrimonios[12],matrimoniosOcupacionNovio2015$Matrimonios[12],
+                                matrimoniosOcupacionNovio2016$Matrimonios[12],matrimoniosOcupacionNovio2017$Matrimonios[12])
+matrimoniosHombresIgnorado <- c(matrimoniosOcupacionNovio2010$Matrimonios[13],matrimoniosOcupacionNovio2011$Matrimonios[13],
+                                matrimoniosOcupacionNovio2012$Matrimonios[13],matrimoniosOcupacionNovio2013$Matrimonios[13],
+                                matrimoniosOcupacionNovio2014$Matrimonios[13],matrimoniosOcupacionNovio2015$Matrimonios[13],
+                                matrimoniosOcupacionNovio2016$Matrimonios[13],matrimoniosOcupacionNovio2017$Matrimonios[13])
+matrimoniosMujeresMilitares <- c(matrimoniosOcupacionNovia2010$Matrimonios[2],matrimoniosOcupacionNovia2011$Matrimonios[2],
+                                 matrimoniosOcupacionNovia2012$Matrimonios[2],matrimoniosOcupacionNovia2013$Matrimonios[2],
+                                 matrimoniosOcupacionNovia2014$Matrimonios[2],matrimoniosOcupacionNovia2015$Matrimonios[2],
+                                 matrimoniosOcupacionNovia2016$Matrimonios[2],matrimoniosOcupacionNovia2017$Matrimonios[2])
+matrimoniosMujeresGerentes <- c(matrimoniosOcupacionNovia2010$Matrimonios[3],matrimoniosOcupacionNovia2011$Matrimonios[3],
+                                matrimoniosOcupacionNovia2012$Matrimonios[3],matrimoniosOcupacionNovia2013$Matrimonios[3],
+                                matrimoniosOcupacionNovia2014$Matrimonios[3],matrimoniosOcupacionNovia2015$Matrimonios[3],
+                                matrimoniosOcupacionNovia2016$Matrimonios[3],matrimoniosOcupacionNovia2017$Matrimonios[3])
+matrimoniosMujeresCientificas <- c(matrimoniosOcupacionNovia2010$Matrimonios[4],matrimoniosOcupacionNovia2011$Matrimonios[4],
+                                 matrimoniosOcupacionNovia2012$Matrimonios[4],matrimoniosOcupacionNovia2013$Matrimonios[4],
+                                 matrimoniosOcupacionNovia2014$Matrimonios[4],matrimoniosOcupacionNovia2015$Matrimonios[4],
+                                 matrimoniosOcupacionNovia2016$Matrimonios[4],matrimoniosOcupacionNovia2017$Matrimonios[4])
+matrimoniosMujeresTecnicas <- c(matrimoniosOcupacionNovia2010$Matrimonios[5],matrimoniosOcupacionNovia2011$Matrimonios[5],
+                                matrimoniosOcupacionNovia2012$Matrimonios[5],matrimoniosOcupacionNovia2013$Matrimonios[5],
+                                matrimoniosOcupacionNovia2014$Matrimonios[5],matrimoniosOcupacionNovia2015$Matrimonios[5],
+                                matrimoniosOcupacionNovia2016$Matrimonios[5],matrimoniosOcupacionNovia2017$Matrimonios[5])
+matrimoniosMujeresApoyo <- c(matrimoniosOcupacionNovia2010$Matrimonios[6],matrimoniosOcupacionNovia2011$Matrimonios[6],
+                             matrimoniosOcupacionNovia2012$Matrimonios[6],matrimoniosOcupacionNovia2013$Matrimonios[6],
+                             matrimoniosOcupacionNovia2014$Matrimonios[6],matrimoniosOcupacionNovia2015$Matrimonios[6],
+                             matrimoniosOcupacionNovia2016$Matrimonios[6],matrimoniosOcupacionNovia2017$Matrimonios[6])
+matrimoniosMujeresComercio <- c(matrimoniosOcupacionNovia2010$Matrimonios[7],matrimoniosOcupacionNovia2011$Matrimonios[7],
+                                matrimoniosOcupacionNovia2012$Matrimonios[7],matrimoniosOcupacionNovia2013$Matrimonios[7],
+                                matrimoniosOcupacionNovia2014$Matrimonios[7],matrimoniosOcupacionNovia2015$Matrimonios[7],
+                                matrimoniosOcupacionNovia2016$Matrimonios[7],matrimoniosOcupacionNovia2017$Matrimonios[7])
+matrimoniosMujeresAgricult <- c(matrimoniosOcupacionNovia2010$Matrimonios[8],matrimoniosOcupacionNovia2011$Matrimonios[8],
+                                matrimoniosOcupacionNovia2012$Matrimonios[8],matrimoniosOcupacionNovia2013$Matrimonios[8],
+                                matrimoniosOcupacionNovia2014$Matrimonios[8],matrimoniosOcupacionNovia2015$Matrimonios[8],
+                                matrimoniosOcupacionNovia2016$Matrimonios[8],matrimoniosOcupacionNovia2017$Matrimonios[8])
+matrimoniosMujeresArtesana <- c(matrimoniosOcupacionNovia2010$Matrimonios[9],matrimoniosOcupacionNovia2011$Matrimonios[9],
+                                matrimoniosOcupacionNovia2012$Matrimonios[9],matrimoniosOcupacionNovia2013$Matrimonios[9],
+                                matrimoniosOcupacionNovia2014$Matrimonios[9],matrimoniosOcupacionNovia2015$Matrimonios[9],
+                                matrimoniosOcupacionNovia2016$Matrimonios[9],matrimoniosOcupacionNovia2017$Matrimonios[9])
+matrimoniosMujeresEnsambla <- c(matrimoniosOcupacionNovia2010$Matrimonios[10],matrimoniosOcupacionNovia2011$Matrimonios[10],
+                                matrimoniosOcupacionNovia2012$Matrimonios[10],matrimoniosOcupacionNovia2013$Matrimonios[10],
+                                matrimoniosOcupacionNovia2014$Matrimonios[10],matrimoniosOcupacionNovia2015$Matrimonios[10],
+                                matrimoniosOcupacionNovia2016$Matrimonios[10],matrimoniosOcupacionNovia2017$Matrimonios[10])
+matrimoniosMujeresElemental <- c(matrimoniosOcupacionNovia2010$Matrimonios[11],matrimoniosOcupacionNovia2011$Matrimonios[11],
+                                 matrimoniosOcupacionNovia2012$Matrimonios[11],matrimoniosOcupacionNovia2013$Matrimonios[11],
+                                 matrimoniosOcupacionNovia2014$Matrimonios[11],matrimoniosOcupacionNovia2015$Matrimonios[11],
+                                 matrimoniosOcupacionNovia2016$Matrimonios[11],matrimoniosOcupacionNovia2017$Matrimonios[11])
+matrimoniosMujeresNoEspecificada <- c(matrimoniosOcupacionNovia2010$Matrimonios[12],matrimoniosOcupacionNovia2011$Matrimonios[12],
+                                 matrimoniosOcupacionNovia2012$Matrimonios[12],matrimoniosOcupacionNovia2013$Matrimonios[12],
+                                 matrimoniosOcupacionNovia2014$Matrimonios[12],matrimoniosOcupacionNovia2015$Matrimonios[12],
+                                 matrimoniosOcupacionNovia2016$Matrimonios[12],matrimoniosOcupacionNovia2017$Matrimonios[12])
+matrimoniosMujeresIgnoradas <- c(matrimoniosOcupacionNovia2010$Matrimonios[13],matrimoniosOcupacionNovia2011$Matrimonios[13],
+                                 matrimoniosOcupacionNovia2012$Matrimonios[13],matrimoniosOcupacionNovia2013$Matrimonios[13],
+                                 matrimoniosOcupacionNovia2014$Matrimonios[13],matrimoniosOcupacionNovia2015$Matrimonios[13],
+                                 matrimoniosOcupacionNovia2016$Matrimonios[13],matrimoniosOcupacionNovia2017$Matrimonios[13])
+# Data frame
+matrimoniosMainDF <- data.frame("Año" = anios,
+                     "Matrimonios_Totales" = matrimoniosGenerales,
+                     "Matrimonios_Enero" = matrimoniosMesEnero,
+                     "Matrimonios_Febrero" = matrimoniosMesFebrero,
+                     "Matrimonios_Marzo" = matrimoniosMesMarzo,
+                     "Matrimonios_Abril" = matrimoniosMesAbril,
+                     "Matrimonios_Mayo" = matrimoniosMesMayo,
+                     "Matrimonios_Junio" = matrimoniosMesJunio,
+                     "Matrimonios_Julio" = matrimoniosMesJulio,
+                     "Matrimonios_Agosto" = matrimoniosMesAgosto,
+                     "Matrimonios_Septiembre" = matrimoniosMesSeptiembre,
+                     "Matrimonios_Octubre" = matrimoniosMesOctubre,
+                     "Matrimonios_Noviembre" = matrimoniosMesNoviembre,
+                     "Matrimonios_Diciembre" = matrimoniosMesDiciembre,
+                     "Num_Hombres_Militares" = matrimoniosHombresMilitares,
+                     "Num_Hombres_Gerentes" = matrimoniosHombresGerentes,
+                     "Num_Hombres_Cientificos" = matrimoniosHombresCientificos,
+                     "Num_Hombres_Tecnicos" = matrimoniosHombresTecnicos,
+                     "Num_Hombres_Personal_de_Apoyo" = matrimoniosHombresApoyo,
+                     "Num_Hombres_Comerciantes" = matrimoniosHombresComercio,
+                     "Num_Hombres_Agricultores" = matrimoniosHombresAgricult,
+                     "Num_Hombres_Artesanos" = matrimoniosHombresArtesano,
+                     "Num_Hombres_Ensambladores" = matrimoniosHombresEnsamble,
+                     "Num_Hombres_Elementales" = matrimoniosHombresElemental,
+                     "Num_Hombres_No_Especificados" = matrimoniosHombresNoEspecificado,
+                     "Num_Hombres_Ignorados" = matrimoniosHombresIgnorado,
+                     "Num_Mujeres_Militares" = matrimoniosMujeresMilitares,
+                     "Num_Mujeres_Gerentes" = matrimoniosMujeresGerentes,
+                     "Num_Mujeres_Cientificas" = matrimoniosMujeresCientificas,
+                     "Num_Mujeres_Tecnicas" = matrimoniosMujeresTecnicas,
+                     "Num_Mujeres_Personal_de_Apoyo" = matrimoniosMujeresApoyo,
+                     "Num_Mujeres_Comerciantes" = matrimoniosMujeresComercio,
+                     "Num_Mujeres_Agricultoras" = matrimoniosMujeresAgricult,
+                     "Num_Mujeres_Artesanas" = matrimoniosMujeresArtesana,
+                     "Num_Mujeres_Ensambladoras" = matrimoniosMujeresEnsambla,
+                     "Num_Mujeres_Elementales" = matrimoniosMujeresElemental,
+                     "Num_Mujeres_No_Especificadas" = matrimoniosMujeresNoEspecificada,
+                     "Num_Mujeres_Ignoradas" = matrimoniosMujeresIgnoradas)
+matrimoniosMainDF
 ```
