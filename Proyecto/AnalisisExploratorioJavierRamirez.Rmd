@@ -132,6 +132,7 @@ violenciaMeses2013 <- read_excel(paste(path,"/DivorciosBD/Divorcios2013.xls",sep
 # Carga de divorcios por ocupacion de la mujer y del hombre 2012
 violenciaOcupacion2012 <- read_excel(paste(path,"/DivorciosBD/Divorcios2012.xls",sep=""),
                                      sheet=5,skip=2,col_names=TRUE)
+
 ```
 ### Analisis Exploratorio General Matrimonios y Divorcios
 ``` {r }
@@ -420,7 +421,7 @@ barplot(ocupaciones2012DF,
         ylim=c(0,2500),
         legend.text = rownames(ocupaciones2012DF))
 ```
-### Analisis Exploratorio Edades del esposo y esposa
+### Analisis Exploratorio Edades del esposo y esposa al momento del divorcio 2012
 ``` {r }
 # Edades
 edades <- c("< 15","15 - 19","20 - 24","25 - 29","30 - 34","35 - 39","40 - 44",
