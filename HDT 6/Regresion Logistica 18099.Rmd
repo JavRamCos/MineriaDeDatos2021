@@ -1,0 +1,84 @@
+---
+title: "Regresion Logistica 18099"
+author: "Javier Ramirez Cospin"
+date: "15/4/2021"
+output: html_document
+---
+
+### Inicializacion de archivo
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+### Instalacion de librerias
+``` {r }
+install.packages('ISLR')
+install.packages('dummies')
+```
+### Carga de librerias
+``` {r }
+library(plyr)
+library(dplyr)
+library(cluster)
+library(e1071)
+library(mclust)
+library(fpc)
+library(NbClust)
+library(factoextra)
+library(tidyverse)
+library(readr)
+library(ppclust)
+library(randomForest)
+library(ggplot2)
+library(broom)
+library(ggpubr)
+library(corrplot)
+library(mctest)
+library(caret)
+library(Amelia)
+library(caretEnsemble)
+library(psych)
+library(mice)
+library(GGally)
+library(rpart)
+library(e1071)
+library(ISLR)
+library(dummies)
+```
+### Carga y Limpieza de Datos
+``` {r }
+rawData <- read.csv("train.csv",TRUE,",")
+datos <- read.csv("train.csv",TRUE,",")
+rawData[is.na(rawData)] = "NO"
+datos[is.na(datos)] = "NO"
+```
+### Variables dicotomicas
+``` {r }
+rawData$Group <- ifelse(rawData$SalePrice > 232669, "Cara", ifelse(rawData$SalePrice>132107, "Media", "Economica"))
+datos<-cbind(rawData,dummy(rawData$Group,verbose = T))
+```
+### Separacion de grupo de prueba y entrenamiento
+``` {r }
+set.seed(123)
+indxTrain <- createDataPartition(y = datos$Group,p = 0.7,list = FALSE)
+trainingSet <- datos[indxTrain,]
+testingSet <- datos[-indxTrain,]
+```
+### Eleccion de variables
+``` {r }
+datosTrain <- select(trainingSet,LotArea,TotalBsmtSF,X1stFlrSF,X2ndFlrSF,WoodDeckSF,OpenPorchSF,
+                EnclosedPorch,X3SsnPorch,ScreenPorch,PoolArea,MiscVal,SalePrice,rawDataCara)
+datosTest <- select(testingSet,LotArea,TotalBsmtSF,X1stFlrSF,X2ndFlrSF,WoodDeckSF,OpenPorchSF,
+                EnclosedPorch,X3SsnPorch,ScreenPorch,PoolArea,MiscVal,SalePrice,rawDataCara)
+```
+### Modelo de regresion logistica para casas caras
+``` {r }
+model <- glm(rawDataCara~.,data=datosTrain[,1:13],family=binomial(),maxit=100)
+pred <- predict(model,newdata=datosTest[,1:13],type="response")
+prediction <- ifelse(pred>=0.5,1,0)
+confusionMatrix(as.factor(datosTest$rawDataCara), as.factor(prediction))
+?confusionMatrix()
+```
+### Multicolinealidad entre variables
+``` {r }
+car::vif(model)
+```
