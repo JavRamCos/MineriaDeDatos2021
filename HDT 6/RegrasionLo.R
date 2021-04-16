@@ -40,5 +40,3 @@ modelo3<-glm(dataEconomicas ~., data = datosC[,c(1:12,14)], family = binomial(),
 pred3<-predict(modelo3, newdata = datosT[,1:12], type="response")
 prediccion3<-ifelse(pred3>=0.5,1,0)
 confusionMatrix(as.factor(datosT$dataCaras), as.factor(prediccion3))
-
-?sample()
