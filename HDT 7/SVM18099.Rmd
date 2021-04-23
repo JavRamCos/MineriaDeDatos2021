@@ -1,0 +1,75 @@
+---
+title: "SVM Javier Ramirez"
+author: "Javier Ramirez Cospin"
+date: "21/4/2021"
+output: html_document
+---
+### Carga de librerias
+``` {r }
+library(plyr)
+library(dplyr)
+library(cluster)
+library(mclust)
+library(fpc)
+library(NbClust)
+library(factoextra)
+library(tidyverse)
+library(readr)
+library(ppclust)
+library(randomForest)
+library(ggplot2)
+library(broom)
+library(ggpubr)
+library(corrplot)
+library(mctest)
+library(caret)
+library(Amelia)
+library(caretEnsemble)
+library(psych)
+library(mice)
+library(GGally)
+library(rpart)
+library(ISLR)
+library(e1071)
+```
+### Inicializacion de archivo
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+### Carga y Limpieza de Datos
+``` {r }
+rawData <- read.csv("train.csv",TRUE,",")
+datos <- read.csv("train.csv",TRUE,",")
+rawData[is.na(rawData)] = "NO"
+datos[is.na(datos)] = "NO"
+```
+### Variables de precio
+``` {r }
+rawData$Group <- as.factor(ifelse(rawData$SalePrice > 232669, "Cara", ifelse(rawData$SalePrice>132107, "Media", "Economica")))
+```
+### Separacion de grupo de prueba y entrenamiento
+``` {r }
+set.seed(123)
+indxTrain <- createDataPartition(y = rawData$Group,p = 0.7,list = FALSE)
+trainingSet <- rawData[indxTrain,]
+testingSet <- rawData[-indxTrain,]
+```
+### Seleccion de datos
+``` {r }
+datosTrain <- select(trainingSet,LotArea,TotalBsmtSF,X1stFlrSF,X2ndFlrSF,WoodDeckSF,OpenPorchSF,
+                EnclosedPorch,X3SsnPorch,ScreenPorch,PoolArea,MiscVal,SalePrice,Group)
+datosTest <- select(testingSet,LotArea,TotalBsmtSF,X1stFlrSF,X2ndFlrSF,WoodDeckSF,OpenPorchSF,
+                EnclosedPorch,X3SsnPorch,ScreenPorch,PoolArea,MiscVal,SalePrice,Group)
+```
+### Modelos de svm
+``` {r }
+modelOne <- svm(Group~.,data = datosTrain,type = "C-classification",kernel="radial",cost=250,gamma=2^-7)
+modelTwo <- svm(Group~.,data = datosTrain,type = "C-classification",kernel="linear")
+modelThree <- svm(Group~.,data = datosTrain,type = "C-classification",kernel="polynomial")
+```
+### Predicciones y Plots
+``` {r }
+plot(modelOne,datosTrain,EnclosedPorch~SalePrice)
+prediccion <- predict(modelOne,newdata=datosTest[,1:12])
+confusionMatrix(datosTest$Group,prediccion)
+```
