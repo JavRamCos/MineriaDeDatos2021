@@ -1,0 +1,89 @@
+---
+title: "RNA 18099"
+author: "Javier Ramirez Cospin"
+date: "3/5/2021"
+output: html_document
+---
+### Inicializacion de archivo
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+### Carga de librerias
+``` {r }
+library(plyr)
+library(dplyr)
+library(cluster)
+library(e1071)
+library(mclust)
+library(fpc)
+library(NbClust)
+library(factoextra)
+library(tidyverse)
+library(readr)
+library(ppclust)
+library(randomForest)
+library(ggplot2)
+library(broom)
+library(ggpubr)
+library(corrplot)
+library(mctest)
+library(caret)
+library(Amelia)
+library(caretEnsemble)
+library(psych)
+library(mice)
+library(GGally)
+library(rpart)
+library(e1071)
+library(neuralnet)
+library(nnet)
+library(RWeka)
+library(neural)
+```
+### Carga y Limpieza de Datos
+``` {r }
+rawData <- read.csv("train.csv",TRUE,",")
+datos <- read.csv("train.csv",TRUE,",")
+rawData[is.na(rawData)] = "NO"
+datos[is.na(datos)] = "NO"
+```
+### Variables de precio
+``` {r }
+rawData$Group <- as.factor(ifelse(rawData$SalePrice > 232669, "Cara", ifelse(rawData$SalePrice>132107, "Media", "Economica")))
+```
+### Separacion de grupo de prueba y entrenamiento
+``` {r }
+set.seed(123)
+indxTrain <- createDataPartition(y = rawData$Group,p = 0.7,list = FALSE)
+trainingSet <- rawData[indxTrain,]
+testingSet <- rawData[-indxTrain,]
+```
+### Seleccion de datos
+``` {r }
+datosTrain <- select(trainingSet,LotArea,TotalBsmtSF,X1stFlrSF,X2ndFlrSF,WoodDeckSF,OpenPorchSF,
+                EnclosedPorch,X3SsnPorch,ScreenPorch,PoolArea,MiscVal,SalePrice,Group)
+datosTest <- select(testingSet,LotArea,TotalBsmtSF,X1stFlrSF,X2ndFlrSF,WoodDeckSF,OpenPorchSF,
+                EnclosedPorch,X3SsnPorch,ScreenPorch,PoolArea,MiscVal,SalePrice,Group)
+```
+### Modelo Uno
+``` {r }
+modelOne <- nnet(Group~.,data = datosTrain, size=2, rang=0.1, decay=5e-4, maxit=100)
+
+prediccion2 <- as.data.frame(predict(modelOne, newdata = datosTest[,1:12]))
+columnaMasAlta<-apply(prediccion2, 1, function(x) colnames(prediccion2)[which.max(x)])
+datosTest$prediccion2<-columnaMasAlta
+datosTest$prediccion2 <- prediccion2
+
+cfm<-confusionMatrix(as.factor(datosTest$prediccion2),datosTest$Group)
+cfm
+```
+### Modelo Dos
+``` {r }
+NB <- make_Weka_classifier("weka/classifiers/functions/MultilayerPerceptron")
+nodes = '4'
+
+modelTwo <- NB(Group~., data=datosTrain, control=Weka_control(H=nodes, N=70, G=TRUE), options=NULL)
+datosTest$prediccionWeka <- predict(modelTwo, newdata = datosTest[,1:12])
+cfm<-confusionMatrix(datosTest$prediccionWeka,datosTest$Group)
+cfm
+```
