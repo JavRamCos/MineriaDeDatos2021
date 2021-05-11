@@ -10,17 +10,31 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 ### Carga de librerias
 ``` {r }
-library('readxl')
-library('ggplot2')
-library('cluster')
-library('e1071')
-library('mclust')
-library('fpc')
-library('NbClust')
-library('factoextra')
-library('tidyverse')
-library('readr')
-library('ppclust')
+library(plyr)
+library(dplyr)
+library(cluster)
+library(e1071)
+library(mclust)
+library(fpc)
+library(NbClust)
+library(factoextra)
+library(tidyverse)
+library(readr)
+library(ppclust)
+library(randomForest)
+library(ggplot2)
+library(broom)
+library(ggpubr)
+library(corrplot)
+library(mctest)
+library(caret)
+library(Amelia)
+library(caretEnsemble)
+library(psych)
+library(mice)
+library(GGally)
+library(rpart)
+library(e1071)
 ```
 
 ### Limpieza de global environment variables (OPCIONAL)
@@ -593,9 +607,27 @@ fviz_cluster(km, data = scaledData, frame.type = "convex")
 ``` {r }
 set.seed(123)
 divorciosDF$Categoria <- km$cluster
-divorciosDF
-groupOne <- divorciosDF[divorciosDF$Categoria == 1,]
-groupTwo <- divorciosDF[divorciosDF$Categoria == 2,]
-groupThree <- divorciosDF[divorciosDF$Categoria == 3,]
-summary(groupThree$Total)
+groupOne <- divorciosDF[divorciosDF$Categoria == "Baja",]
+groupTwo <- divorciosDF[divorciosDF$Categoria == "Media",]
+groupThree <- divorciosDF[divorciosDF$Categoria == "Alta",]
+```
+### Grafica de Silueta
+``` {r }
+dis = dist(scaledData)^2
+sil = silhouette(km$cluster,dis)
+dev.new(width=5,height=8,noRStudioGD = TRUE,unit="in")
+plot(sil)
+```
+### Bayes Naive
+``` {r }
+divorciosDF$Categoria <- factor(divorciosDF$Categoria,levels=c("Baja","Media","Alta"),labels=c(1,2,3))
+indxTrain <- createDataPartition(y = divorciosDF$Categoria,p=0.7,list=FALSE)
+trainingSet <- divorciosDF[indxTrain,]
+testingSet <- divorciosDF[-indxTrain,]
+classifier <- naiveBayes(Categoria ~ X01,X02,X03,X04,X05,X06,X07,X08,X09,X10,
+                X11,X12,X13,X14,X15,X16,X17,X18,X19,X20,X21,X22,X23,X24,X25,X26,X27,X28,X29,X30,X31,
+                data=trainingSet)
+predicter <- predict(classifier,newdata=testingSet)
+cm <- table(testingSet$Categoria,predicter)
+confusionMatrix(cm)
 ```
